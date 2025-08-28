@@ -1,0 +1,1262 @@
+﻿@{
+}
+<style>
+    :root {
+        --primary-green: #28a745;
+        --light-green: #d4edda;
+        --dark-green: #1e7e34;
+        --muted-green: #6c757d;
+    }
+
+    .bg-primary-green {
+        background-color: var(--primary-green) !important;
+    }
+
+    .text-primary-green {
+        color: var(--primary-green) !important;
+    }
+
+    .btn-primary-green {
+        background-color: var(--primary-green);
+        border-color: var(--primary-green);
+        color: white;
+    }
+
+        .btn-primary-green:hover {
+            background-color: var(--dark-green);
+            border-color: var(--dark-green);
+            color: white;
+        }
+
+    .btn-outline-primary-green {
+        background-color: transparent;
+        border-color: var(--primary-green);
+        color: var(--primary-green);
+    }
+
+        .btn-outline-primary-green:hover {
+            background-color: var(--primary-green);
+            border-color: var(--primary-green);
+            color: white;
+        }
+
+    .btn-secondary-green {
+        background-color: var(--muted-green);
+        border-color: var(--muted-green);
+        color: white;
+    }
+
+        .btn-secondary-green:hover {
+            background-color: #5a6268;
+            border-color: #545b62;
+            color: white;
+        }
+
+    .table-hover tbody tr:hover {
+        background-color: var(--light-green);
+    }
+
+    .card {
+        border: 1px solid var(--primary-green);
+    }
+
+    .card-header {
+        background-color: var(--light-green);
+        border-bottom: 1px solid var(--primary-green);
+    }
+
+    .form-select:focus, .form-control:focus {
+        border-color: var(--primary-green);
+        box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
+    }
+
+    .checkbox-custom {
+        transform: scale(1.2);
+        accent-color: var(--primary-green);
+    }
+
+    .section-divider {
+        border-top: 2px solid var(--primary-green);
+        margin: 20px 0;
+    }
+
+    .editable-cell {
+        background-color: #f8f9fa;
+        border: 1px solid transparent;
+        padding: 5px;
+        border-radius: 3px;
+    }
+
+        .editable-cell:focus {
+            background-color: white;
+            border-color: var(--primary-green);
+            outline: none;
+            box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
+        }
+
+    .save-indicator {
+        color: var(--primary-green);
+        font-size: 0.8em;
+        opacity: 0;
+        transition: opacity 0.3s;
+    }
+
+        .save-indicator.show {
+            opacity: 1;
+        }
+
+    .mode-selector {
+        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        border-radius: 10px;
+        padding: 20px;
+        margin-bottom: 25px;
+        border: 2px solid var(--primary-green);
+    }
+
+    .mode-card {
+        border: 2px solid #dee2e6;
+        border-radius: 8px;
+        padding: 20px;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        min-height: 120px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+        .mode-card:hover {
+            border-color: var(--primary-green);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(40, 167, 69, 0.15);
+        }
+
+        .mode-card.active {
+            border-color: var(--primary-green);
+            background-color: var(--light-green);
+            box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
+        }
+
+        .mode-card i {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            color: var(--primary-green);
+        }
+
+    .domain-module-section {
+        display: none;
+    }
+
+        .domain-module-section.active {
+            display: block;
+        }
+
+    .old-price-section.active {
+        display: block;
+    }
+
+    .module-item {
+        border: 1px solid #dee2e6;
+        border-radius: 5px;
+        padding: 10px;
+        margin: 5px 0;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+        .module-item:hover {
+            border-color: var(--primary-green);
+            background-color: #f8f9fa;
+        }
+
+        .module-item.selected {
+            border-color: var(--primary-green);
+            background-color: var(--light-green);
+        }
+</style>
+
+<div class="app-content-header">
+    <div class="container-fluid">
+        <!-- 主標題區域 -->
+        <div class="row">
+            <div class="col-sm-6">
+                <h3 class="mb-0">
+                    建立估價單
+                </h3>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-end">
+                    <li class="breadcrumb-item">
+                        <a href="#">Home</a>
+                    </li>
+                    <li class="breadcrumb-item active" aria-current="page">建立估價單</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="app-content">
+    <div class="container-fluid">
+        <!-- 模式選擇區域 -->
+        <div class="mode-selector">
+            <h5 class="text-primary-green mb-3">
+                <i class="fas fa-cogs"></i> 請選擇建立模式
+            </h5>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="mode-card active" id="oldPriceMode" onclick="selectMode('oldPrice')">
+                        <i class="fas fa-history"></i>
+                        <h6 class="fw-bold">舊價模式</h6>
+                        <p class="text-muted mb-0">從舊價資料庫選擇項目建立估價單</p>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="mode-card" id="domainModuleMode" onclick="selectMode('domainModule')">
+                        <i class="fas fa-layer-group"></i>
+                        <h6 class="fw-bold">場域模組模式</h6>
+                        <p class="text-muted mb-0">選擇場域模組快速載入工程項目</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 場域模組選擇區域 -->
+        <div class="domain-module-section" id="domainModuleSection">
+            <div class="card mb-3">
+                <div class="card-header">
+                    <h5 class="mb-0 text-primary-green">
+                        <i class="fas fa-layer-group"></i> 場域模組選擇
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <label class="form-label fw-bold text-primary-green">場域類型:</label>
+                            <select class="form-select" id="domainType">
+                                <option value="office">辦公空間</option>
+                                <option value="residential">住宅空間</option>
+                                <option value="commercial">商業空間</option>
+                                <option value="industrial">工業廠房</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label fw-bold text-primary-green">空間規模:</label>
+                            <select class="form-select" id="spaceScale">
+                                <option value="small">小型 (50坪以下)</option>
+                                <option value="medium">中型 (50-200坪)</option>
+                                <option value="large">大型 (200坪以上)</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label fw-bold text-primary-green">裝修等級:</label>
+                            <select class="form-select" id="renovationLevel">
+                                <option value="basic">基本裝修</option>
+                                <option value="standard">標準裝修</option>
+                                <option value="premium">精裝修</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-12">
+                            <button class="btn btn-primary-green" onclick="loadDomainModule()">
+                                <i class="fas fa-download"></i> 載入場域模組
+                            </button>
+                            <button class="btn btn-outline-primary-green ms-2" onclick="previewModule()">
+                                <i class="fas fa-eye"></i> 預覽模組內容
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 模組項目預覽 -->
+            <div class="card mb-3" id="modulePreviewCard" style="display: none;">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h6 class="mb-0 text-primary-green">
+                        <i class="fas fa-list"></i> 模組項目預覽
+                    </h6>
+                    <button class="btn btn-sm btn-outline-primary-green" onclick="customizeModule()">
+                        <i class="fas fa-edit"></i> 自訂調整
+                    </button>
+                </div>
+                <div class="card-body">
+                    <div id="moduleItemsPreview" class="row">
+                        <!-- 模組項目將在這裡顯示 -->
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <button class="btn btn-primary-green" onclick="confirmLoadModule()">
+                        <i class="fas fa-check"></i> 確認載入到估價單
+                    </button>
+                    <button class="btn btn-secondary-green ms-2" onclick="hidePreview()">
+                        <i class="fas fa-times"></i> 取消
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 舊價模式區域 -->
+        <div class="old-price-section active" id="oldPriceSection">
+            <!-- 選擇區域 -->
+            <div class="card mb-3">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold text-primary-green">
+                                <i class="fas fa-chevron-down"></i> 大項目:
+                            </label>
+                            <select class="form-select" id="majorCategory">
+                                <option value="裝修">裝修</option>
+                                <option value="水電">水電</option>
+                                <option value="空調">空調</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold text-primary-green">
+                                <i class="fas fa-chevron-down"></i> 中項目:
+                            </label>
+                            <select class="form-select" id="middleCategory">
+                                <option value="室內隔間工程">室內隔間工程</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 舊價小項目清單 -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0 text-primary-green">
+                        <i class="fas fa-check-circle"></i> 舊價小項目清單（依條件查詢後顯示，可勾選加入估價單）
+                    </h5>
+                    <small class="text-muted">[☑] 表示已勾選加入估價單</small>
+                </div>
+
+                <!-- 搜尋輸入欄 -->
+                <div class="px-3 py-2 border-bottom bg-white">
+                    <div class="input-group">
+                        <input type="text" class="form-control" id="searchInput" placeholder="輸入關鍵字搜尋小項目..." oninput="filterItems()">
+                        <button class="btn btn-outline-primary-green" onclick="clearSearch()">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0">
+                            <thead class="table-success">
+                                <tr>
+                                    <th width="50">選取</th>
+                                    <th>編碼</th>
+                                    <th>小項目名稱</th>
+                                    <th>單位</th>
+                                    <th>數量</th>
+                                    <th>原單價</th>
+                                    <th>原複價</th>
+                                    <th>合約單價</th>
+                                    <th>合約複價</th>
+                                    <th>備註</th>
+                                </tr>
+                            </thead>
+                            <tbody id="oldPriceList">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <div class="d-flex gap-2">
+                        <button class="btn btn-primary-green" onclick="searchItems()">
+                            <i class="fas fa-search"></i> 查詢
+                        </button>
+                        <button class="btn btn-primary-green" onclick="addToEstimate()">
+                            <i class="fas fa-check"></i> 加入估價單
+                        </button>
+                        <button class="btn btn-outline-primary-green" onclick="refreshList()">
+                            <i class="fas fa-sync-alt"></i> 重新整理
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 分隔線 -->
+        <div class="section-divider"></div>
+
+        <!-- 已選項目區域 -->
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0 text-primary-green">
+                    <i class="fas fa-edit"></i> 已選項目（可編輯）
+                </h5>
+                <div class="save-indicator" id="saveIndicator">
+                    <i class="fas fa-check-circle"></i> 已自動儲存
+                </div>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead class="table-success">
+                            <tr>
+                                <th width="50">
+                                    <input type="checkbox" class="form-check-input" id="selectAll" onchange="toggleSelectAll()">
+                                </th>
+                                <th>編號</th>
+                                <th>編碼</th>
+                                <th>小項目名稱</th>
+                                <th>規格/說明</th>
+                                <th>單位</th>
+                                <th>數量</th>
+                                <th>原單價</th>
+                                <th>原複價</th>
+                                <th>合約單價</th>
+                                <th>合約複價</th>
+                                <th>備註</th>
+                            </tr>
+                        </thead>
+                        <tbody id="selectedItemsList">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="card-footer">
+                <div class="d-flex gap-2">
+                    <button class="btn btn-primary-green" onclick="addNewItem()">
+                        <i class="fas fa-plus"></i> 新增項目
+                    </button>
+                    <button class="btn btn-secondary-green" onclick="deleteSelected()">
+                        <i class="fas fa-trash"></i> 刪除選取
+                    </button>
+                    <button class="btn btn-outline-primary-green" onclick="saveData()">
+                        <i class="fas fa-save"></i> 儲存資料
+                    </button>
+                    <button class="btn btn-primary-green" onclick="exportToExcel()">
+                        <i class="fas fa-download"></i> 匯出Excel
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 新增項目模態框 -->
+<div class="modal fade" id="addItemModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-primary-green">新增項目</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <label class="form-label">編碼</label>
+                        <input type="text" class="form-control" id="newItemCode" placeholder="請輸入編碼">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">單位</label>
+                        <input type="text" class="form-control" id="newItemUnit" placeholder="請輸入單位">
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-12">
+                        <label class="form-label">小項目名稱</label>
+                        <input type="text" class="form-control" id="newItemName" placeholder="請輸入項目名稱">
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-12">
+                        <label class="form-label">規格/說明</label>
+                        <textarea class="form-control" id="newItemSpec" rows="3" placeholder="請輸入規格說明"></textarea>
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-md-4">
+                        <label class="form-label">數量</label>
+                        <input type="number" class="form-control" id="newItemQuantity" placeholder="0" onchange="calculateNewItemTotal()">
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">原單價</label>
+                        <input type="number" class="form-control" id="newItemUnitPrice" placeholder="0" onchange="calculateNewItemTotal()">
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">原複價</label>
+                        <input type="number" class="form-control" id="newItemTotalPrice" placeholder="0" readonly>
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-12">
+                        <label class="form-label">備註</label>
+                        <input type="text" class="form-control" id="newItemNote" placeholder="請輸入備註">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary-green" data-bs-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary-green" onclick="confirmAddItem()">確認新增</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 模組自訂調整模態框 -->
+<div class="modal fade" id="customizeModuleModal" tabindex="-1">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-primary-green">自訂調整場域模組</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="alert alert-info">
+                            <i class="fas fa-info-circle"></i>
+                            您可以在此調整模組項目，新增或刪除項目。這些變更不會影響原始模組資料。
+                        </div>
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead class="table-success">
+                            <tr>
+                                <th width="50">
+                                    <input type="checkbox" class="form-check-input" id="selectAllModule" onchange="toggleSelectAllModule()">
+                                </th>
+                                <th>編碼</th>
+                                <th>項目名稱</th>
+                                <th>規格/說明</th>
+                                <th>單位</th>
+                                <th>預設數量</th>
+                                <th>預設單價</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody id="moduleCustomizeList">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-primary-green" onclick="addModuleItem()">
+                    <i class="fas fa-plus"></i> 新增項目
+                </button>
+                <button type="button" class="btn btn-secondary-green" onclick="deleteSelectedModule()">
+                    <i class="fas fa-trash"></i> 刪除選取
+                </button>
+                <button type="button" class="btn btn-secondary-green" data-bs-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary-green" onclick="confirmCustomizedModule()">確認載入</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script>
+        // 場域模組資料
+        const domainModules = {
+            'office-small-basic': {
+                name: '小型辦公空間 - 基本裝修',
+                items: [
+                    { code: 'OM-001', name: '辦公室隔間牆', spec: '9mm矽酸鈣板輕隔間', unit: 'm²', quantity: '50', unitPrice: '1200', note: '含隔音材料' },
+                    { code: 'OM-002', name: '天花板工程', spec: '輕鋼架石膏板', unit: 'm²', quantity: '45', unitPrice: '800', note: '含照明配置' },
+                    { code: 'OM-003', name: '地板工程', spec: 'PVC地板', unit: 'm²', quantity: '45', unitPrice: '600', note: '商業級防滑' },
+                    { code: 'OM-004', name: '門窗工程', spec: '鋁合金門', unit: '樘', quantity: '3', unitPrice: '12000', note: '含五金配件' },
+                    { code: 'OM-005', name: '電氣工程', spec: '照明及插座配線', unit: '式', quantity: '1', unitPrice: '25000', note: '符合法規標準' }
+                ]
+            },
+            'office-medium-standard': {
+                name: '中型辦公空間 - 標準裝修',
+                items: [
+                    { code: 'OM-011', name: '會議室隔間', spec: '12mm雙層矽酸鈣板', unit: 'm²', quantity: '80', unitPrice: '1500', note: '含隔音處理' },
+                    { code: 'OM-012', name: '接待區裝修', spec: '大理石牆面', unit: 'm²', quantity: '20', unitPrice: '2800', note: '含設計造型' },
+                    { code: 'OM-013', name: '辦公區天花板', spec: '輕鋼架礦纖板', unit: 'm²', quantity: '150', unitPrice: '900', note: '含空調出風口' },
+                    { code: 'OM-014', name: '地板工程', spec: '拋光石英磚', unit: 'm²', quantity: '150', unitPrice: '1200', note: '60x60cm規格' },
+                    { code: 'OM-015', name: '電氣系統', spec: '智能照明控制', unit: '式', quantity: '1', unitPrice: '45000', note: '含感應器' }
+                ]
+            },
+            'residential-small-basic': {
+                name: '小型住宅 - 基本裝修',
+                items: [
+                    { code: 'RM-001', name: '客廳天花板', spec: '平釘天花板', unit: 'm²', quantity: '25', unitPrice: '750', note: '含間接照明' },
+                    { code: 'RM-002', name: '廚房櫥櫃', spec: '系統櫥櫃', unit: '尺', quantity: '8', unitPrice: '8500', note: '含人造石檯面' },
+                    { code: 'RM-003', name: '臥室地板', spec: '超耐磨木地板', unit: 'm²', quantity: '30', unitPrice: '1800', note: '8mm厚度' },
+                    { code: 'RM-004', name: '衛浴設備', spec: '標準衛浴組', unit: '組', quantity: '2', unitPrice: '35000', note: '含安裝' },
+                    { code: 'RM-005', name: '油漆工程', spec: '乳膠漆', unit: 'm²', quantity: '120', unitPrice: '180', note: '一底二度' }
+                ]
+            },
+            'commercial-medium-standard': {
+                name: '中型商業空間 - 標準裝修',
+                items: [
+                    { code: 'CM-001', name: '店面招牌', spec: 'LED招牌', unit: 'm²', quantity: '12', unitPrice: '4500', note: '含安裝施工' },
+                    { code: 'CM-002', name: '展示區裝修', spec: '系統展示櫃', unit: '組', quantity: '6', unitPrice: '25000', note: '含照明' },
+                    { code: 'CM-003', name: '收銀台', spec: '人造石檯面', unit: '組', quantity: '2', unitPrice: '18000', note: '含配線' },
+                    { code: 'CM-004', name: '地板工程', spec: '商用地磚', unit: 'm²', quantity: '100', unitPrice: '800', note: '防滑處理' },
+                    { code: 'CM-005', name: '空調工程', spec: '商用空調', unit: '坪', quantity: '60', unitPrice: '3500', note: '含管路配置' }
+                ]
+            }
+        };
+
+        // 原有的變數和資料
+        const categoryMapping = {
+            '裝修': ['假設工程', '室內隔間工程', '天花板裝修工程', '牆面裝修工程', '地坪裝修工程',
+                '地坪P.V.C無縫地毯工程', '地坪磁磚(材料)', '樓梯間裝修工程',
+                '內部門工程', '特殊裝修工程', '系統廚櫃工程', '雜項工程'],
+            '水電': ['給水工程', '排水工程', '電氣工程'],
+            '空調': ['空調設備', '通風工程', '冷卻水塔']
+        };
+
+        // 不同中項目對應的小項目資料
+        const itemsData = {
+            '假設工程': [
+                { code: 'A01-001', name: '臨時水、電、電信費', unit: '式', quantity: '1', unitPrice: '378000', totalPrice: '378000', note: '' },
+                { code: 'A01-002', name: '工務所及相關設備', unit: '式', quantity: '1', unitPrice: '252000', totalPrice: '252000', note: '' },
+                { code: 'A01-003', name: '臨時廁所、設備與維護清潔費', unit: '式', quantity: '1', unitPrice: '126000', totalPrice: '126000', note: '' }
+            ],
+            '室內隔間工程': [
+                { code: 'A02-001', name: '放樣工程', unit: 'm²', quantity: '32555', unitPrice: '47', totalPrice: '1530085', note: '總樓地板面積' },
+                { code: 'A02-015-T', name: 'Type-A 9mm單層雙面矽酸鈣板輕隔間牆至頂(C型立柱92x35x0.95mm骨架@406mm,60K/50mm岩棉)', unit: 'm²', quantity: '3468', unitPrice: '1292', totalPrice: '4480656', note: 'A13-21' },
+                { code: 'A02-016-T', name: 'Type-B 9,12mm單層雙面矽酸鈣板輕隔間牆,面刷一底二度水泥漆(外立面)(CH型立柱92x35x0.95mm骨架@610mm,60K/50mm岩棉)', unit: 'm²', quantity: '35', unitPrice: '1870', totalPrice: '65450', note: 'A13-21虹牌、得利同外牆玻璃色漆' }
+            ],
+            '天花板裝修工程': [
+                { code: 'B01-001', name: '輕鋼架天花板', unit: 'm²', quantity: '1200', unitPrice: '850', totalPrice: '1020000', note: '含燈具配置' },
+                { code: 'B01-002', name: '矽酸鈣板天花板', unit: 'm²', quantity: '800', unitPrice: '950', totalPrice: '760000', note: '防火等級' }
+            ],
+            '給水工程': [
+                { code: 'C01-001', name: '給水管配置', unit: 'm', quantity: '500', unitPrice: '320', totalPrice: '160000', note: 'PVC管材' },
+                { code: 'C01-002', name: '給水設備安裝', unit: '組', quantity: '25', unitPrice: '8500', totalPrice: '212500', note: '含閥件' }
+            ]
+        };
+
+        let itemCounter = 0;
+        let selectedItems = [];
+        let currentMode = 'oldPrice';
+        let currentModuleItems = [];
+
+        // 模式選擇功能
+        function selectMode(mode) {
+            currentMode = mode;
+
+            // 更新模式卡片狀態
+            document.querySelectorAll('.mode-card').forEach(card => {
+                card.classList.remove('active');
+            });
+
+            if (mode === 'oldPrice') {
+                document.getElementById('oldPriceMode').classList.add('active');
+                document.getElementById('oldPriceSection').classList.add('active');
+                document.getElementById('domainModuleSection').classList.remove('active');
+            } else {
+                document.getElementById('domainModuleMode').classList.add('active');
+                document.getElementById('domainModuleSection').classList.add('active');
+                document.getElementById('oldPriceSection').classList.remove('active');
+            }
+        }
+
+        // 場域模組功能
+        function loadDomainModule() {
+            const domainType = document.getElementById('domainType').value;
+            const spaceScale = document.getElementById('spaceScale').value;
+            const renovationLevel = document.getElementById('renovationLevel').value;
+
+            const moduleKey = `${domainType}-${spaceScale}-${renovationLevel}`;
+
+            if (domainModules[moduleKey]) {
+                currentModuleItems = [...domainModules[moduleKey].items];
+                showModulePreview(domainModules[moduleKey]);
+                showMessage(`已載入模組：${domainModules[moduleKey].name}`, 'success');
+            } else {
+                showMessage('找不到對應的場域模組', 'warning');
+            }
+        }
+
+        function previewModule() {
+            const domainType = document.getElementById('domainType').value;
+            const spaceScale = document.getElementById('spaceScale').value;
+            const renovationLevel = document.getElementById('renovationLevel').value;
+
+            const moduleKey = `${domainType}-${spaceScale}-${renovationLevel}`;
+
+            if (domainModules[moduleKey]) {
+                currentModuleItems = [...domainModules[moduleKey].items];
+                showModulePreview(domainModules[moduleKey]);
+            } else {
+                showMessage('找不到對應的場域模組', 'warning');
+            }
+        }
+
+        function showModulePreview(module) {
+            const previewCard = document.getElementById('modulePreviewCard');
+            const previewContainer = document.getElementById('moduleItemsPreview');
+
+            previewContainer.innerHTML = '';
+
+            module.items.forEach((item, index) => {
+                const itemDiv = document.createElement('div');
+                itemDiv.className = 'col-md-6 col-lg-4 mb-3';
+                itemDiv.innerHTML = `
+                                                <div class="module-item" data-index="${index}">
+                                                    <h6 class="fw-bold text-primary-green">${item.name}</h6>
+                                                    <p class="mb-1"><strong>編碼:</strong> ${item.code}</p>
+                                                    <p class="mb-1"><strong>規格:</strong> ${item.spec}</p>
+                                                    <p class="mb-1"><strong>單位:</strong> ${item.unit} | <strong>數量:</strong> ${item.quantity}</p>
+                                                    <p class="mb-0"><strong>單價:</strong> ${formatNumber(item.unitPrice)}</p>
+                                                    ${item.note ? `<small class="text-muted">${item.note}</small>` : ''}
+                                                </div>
+                                            `;
+                previewContainer.appendChild(itemDiv);
+            });
+
+            previewCard.style.display = 'block';
+            previewCard.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function hidePreview() {
+            document.getElementById('modulePreviewCard').style.display = 'none';
+        }
+
+        function customizeModule() {
+            if (currentModuleItems.length === 0) {
+                showMessage('請先載入或預覽模組', 'warning');
+                return;
+            }
+
+            showCustomizeModal();
+        }
+
+        function showCustomizeModal() {
+            const tbody = document.getElementById('moduleCustomizeList');
+            tbody.innerHTML = '';
+
+            currentModuleItems.forEach((item, index) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                                                <td class="text-center">
+                                                    <input type="checkbox" class="form-check-input module-row-checkbox" data-index="${index}">
+                                                </td>
+                                                <td class="editable-cell" contenteditable data-field="code" data-index="${index}">${item.code}</td>
+                                                <td class="editable-cell" contenteditable data-field="name" data-index="${index}">${item.name}</td>
+                                                <td class="editable-cell" contenteditable data-field="spec" data-index="${index}">${item.spec}</td>
+                                                <td class="editable-cell" contenteditable data-field="unit" data-index="${index}">${item.unit}</td>
+                                                <td class="editable-cell" contenteditable data-field="quantity" data-index="${index}">${item.quantity}</td>
+                                                <td class="editable-cell" contenteditable data-field="unitPrice" data-index="${index}">${item.unitPrice}</td>
+                                                <td>
+                                                    <button class="btn btn-sm btn-outline-danger" onclick="removeModuleItem(${index})">
+                                                        <i class="fas fa-trash"></i>
+                                                    </button>
+                                                </td>
+                                            `;
+
+                // 添加編輯事件監聽
+                const editableCells = row.querySelectorAll('.editable-cell');
+                editableCells.forEach(cell => {
+                    cell.addEventListener('blur', function () {
+                        const index = parseInt(this.dataset.index);
+                        const field = this.dataset.field;
+                        currentModuleItems[index][field] = this.textContent.trim();
+                    });
+                });
+
+                tbody.appendChild(row);
+            });
+
+            const modal = new bootstrap.Modal(document.getElementById('customizeModuleModal'));
+            modal.show();
+        }
+
+        function addModuleItem() {
+            const newItem = {
+                code: `NEW-${Date.now()}`,
+                name: '新項目',
+                spec: '',
+                unit: '式',
+                quantity: '1',
+                unitPrice: '0',
+                note: ''
+            };
+
+            currentModuleItems.push(newItem);
+            showCustomizeModal();
+        }
+
+        function removeModuleItem(index) {
+            if (confirm('確定要刪除這個項目嗎？')) {
+                currentModuleItems.splice(index, 1);
+                showCustomizeModal();
+            }
+        }
+
+        function toggleSelectAllModule() {
+            const selectAll = document.getElementById('selectAllModule');
+            const checkboxes = document.querySelectorAll('.module-row-checkbox');
+
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = selectAll.checked;
+            });
+        }
+
+        function deleteSelectedModule() {
+            const checkedBoxes = document.querySelectorAll('.module-row-checkbox:checked');
+
+            if (checkedBoxes.length === 0) {
+                showMessage('請先選取要刪除的項目', 'warning');
+                return;
+            }
+
+            if (!confirm(`確定要刪除選取的 ${checkedBoxes.length} 個項目嗎？`)) {
+                return;
+            }
+
+            const indicesToDelete = Array.from(checkedBoxes)
+                .map(cb => parseInt(cb.dataset.index))
+                .sort((a, b) => b - a); // 從大到小排序，避免索引錯亂
+
+            indicesToDelete.forEach(index => {
+                currentModuleItems.splice(index, 1);
+            });
+
+            showCustomizeModal();
+            showMessage(`已刪除 ${checkedBoxes.length} 個項目`, 'success');
+        }
+
+        function confirmCustomizedModule() {
+            loadModuleItemsToEstimate();
+            const modal = bootstrap.Modal.getInstance(document.getElementById('customizeModuleModal'));
+            modal.hide();
+            showMessage('模組項目已載入到估價單', 'success');
+        }
+
+        function confirmLoadModule() {
+            loadModuleItemsToEstimate();
+            hidePreview();
+            showMessage('模組項目已載入到估價單', 'success');
+        }
+
+        function loadModuleItemsToEstimate() {
+            currentModuleItems.forEach(item => {
+                itemCounter += 1;
+
+                const selectedItem = {
+                    id: itemCounter,
+                    code: item.code,
+                    name: item.name,
+                    spec: item.spec || '',
+                    unit: item.unit,
+                    quantity: item.quantity,
+                    unitPrice: item.unitPrice,
+                    totalPrice: calculateTotal(item.quantity, item.unitPrice),
+                    contractUnitPrice: '',
+                    contractTotalPrice: '',
+                    note: item.note || ''
+                };
+
+                // 檢查是否已存在相同編碼的項目
+                const existingIndex = selectedItems.findIndex(existing => existing.code === item.code);
+                if (existingIndex >= 0) {
+                    // 如果已存在，更新數量
+                    const existingQty = parseFloat(selectedItems[existingIndex].quantity) || 0;
+                    const newQty = parseFloat(item.quantity) || 0;
+                    selectedItems[existingIndex].quantity = (existingQty + newQty).toString();
+                    selectedItems[existingIndex].totalPrice = calculateTotal(
+                        selectedItems[existingIndex].quantity,
+                        selectedItems[existingIndex].unitPrice
+                    );
+                } else {
+                    selectedItems.push(selectedItem);
+                }
+            });
+
+            renderSelectedItems();
+            autoSave();
+        }
+
+        // 原有的功能保持不變
+        function updateItemsList(category) {
+            const tbody = document.getElementById('oldPriceList');
+            tbody.innerHTML = '';
+
+            if (itemsData[category]) {
+                itemsData[category].forEach((item, index) => {
+                    const row = createItemRow(item, index);
+                    tbody.appendChild(row);
+                });
+            }
+        }
+
+        function createItemRow(item, index) {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                                            <td class="text-center">
+                                                <input type="checkbox" class="form-check-input checkbox-custom" id="item${index + 1}">
+                                            </td>
+                                            <td>${item.code}</td>
+                                            <td>${item.name}</td>
+                                            <td>${item.unit}</td>
+                                            <td>${formatNumber(item.quantity)}</td>
+                                            <td>${formatNumber(item.unitPrice)}</td>
+                                            <td>${formatNumber(item.totalPrice)}</td>
+                                            <td>-</td>
+                                            <td>-</td>
+                                            <td>${item.note}</td>
+                                        `;
+
+            const checkbox = row.querySelector('input[type="checkbox"]');
+
+            checkbox.addEventListener('change', function () {
+                if (this.checked) {
+                    addItemToSelectedList(item);
+                } else {
+                    removeItemFromSelectedList(item.code);
+                }
+            });
+
+            row.addEventListener('click', function (e) {
+                if (e.target.tagName !== 'INPUT') {
+                    checkbox.checked = !checkbox.checked;
+                    checkbox.dispatchEvent(new Event('change'));
+                }
+            });
+
+            return row;
+        }
+
+        function addItemToSelectedList(item) {
+            const alreadyExists = selectedItems.some(selectedItem => selectedItem.code === item.code);
+            if (alreadyExists) return;
+
+            itemCounter += 1;
+
+            const selectedItem = {
+                id: itemCounter,
+                code: item.code,
+                name: item.name,
+                spec: '',
+                unit: item.unit,
+                quantity: item.quantity,
+                unitPrice: item.unitPrice,
+                totalPrice: item.totalPrice,
+                contractUnitPrice: '',
+                contractTotalPrice: '',
+                note: item.note
+            };
+
+            selectedItems.push(selectedItem);
+            renderSelectedItems();
+            autoSave();
+        }
+
+        function removeItemFromSelectedList(code) {
+            selectedItems = selectedItems.filter(item => item.code !== code);
+            renderSelectedItems();
+            autoSave();
+        }
+
+        function renderSelectedItems() {
+            const tbody = document.getElementById('selectedItemsList');
+            tbody.innerHTML = '';
+
+            selectedItems.forEach((item, index) => {
+                const row = createSelectedItemRow(item, index);
+                tbody.appendChild(row);
+            });
+        }
+
+        function createSelectedItemRow(item, index) {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                                            <td class="text-center">
+                                                <input type="checkbox" class="form-check-input row-checkbox" data-id="${item.id}">
+                                            </td>
+                                            <td>${String(index + 1).padStart(3, '0')}</td>
+                                            <td>${item.code}</td>
+                                            <td>${item.name}</td>
+                                            <td class="editable-cell" contenteditable data-field="spec" data-id="${item.id}">${item.spec}</td>
+                                            <td>${item.unit}</td>
+                                            <td class="editable-cell" contenteditable data-field="quantity" data-id="${item.id}">${item.quantity}</td>
+                                            <td>${item.unitPrice}</td>
+                                            <td class="calculated-field">${formatNumber(calculateTotal(item.quantity, item.unitPrice))}</td>
+                                            <td class="editable-cell" contenteditable data-field="contractUnitPrice" data-id="${item.id}">${item.contractUnitPrice}</td>
+                                            <td class="calculated-field">${item.contractUnitPrice ? formatNumber(calculateTotal(item.quantity, item.contractUnitPrice)) : '-'}</td>
+                                            <td class="editable-cell" contenteditable data-field="note" data-id="${item.id}">${item.note}</td>
+                                        `;
+
+            // 添加編輯事件監聽
+            const editableCells = row.querySelectorAll('.editable-cell');
+            editableCells.forEach(cell => {
+                cell.addEventListener('blur', function () {
+                    updateItemData(this.dataset.id, this.dataset.field, this.textContent);
+                });
+
+                cell.addEventListener('keydown', function (e) {
+                    if (e.key === 'Enter') {
+                        e.preventDefault();
+                        this.blur();
+                    }
+                });
+            });
+
+            return row;
+        }
+
+        function updateItemData(id, field, value) {
+            const item = selectedItems.find(item => item.id == id);
+            if (item) {
+                item[field] = value;
+
+                // 如果是數量或單價變更，重新計算總價
+                if (field === 'quantity' || field === 'unitPrice' || field === 'contractUnitPrice') {
+                    renderSelectedItems();
+                }
+
+                autoSave();
+            }
+        }
+
+        function calculateTotal(quantity, unitPrice) {
+            const qty = parseFloat(quantity) || 0;
+            const price = parseFloat(unitPrice) || 0;
+            return qty * price;
+        }
+
+        function formatNumber(num) {
+            if (!num || num === '' || num === '-') return '-';
+            return parseFloat(num).toLocaleString();
+        }
+
+        // 自動儲存功能
+        function autoSave() {
+            const data = {
+                selectedItems: selectedItems,
+                currentMode: currentMode,
+                timestamp: new Date().toISOString()
+            };
+
+            console.log('自動儲存資料:', data);
+
+            // 顯示儲存指示器
+            const indicator = document.getElementById('saveIndicator');
+            indicator.classList.add('show');
+            setTimeout(() => {
+                indicator.classList.remove('show');
+            }, 2000);
+        }
+
+        // 功能按鈕事件處理
+        function searchItems() {
+            const middleCategory = document.getElementById('middleCategory').value;
+            updateItemsList(middleCategory);
+            showMessage('查詢完成', 'success');
+        }
+
+        function addToEstimate() {
+            const checkedItems = document.querySelectorAll('#oldPriceList input[type="checkbox"]:checked');
+            if (checkedItems.length === 0) {
+                showMessage('請先選取要加入的項目', 'warning');
+                return;
+            }
+            showMessage(`已選取 ${checkedItems.length} 個項目加入估價單`, 'success');
+        }
+
+        function refreshList() {
+            const middleCategory = document.getElementById('middleCategory').value;
+            updateItemsList(middleCategory);
+            showMessage('清單已重新整理', 'info');
+        }
+
+        function addNewItem() {
+            // 清空表單
+            document.getElementById('newItemCode').value = '';
+            document.getElementById('newItemName').value = '';
+            document.getElementById('newItemSpec').value = '';
+            document.getElementById('newItemUnit').value = '';
+            document.getElementById('newItemQuantity').value = '';
+            document.getElementById('newItemUnitPrice').value = '';
+            document.getElementById('newItemTotalPrice').value = '';
+            document.getElementById('newItemNote').value = '';
+
+            // 顯示模態框
+            const modal = new bootstrap.Modal(document.getElementById('addItemModal'));
+            modal.show();
+        }
+
+        function calculateNewItemTotal() {
+            const quantity = parseFloat(document.getElementById('newItemQuantity').value) || 0;
+            const unitPrice = parseFloat(document.getElementById('newItemUnitPrice').value) || 0;
+            const total = quantity * unitPrice;
+            document.getElementById('newItemTotalPrice').value = total;
+        }
+
+        function confirmAddItem() {
+            const code = document.getElementById('newItemCode').value.trim();
+            const name = document.getElementById('newItemName').value.trim();
+            const spec = document.getElementById('newItemSpec').value.trim();
+            const unit = document.getElementById('newItemUnit').value.trim();
+            const quantity = document.getElementById('newItemQuantity').value || '0';
+            const unitPrice = document.getElementById('newItemUnitPrice').value || '0';
+            const note = document.getElementById('newItemNote').value.trim();
+
+            if (!code || !name || !unit) {
+                showMessage('請填寫必要欄位：編碼、項目名稱、單位', 'warning');
+                return;
+            }
+
+            // 檢查編碼是否重複
+            const exists = selectedItems.some(item => item.code === code);
+            if (exists) {
+                showMessage('編碼已存在，請使用其他編碼', 'warning');
+                return;
+            }
+
+            itemCounter += 1;
+
+            const newItem = {
+                id: itemCounter,
+                code: code,
+                name: name,
+                spec: spec,
+                unit: unit,
+                quantity: quantity,
+                unitPrice: unitPrice,
+                totalPrice: calculateTotal(quantity, unitPrice),
+                contractUnitPrice: '',
+                contractTotalPrice: '',
+                note: note
+            };
+
+            selectedItems.push(newItem);
+            renderSelectedItems();
+            autoSave();
+
+            // 關閉模態框
+            const modal = bootstrap.Modal.getInstance(document.getElementById('addItemModal'));
+            modal.hide();
+
+            showMessage('新增項目成功', 'success');
+        }
+
+        function toggleSelectAll() {
+            const selectAll = document.getElementById('selectAll');
+            const checkboxes = document.querySelectorAll('.row-checkbox');
+
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = selectAll.checked;
+            });
+        }
+
+        function deleteSelected() {
+            const checkedBoxes = document.querySelectorAll('.row-checkbox:checked');
+
+            if (checkedBoxes.length === 0) {
+                showMessage('請先選取要刪除的項目', 'warning');
+                return;
+            }
+
+            if (!confirm(`確定要刪除選取的 ${checkedBoxes.length} 個項目嗎？`)) {
+                return;
+            }
+
+            const idsToDelete = Array.from(checkedBoxes).map(cb => parseInt(cb.dataset.id));
+            selectedItems = selectedItems.filter(item => !idsToDelete.includes(item.id));
+
+            renderSelectedItems();
+            autoSave();
+
+            document.getElementById('selectAll').checked = false;
+            showMessage(`已刪除 ${checkedBoxes.length} 個項目`, 'success');
+        }
+
+        function saveData() {
+            const data = {
+                selectedItems: selectedItems,
+                currentMode: currentMode,
+                timestamp: new Date().toISOString(),
+                itemCount: selectedItems.length
+            };
+
+            console.log('手動儲存資料:', data);
+            showMessage('資料儲存成功', 'success');
+        }
+
+        function exportToExcel() {
+            showMessage('Excel匯出功能開發中...', 'info');
+        }
+
+        // 顯示訊息的輔助函數
+        function showMessage(message, type = 'info') {
+            const alertClass = {
+                'success': 'alert-success',
+                'warning': 'alert-warning',
+                'error': 'alert-danger',
+                'info': 'alert-info'
+            };
+
+            const alertDiv = document.createElement('div');
+            alertDiv.className = `alert ${alertClass[type]} alert-dismissible fade show position-fixed`;
+            alertDiv.style.cssText = 'top: 20px; right: 20px; z-index: 9999; min-width: 300px;';
+            alertDiv.innerHTML = `
+                                            ${message}
+                                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                                        `;
+
+            document.body.appendChild(alertDiv);
+
+            // 3秒後自動移除
+            setTimeout(() => {
+                if (alertDiv.parentNode) {
+                    alertDiv.remove();
+                }
+            }, 3000);
+        }
+
+        // 搜尋和篩選功能
+        function filterItems() {
+            const keyword = document.getElementById('searchInput').value.trim().toLowerCase();
+            const rows = document.querySelectorAll('#oldPriceList tr');
+
+            rows.forEach(row => {
+                const cells = Array.from(row.children).map(cell => cell.textContent.toLowerCase());
+                const matched = cells.some(cellText => cellText.includes(keyword));
+                row.style.display = matched ? '' : 'none';
+            });
+        }
+
+        function clearSearch() {
+            document.getElementById('searchInput').value = '';
+            filterItems();
+        }
+
+        // 當大項目改變時更新中項目選項
+        document.addEventListener('DOMContentLoaded', function () {
+            const majorCategorySelect = document.getElementById('majorCategory');
+            const middleCategorySelect = document.getElementById('middleCategory');
+
+            majorCategorySelect.addEventListener('change', function () {
+                const selectedMajor = this.value;
+                middleCategorySelect.innerHTML = '';
+
+                if (categoryMapping[selectedMajor]) {
+                    categoryMapping[selectedMajor].forEach(item => {
+                        const option = document.createElement('option');
+                        option.value = item;
+                        option.textContent = item;
+                        middleCategorySelect.appendChild(option);
+                    });
+
+                    middleCategorySelect.dispatchEvent(new Event('change'));
+                }
+            });
+
+            // 當中項目改變時更新小項目清單
+            middleCategorySelect.addEventListener('change', function () {
+                const selectedMiddle = this.value;
+                updateItemsList(selectedMiddle);
+            });
+
+            // 初始化
+            const initialCategory = middleCategorySelect.value;
+            updateItemsList(initialCategory);
+        });
+    </script>
+}

@@ -1,0 +1,674 @@
+﻿@{
+    ViewData["Title"] = "Demo Page";
+}
+@{ Layout= null;}
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Procurement History Database</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --dark-green: #1a5e36;
+            --light-green: #2a7f4a;
+            --lightest-green: #e8f5e9;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+        }
+
+        .navbar {
+            background-color: var(--dark-green);
+        }
+
+        .navbar-brand, .nav-link {
+            color: white;
+        }
+
+            .nav-link:hover {
+                color: rgba(255,255,255,0.8);
+            }
+
+        .card {
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+
+        .card-header {
+            background-color: var(--dark-green);
+            color: white;
+            font-weight: 600;
+            border-top-left-radius: 8px;
+            border-top-right-radius: 8px;
+        }
+
+        .btn-primary {
+            background-color: var(--dark-green);
+            border-color: var(--dark-green);
+        }
+
+            .btn-primary:hover {
+                background-color: var(--light-green);
+                border-color: var(--light-green);
+            }
+
+        .btn-outline-primary {
+            color: var(--dark-green);
+            border-color: var(--dark-green);
+        }
+
+            .btn-outline-primary:hover {
+                background-color: var(--dark-green);
+                color: white;
+            }
+
+        .sidebar {
+            background-color: white;
+            border-right: 1px solid #dee2e6;
+        }
+
+        .table-header {
+            background-color: var(--dark-green);
+            color: white;
+        }
+
+        .filter-card {
+            border-left: 4px solid var(--dark-green);
+        }
+
+        .form-check-input:checked {
+            background-color: var(--dark-green);
+            border-color: var(--dark-green);
+        }
+
+        .form-control:focus, .form-select:focus {
+            border-color: var(--light-green);
+            box-shadow: 0 0 0 0.25rem rgba(42, 127, 74, 0.25);
+        }
+
+        .pagination .page-item.active .page-link {
+            background-color: var(--dark-green);
+            border-color: var(--dark-green);
+        }
+
+        .pagination .page-link {
+            color: var(--dark-green);
+        }
+
+        .table-striped tbody tr:nth-of-type(odd) {
+            background-color: rgba(42, 127, 74, 0.05);
+        }
+
+        .table-hover tbody tr:hover {
+            background-color: rgba(42, 127, 74, 0.1);
+        }
+
+        .bg-light-green {
+            background-color: var(--lightest-green);
+        }
+
+        .tab-content {
+            border: 1px solid #dee2e6;
+            border-top: none;
+            padding: 20px;
+            background-color: white;
+        }
+
+        .nav-tabs .nav-link.active {
+            color: var(--dark-green);
+            font-weight: bold;
+            border-top: 3px solid var(--dark-green);
+        }
+
+        .nav-tabs .nav-link {
+            color: #495057;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">
+                <i class="fas fa-database me-2"></i>
+                Procurement System
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#" id="priceDbLink">Price Database</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" id="analysisLink">Price Analysis</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" id="evaluationLink">Evaluation Tables</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" id="settingsLink">Settings</a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <i class="fas fa-user me-1"></i> Admin
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <i class="fas fa-sign-out-alt me-1"></i> Logout
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content Area -->
+    <div class="container-fluid mt-4">
+        <!-- Price Database Section -->
+        <div id="priceDbSection">
+            <div class="row mb-4">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h5 class="mb-0">Procurement History Database</h5>
+                            <div>
+                                <button class="btn btn-sm btn-outline-light" data-bs-toggle="modal" data-bs-target="#importModal">
+                                    <i class="fas fa-file-import me-1"></i> 匯入
+                                </button>
+                                <div class="btn-group">
+                                    <button class="btn btn-sm btn-outline-light dropdown-toggle" data-bs-toggle="dropdown">
+                                        <i class="fas fa-file-export me-1"></i> 匯出
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item" href="#"><i class="far fa-file-excel me-2"></i>Excel</a></li>
+                                        <li><a class="dropdown-item" href="#"><i class="far fa-file-pdf me-2"></i>PDF</a></li>
+                                        <li><a class="dropdown-item" href="#"><i class="far fa-file-csv me-2"></i>CSV</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="row g-3 mb-4">
+                                <div class="col-md-3">
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-white">
+                                            <i class="fas fa-search text-muted"></i>
+                                        </span>
+                                        <input type="text" class="form-control" placeholder="搜尋品項...">
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <select class="form-select">
+                                        <option selected>所有類型</option>
+                                        <option>儀器設備</option>
+                                        <option>醫療材料</option>
+                                        <option>醫療維修所需物品料件</option>
+                                        <option>工程維修所需物品料件</option>
+                                        <option>醫療相關耗材及雜項用品</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-2">
+                                    <select class="form-select">
+                                        <option selected>所有供應商</option>
+                                        <option>Vendor A</option>
+                                        <option>Vendor B</option>
+                                        <option>Vendor C</option>
+                                        <option>Vendor D</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-2">
+                                    <input type="date" class="form-control" placeholder="Start Date">
+                                </div>
+                                <div class="col-md-2">
+                                    <input type="date" class="form-control" placeholder="End Date">
+                                </div>
+                                <div class="col-md-1">
+                                    <button class="btn btn-primary w-100">查詢</button>
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <div class="col-md-3">
+                                    <div class="card filter-card h-100">
+                                        <div class="card-header bg-white text-dark">
+                                            <h6 class="mb-0">進階查詢</h6>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="mb-3">
+                                                <label class="form-label fw-bold">價格範圍</label>
+                                                <div class="row g-2">
+                                                    <div class="col-6">
+                                                        <input type="number" class="form-control form-control-sm" placeholder="最小值">
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <input type="number" class="form-control form-control-sm" placeholder="最大值">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label class="form-label fw-bold">狀態</label>
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" value="" id="checkActive">
+                                                    <label class="form-check-label" for="checkActive">
+                                                        有效
+                                                    </label>
+                                                </div>
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" value="" id="checkExpired">
+                                                    <label class="form-check-label" for="checkExpired">
+                                                        已過期
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label class="form-label fw-bold">價格選擇</label>
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" value="" id="checkLatestPrice">
+                                                    <label class="form-check-label" for="checkLatestPrice">
+                                                        最新價格
+                                                    </label>
+                                                </div>
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" value="" id="checkLowestPrice">
+                                                    <label class="form-check-label" for="checkLowestPrice">
+                                                        最低價格
+                                                    </label>
+                                                </div>
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" value="" id="checkAveragePrice">
+                                                    <label class="form-check-label" for="checkAveragePrice">
+                                                        平均價格
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <hr>
+                                            <div class="d-grid">
+                                                <button class="btn btn-primary btn-sm">查詢</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-9">
+                                    <div class="card h-100">
+                                        <div class="card-header bg-white text-dark d-flex justify-content-between align-items-center">
+                                            <h6 class="mb-0">舊價查詢</h6>
+                                            <div>
+                                                <button class="btn btn-sm btn-outline-primary me-1">
+                                                    <i class="fas fa-plus me-1"></i> Add New Entry
+                                                </button>
+                                                <button class="btn btn-sm btn-outline-success">
+                                                    <i class="fas fa-chart-line me-1"></i> Analytics
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div class="card-body p-0">
+                                            <div class="table-responsive">
+                                                <table class="table table-hover table-striped mb-0">
+                                                    <thead class="table-header">
+                                                        <tr>
+                                                            <th scope="col">名稱</th>
+                                                            <th scope="col">供應商</th>
+                                                            <th scope="col">種類</th>
+                                                            <th scope="col">報價</th>
+                                                            <th scope="col">日期</th>
+                                                            <th scope="col">交貨時間</th>
+                                                            <th scope="col">狀態</th>
+                                                            <th scope="col">操作工具</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td>“美瑞特”英雄人工血管</td>
+                                                            <td>美瑞特醫療器材股份有限公司</td>
+                                                            <td>醫療材料</td>
+                                                            <td>$165,000</td>
+                                                            <td>2025-02-15</td>
+                                                            <td>14 天</td>
+                                                            <td><span class="badge bg-success">Active</span></td>
+                                                            <td>
+                                                                <button class="btn btn-sm btn-outline-dark" title="View Details">
+                                                                    <i class="fas fa-eye"></i>
+                                                                </button>
+                                                                <button class="btn btn-sm btn-outline-primary" title="Edit">
+                                                                    <i class="fas fa-edit"></i>
+                                                                </button>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>"波士頓科技"可調控鞘管套組</td>
+                                                            <td>波士頓科技</td>
+                                                            <td>醫療材料</td>
+                                                            <td>$74,250</td>
+                                                            <td>2025-01-10</td>
+                                                            <td>7 天</td>
+                                                            <td><span class="badge bg-success">Active</span></td>
+                                                            <td>
+                                                                <button class="btn btn-sm btn-outline-dark" title="View Details">
+                                                                    <i class="fas fa-eye"></i>
+                                                                </button>
+                                                                <button class="btn btn-sm btn-outline-primary" title="Edit">
+                                                                    <i class="fas fa-edit"></i>
+                                                                </button>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Executive Office Chair</td>
+                                                            <td>Herman Miller</td>
+                                                            <td>Furniture</td>
+                                                            <td>$799.00</td>
+                                                            <td>2024-12-05</td>
+                                                            <td>21 days</td>
+                                                            <td><span class="badge bg-success">Active</span></td>
+                                                            <td>
+                                                                <button class="btn btn-sm btn-outline-dark" title="View Details">
+                                                                    <i class="fas fa-eye"></i>
+                                                                </button>
+                                                                <button class="btn btn-sm btn-outline-primary" title="Edit">
+                                                                    <i class="fas fa-edit"></i>
+                                                                </button>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Premium Copy Paper (5000 sheets)</td>
+                                                            <td>Staples</td>
+                                                            <td>Office Supplies</td>
+                                                            <td>$49.99</td>
+                                                            <td>2024-11-20</td>
+                                                            <td>3 days</td>
+                                                            <td><span class="badge bg-success">Active</span></td>
+                                                            <td>
+                                                                <button class="btn btn-sm btn-outline-dark" title="View Details">
+                                                                    <i class="fas fa-eye"></i>
+                                                                </button>
+                                                                <button class="btn btn-sm btn-outline-primary" title="Edit">
+                                                                    <i class="fas fa-edit"></i>
+                                                                </button>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Network Switch 24-Port</td>
+                                                            <td>Cisco Systems</td>
+                                                            <td>IT Equipment</td>
+                                                            <td>$899.00</td>
+                                                            <td>2024-10-15</td>
+                                                            <td>10 days</td>
+                                                            <td><span class="badge bg-warning text-dark">Expiring Soon</span></td>
+                                                            <td>
+                                                                <button class="btn btn-sm btn-outline-dark" title="View Details">
+                                                                    <i class="fas fa-eye"></i>
+                                                                </button>
+                                                                <button class="btn btn-sm btn-outline-primary" title="Edit">
+                                                                    <i class="fas fa-edit"></i>
+                                                                </button>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Aluminum Raw Material (500kg)</td>
+                                                            <td>MetalCorp</td>
+                                                            <td>Raw Materials</td>
+                                                            <td>$3,250.00</td>
+                                                            <td>2024-09-25</td>
+                                                            <td>30 days</td>
+                                                            <td><span class="badge bg-secondary">Expired</span></td>
+                                                            <td>
+                                                                <button class="btn btn-sm btn-outline-dark" title="View Details">
+                                                                    <i class="fas fa-eye"></i>
+                                                                </button>
+                                                                <button class="btn btn-sm btn-outline-primary" title="Edit">
+                                                                    <i class="fas fa-edit"></i>
+                                                                </button>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                        <div class="card-footer bg-white">
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                <div>
+                                                    <span class="text-muted">Showing 1 to 6 of 24 entries</span>
+                                                </div>
+                                                <nav>
+                                                    <ul class="pagination pagination-sm mb-0">
+                                                        <li class="page-item disabled">
+                                                            <a class="page-link" href="#" tabindex="-1">前一頁</a>
+                                                        </li>
+                                                        <li class="page-item active">
+                                                            <a class="page-link" href="#">1</a>
+                                                        </li>
+                                                        <li class="page-item">
+                                                            <a class="page-link" href="#">2</a>
+                                                        </li>
+                                                        <li class="page-item">
+                                                            <a class="page-link" href="#">3</a>
+                                                        </li>
+                                                        <li class="page-item">
+                                                            <a class="page-link" href="#">4</a>
+                                                        </li>
+                                                        <li class="page-item">
+                                                            <a class="page-link" href="#">下一頁</a>
+                                                        </li>
+                                                    </ul>
+                                                </nav>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Price Trend Chart -->
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5 class="mb-0">Price Trend Analysis</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row mb-3">
+                                        <div class="col-md-3">
+                                            <select class="form-select" id="chartProductSelect">
+                                                <option selected>Select Product</option>
+                                                <option>Dell XPS 15 Laptop</option>
+                                                <option>HP LaserJet Pro Printer</option>
+                                                <option>Executive Office Chair</option>
+                                                <option>Premium Copy Paper</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <select class="form-select" id="chartPeriodSelect">
+                                                <option selected>Last 12 months</option>
+                                                <option>Last 6 months</option>
+                                                <option>Last 3 months</option>
+                                                <option>Custom Range</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div id="priceTrendChart" style="height: 300px; width: 100%;">
+                                        <!-- Chart will be rendered here -->
+                                        <div class="d-flex justify-content-center align-items-center h-100">
+                                            <div class="text-center text-muted">
+                                                <i class="fas fa-chart-line fa-3x mb-3"></i>
+                                                <p>Select a product to view price trend</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Price Analysis Section (Hidden by default) -->
+        <div id="analysisSection" style="display: none;">
+            <div class="row mb-4">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0">Price Analysis & Reserve Price Evaluation</h5>
+                        </div>
+                        <div class="card-body">
+                            <ul class="nav nav-tabs" id="analysisTab" role="tablist">
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link active" id="comparison-tab" data-bs-toggle="tab" data-bs-target="#comparison" type="button" role="tab">Price Comparison</button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link" id="reserve-tab" data-bs-toggle="tab" data-bs-target="#reserve" type="button" role="tab">Reserve Price Analysis</button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link" id="vendor-tab" data-bs-toggle="tab" data-bs-target="#vendor" type="button" role="tab">Vendor Performance</button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link" id="market-tab" data-bs-toggle="tab" data-bs-target="#market" type="button" role="tab">Market Analysis</button>
+                                </li>
+                            </ul>
+                            <div class="tab-content" id="analysisTabContent">
+                                <div class="tab-pane fade show active" id="comparison" role="tabpanel">
+                                    <div class="row mb-3">
+                                        <div class="col-md-6">
+                                            <div class="input-group mb-3">
+                                                <span class="input-group-text">Product</span>
+                                                <select class="form-select" id="comparisonProduct">
+                                                    <option selected>Select Product</option>
+                                                    <option>Dell XPS 15 Laptop</option>
+                                                    <option>HP LaserJet Pro Printer</option>
+                                                    <option>Executive Office Chair</option>
+                                                </select>
+                                                <button class="btn btn-primary">Compare</button>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="input-group mb-3">
+                                                <span class="input-group-text">Date Range</span>
+                                                <input type="date" class="form-control">
+                                                <span class="input-group-text">to</span>
+                                                <input type="date" class="form-control">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered table-hover">
+                                            <thead class="table-header">
+                                                <tr>
+                                                    <th>Vendor</th>
+                                                    <th>Lowest Price</th>
+                                                    <th>Highest Price</th>
+                                                    <th>Average Price</th>
+                                                    <th>Last Purchase</th>
+                                                    <th>Current Quote</th>
+                                                    <th>% Change</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>Vendor A</td>
+                                                    <td>$1,450.00</td>
+                                                    <td>$1,550.00</td>
+                                                    <td>$1,499.50</td>
+                                                    <td>$1,499.99 (2025-01-15)</td>
+                                                    <td>$1,525.00</td>
+                                                    <td class="text-danger">+1.67%</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Vendor B</td>
+                                                    <td>$1,425.00</td>
+                                                    <td>$1,600.00</td>
+                                                    <td>$1,510.75</td>
+                                                    <td>$1,525.00 (2024-12-10)</td>
+                                                    <td>$1,475.00</td>
+                                                    <td class="text-success">-3.28%</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Vendor C</td>
+                                                    <td>$1,400.00</td>
+                                                    <td>$1,575.00</td>
+                                                    <td>$1,487.50</td>
+                                                    <td>$1,475.00 (2024-11-25)</td>
+                                                    <td>$1,450.00</td>
+                                                    <td class="text-success">-1.69%</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="mt-4">
+                                        <h6>Recommendation</h6>
+                                        <div class="alert alert-success">
+                                            <i class="fas fa-check-circle me-2"></i> Based on historical data and current market trends, <strong>Vendor C</strong> offers the best value at $1,450.00 with consistently competitive pricing and good quality rating.
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tab-pane fade" id="reserve" role="tabpanel">
+                                    <div class="row mb-4">
+                                        <div class="col-md-4">
+                                            <div class="card">
+                                                <div class="card-header bg-white">
+                                                    <h6 class="mb-0">Reserve Price Calculator</h6>
+                                                </div>
+                                                <div class="card-body">
+                                                    <div class="mb-3">
+                                                        <label class="form-label">Product Category</label>
+                                                        <select class="form-select">
+                                                            <option>IT Equipment</option>
+                                                            <option>Office Supplies</option>
+                                                            <option>Furniture</option>
+                                                            <option>Raw Materials</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label class="form-label">Product Name</label>
+                                                        <input type="text" class="form-control" placeholder="Enter product name">
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label class="form-label">Historical Average Price</label>
+                                                        <div class="input-group">
+                                                            <span class="input-group-text">$</span>
+                                                            <input type="number" class="form-control" value="1495.50" readonly>
+                                                        </div>
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label class="form-label">Market Adjustment (%)</label>
+                                                        <input type="number" class="form-control" value="2">
+                                                        <div class="form-text">Current market trend adjustment factor</div>
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label class="form-label">Volume Discount (%)</label>
+                                                        <input type="number" class="form-control" value="3">
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label class="form-label">Inflation Rate (%)</label>
+                                                        <input type="number" class="form-control" value="1.5">
+                                                    </div>
+                                                    <hr>
+                                                    <div class="mb-3">
+                                                        <label class="form-label fw-bold">Calculated Reserve Price</label>
+                                                        <div class="input-group">
+                                                            <span class="input-group-text">$</span>
+                                                            <input type="number" class="form-control form-control-lg bg-light-green" value="1485.03" readonly>
+                                                        </div>
+                                                    </div>
+                                                    <div class="d-grid">
+                                                        <button class="btn btn-primary">Save to Reserve Price Table</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>

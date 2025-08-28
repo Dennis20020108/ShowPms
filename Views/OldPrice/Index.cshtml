@@ -1,0 +1,923 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+<style>
+    :root {
+        --primary-green: #28a745;
+        --light-green: #d4edda;
+        --dark-green: #1e7e34;
+        --muted-green: #6c757d;
+    }
+
+    .bg-primary-green {
+        background-color: var(--primary-green) !important;
+    }
+
+    .text-primary-green {
+        color: var(--primary-green) !important;
+    }
+
+    .btn-primary-green {
+        background-color: var(--primary-green);
+        border-color: var(--primary-green);
+        color: white;
+    }
+
+        .btn-primary-green:hover {
+            background-color: var(--dark-green);
+            border-color: var(--dark-green);
+            color: white;
+        }
+
+    .btn-outline-primary-green {
+        background-color: transparent;
+        border-color: var(--primary-green);
+        color: var(--primary-green);
+    }
+
+        .btn-outline-primary-green:hover {
+            background-color: var(--primary-green);
+            border-color: var(--primary-green);
+            color: white;
+        }
+
+    .card {
+        border: 1px solid var(--primary-green);
+        box-shadow: 0 2px 4px rgba(40, 167, 69, 0.1);
+    }
+
+    .card-header {
+        background-color: var(--light-green);
+        border-bottom: 1px solid var(--primary-green);
+    }
+
+    .form-select:focus, .form-control:focus {
+        border-color: var(--primary-green);
+        box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
+    }
+
+    .search-section {
+        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        border-radius: 10px;
+        padding: 25px;
+        margin-bottom: 25px;
+        border: 2px solid var(--primary-green);
+    }
+
+    .filter-card {
+        border: 1px solid #dee2e6;
+        border-radius: 8px;
+        padding: 20px;
+        margin-bottom: 20px;
+        transition: all 0.3s ease;
+    }
+
+        .filter-card:hover {
+            border-color: var(--primary-green);
+            box-shadow: 0 2px 8px rgba(40, 167, 69, 0.1);
+        }
+
+    .filter-toggle {
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+        .filter-toggle:hover {
+            color: var(--primary-green);
+        }
+
+    .advanced-search {
+        background-color: #f8f9fa;
+        border-radius: 8px;
+        padding: 20px;
+        margin-top: 15px;
+        border: 1px solid #dee2e6;
+    }
+
+    .search-stats {
+        background: linear-gradient(135deg, var(--light-green) 0%, #ffffff 100%);
+        border-radius: 6px;
+        padding: 15px;
+        margin-bottom: 20px;
+    }
+
+    /* DataTable 自定義樣式 */
+    .dataTables_wrapper .dataTables_length select,
+    .dataTables_wrapper .dataTables_filter input {
+        border-color: var(--primary-green);
+    }
+
+        .dataTables_wrapper .dataTables_filter input:focus {
+            border-color: var(--primary-green);
+            box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
+        }
+
+    .table-hover tbody tr:hover {
+        background-color: var(--light-green);
+    }
+
+    .dt-buttons .btn {
+        background-color: var(--primary-green);
+        border-color: var(--primary-green);
+        color: white;
+        margin-right: 5px;
+    }
+
+        .dt-buttons .btn:hover {
+            background-color: var(--dark-green);
+            border-color: var(--dark-green);
+        }
+
+    .loading-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(255, 255, 255, 0.8);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 1000;
+        border-radius: 8px;
+    }
+
+    .spinner-border-custom {
+        color: var(--primary-green);
+    }
+
+</style>
+
+
+<div class="app-content-header">
+    <div class="container-fluid">
+        <!-- 主標題區域 -->
+        <div class="row">
+            <div class="col-sm-6">
+                <h3 class="mb-0">
+                    舊價資料查詢
+                </h3>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-end">
+                    <li class="breadcrumb-item">
+                        <a href="#">Home</a>
+                    </li>
+                    <li class="breadcrumb-item active" aria-current="page">
+                        舊價資料查詢
+                    </li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="app-content">
+    <div class="container-fluid">
+        <!-- 搜尋區域 -->
+        <div class="search-section">
+            <div class="row align-items-end">
+                <div class="col-md-8">
+                    <label class="form-label fw-bold text-primary-green">
+                        <i class="bi bi-search"></i> 搜尋
+                    </label>
+                    <div class="input-group">
+                        <input type="text" class="form-control" id="globalSearch"
+                               placeholder="輸入編碼、項目名稱、規格說明等關鍵字進行搜尋...">
+                        <button class="btn btn-primary-green" onclick="performGlobalSearch()">
+                            <i class="bi bi-search"></i> 搜尋
+                        </button>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="d-flex gap-2">
+                        <button class="btn btn-outline-primary-green" onclick="clearGlobalSearch()">
+                            <i class="bi bi-x-lg"></i> 清除
+                        </button>
+                        <button class="btn btn-outline-primary-green filter-toggle" onclick="toggleAdvancedFilter()">
+                            <i class="bi bi-funnel"></i> 進階篩選
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 進階篩選區域 -->
+            <div class="advanced-search" id="advancedFilter" style="display: none;">
+                <h6 class="text-primary-green mb-3">
+                    <i class="bi bi-filter"></i> 進階篩選條件
+                </h6>
+                <div class="row">
+                    <div class="col-md-4">
+                        <label class="form-label">大項目</label>
+                        <select class="form-select" id="filterMajorCategory">
+                            <option value="">全部</option>
+                            <option value="裝修">裝修</option>
+                            <option value="水電">水電</option>
+                            <option value="空調">空調</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">中項目</label>
+                        <select class="form-select" id="filterMiddleCategory">
+                            <option value="">全部</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">單位</label>
+                        <select class="form-select" id="filterUnit">
+                            <option value="">全部</option>
+                            <option value="m²">m²</option>
+                            <option value="m">m</option>
+                            <option value="式">式</option>
+                            <option value="組">組</option>
+                            <option value="樘">樘</option>
+                            <option value="尺">尺</option>
+                            <option value="坪">坪</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-md-6">
+                        <label class="form-label">單價範圍</label>
+                        <div class="row">
+                            <div class="col-6">
+                                <input type="number" class="form-control" id="minPrice" placeholder="最低價">
+                            </div>
+                            <div class="col-6">
+                                <input type="number" class="form-control" id="maxPrice" placeholder="最高價">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 d-flex align-items-end">
+                        <div class="d-flex gap-2 w-100">
+                            <button class="btn btn-primary-green flex-fill" onclick="applyAdvancedFilter()">
+                                <i class="bi bi-filter"></i> 套用篩選
+                            </button>
+                            <button class="btn btn-outline-primary-green" onclick="resetAdvancedFilter()">
+                                <i class="bi bi-arrow-counterclockwise"></i> 重置
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 搜尋統計資訊 -->
+        <div class="search-stats" id="searchStats">
+            <div class="row">
+                <div class="col-md-6">
+                    <h6 class="mb-1 text-primary-green">搜尋結果統計</h6>
+                    <p class="mb-0">
+                        <span class="fw-bold" id="totalResults">2,456</span> 筆資料
+                        <span class="text-muted ms-2" id="filteredResults"></span>
+                    </p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <small class="text-muted">
+                        最後更新：<span id="lastUpdate">2024-12-25 10:30</span>
+                    </small>
+                </div>
+            </div>
+        </div>
+
+        <!-- 資料表格區域 -->
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center flex-wrap">
+                <h5 class="mb-0 text-primary-green">
+                    <i class="bi bi-table"></i> 舊價資料清單
+                </h5>
+                <div class="ms-auto btn-group" role="group">
+                    <button class="btn btn-sm btn-outline-primary-green" onclick="refreshData()">
+                        <i class="bi bi-arrow-clockwise"></i> 重新整理
+                    </button>
+                    <button class="btn btn-sm btn-outline-primary-green" onclick="exportData()">
+                        <i class="bi bi-download"></i> 匯出
+                    </button>
+                </div>
+            </div>
+            <div class="card-body p-0" style="position: relative;">
+                <!-- 載入指示器 -->
+                <div class="loading-overlay" id="loadingOverlay" style="display: none;">
+                    <div class="text-center">
+                        <div class="spinner-border spinner-border-custom" role="status">
+                            <span class="visually-hidden">載入中...</span>
+                        </div>
+                        <div class="mt-2 text-muted">載入資料中...</div>
+                    </div>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0" id="oldPriceTable">
+                        <thead class="table-success">
+                            <tr>
+                                <th>編碼</th>
+                                <th>大項目</th>
+                                <th>中項目</th>
+                                <th>小項目名稱</th>
+                                <th>規格/說明</th>
+                                <th>單位</th>
+                                <th>數量</th>
+                                <th>原單價</th>
+                                <th>原複價</th>
+                                <th>合約單價</th>
+                                <th>合約複價</th>
+                                <th>備註</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- 資料將由 JavaScript 動態載入 -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section scripts{
+    <!-- JSZip for Excel export -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+
+    <script>
+        // 類別映射資料
+        const categoryMapping = {
+            '裝修': ['假設工程', '室內隔間工程', '天花板裝修工程', '牆面裝修工程', '地坪裝修工程',
+                '地坪P.V.C無縫地毯工程', '地坪磁磚(材料)', '樓梯間裝修工程',
+                '內部門工程', '特殊裝修工程', '系統廚櫃工程', '雜項工程'],
+            '水電': ['給水工程', '排水工程', '電氣工程'],
+            '空調': ['空調設備', '通風工程', '冷卻水塔']
+        };
+
+        // 模擬舊價資料
+        const sampleData = [
+            {
+                code: 'A01-001',
+                majorCategory: '裝修',
+                middleCategory: '假設工程',
+                name: '臨時水、電、電信費',
+                spec: '施工期間臨時用電與通訊設備',
+                unit: '式',
+                quantity: 1,
+                unitPrice: 378000,
+                totalPrice: 378000,
+                contractUnitPrice: 350000,
+                contractTotalPrice: 350000,
+                note: '含施工期間所有臨時費用'
+            },
+            {
+                code: 'A01-002',
+                majorCategory: '裝修',
+                middleCategory: '假設工程',
+                name: '工務所及相關設備',
+                spec: '現場工務所搭建與設備配置',
+                unit: '式',
+                quantity: 1,
+                unitPrice: 252000,
+                totalPrice: 252000,
+                contractUnitPrice: 240000,
+                contractTotalPrice: 240000,
+                note: '含辦公設備租賃'
+            },
+            {
+                code: 'A02-001',
+                majorCategory: '裝修',
+                middleCategory: '室內隔間工程',
+                name: '放樣工程',
+                spec: '總樓地板面積放樣標示',
+                unit: 'm²',
+                quantity: 32555,
+                unitPrice: 47,
+                totalPrice: 1530085,
+                contractUnitPrice: 45,
+                contractTotalPrice: 1524975,
+                note: '依實際面積計算'
+            },
+            {
+                code: 'A02-015-T',
+                majorCategory: '裝修',
+                middleCategory: '室內隔間工程',
+                name: 'Type-A 9mm單層雙面矽酸鈣板輕隔間牆至頂',
+                spec: 'C型立柱92x35x0.95mm骨架@406mm,60K/50mm岩棉',
+                unit: 'm²',
+                quantity: 3468,
+                unitPrice: 1292,
+                totalPrice: 4480656,
+                contractUnitPrice: 1250,
+                contractTotalPrice: 4335000,
+                note: '含隔音材料A13-21'
+            },
+            {
+                code: 'B01-001',
+                majorCategory: '裝修',
+                middleCategory: '天花板裝修工程',
+                name: '輕鋼架天花板',
+                spec: '標準輕鋼架系統天花板',
+                unit: 'm²',
+                quantity: 1200,
+                unitPrice: 850,
+                totalPrice: 1020000,
+                contractUnitPrice: 820,
+                contractTotalPrice: 984000,
+                note: '含燈具配置預留孔'
+            },
+            {
+                code: 'C01-001',
+                majorCategory: '水電',
+                middleCategory: '給水工程',
+                name: '給水管配置',
+                spec: 'PVC給水管路系統配置',
+                unit: 'm',
+                quantity: 500,
+                unitPrice: 320,
+                totalPrice: 160000,
+                contractUnitPrice: 310,
+                contractTotalPrice: 155000,
+                note: '含管件與接頭'
+            },
+            {
+                code: 'D01-001',
+                majorCategory: '空調',
+                middleCategory: '空調設備',
+                name: '中央空調主機',
+                spec: '100RT離心式冰水主機',
+                unit: '台',
+                quantity: 2,
+                unitPrice: 1500000,
+                totalPrice: 3000000,
+                contractUnitPrice: 1450000,
+                contractTotalPrice: 2900000,
+                note: '含安裝調試'
+            }
+        ];
+
+        let dataTable;
+        let allData = [...sampleData];
+
+        // 初始化
+        $(document).ready(function () {
+            initializeDataTable();
+            setupEventHandlers();
+            updateSearchStats();
+        });
+
+        function initializeDataTable() {
+            dataTable = $('#oldPriceTable').DataTable({
+                data: allData,
+                columns: [
+                    { data: 'code' },
+                    { data: 'majorCategory' },
+                    { data: 'middleCategory' },
+                    { data: 'name' },
+                    { data: 'spec' },
+                    { data: 'unit' },
+                    {
+                        data: 'quantity',
+                        render: function (data) {
+                            return formatNumber(data);
+                        }
+                    },
+                    {
+                        data: 'unitPrice',
+                        render: function (data) {
+                            return formatNumber(data);
+                        }
+                    },
+                    {
+                        data: 'totalPrice',
+                        render: function (data) {
+                            return formatNumber(data);
+                        }
+                    },
+                    {
+                        data: 'contractUnitPrice',
+                        render: function (data) {
+                            return data ? formatNumber(data) : '-';
+                        }
+                    },
+                    {
+                        data: 'contractTotalPrice',
+                        render: function (data) {
+                            return data ? formatNumber(data) : '-';
+                        }
+                    },
+                    { data: 'note' }
+                ],
+                language: {
+                    url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/zh-HANT.json'
+                },
+                buttons: [
+                    {
+                        extend: 'excel',
+                        text: '<i class="bi bi-file-earmark-excel"></i> Excel',
+                        className: 'btn btn-sm'
+                    },
+                    {
+                        extend: 'copy',
+                        text: '<i class="bi bi-clipboard"></i> 複製',
+                        className: 'btn btn-sm'
+                    }
+                ],
+                responsive: true,
+                scrollX: true,
+                pageLength: 25,
+                lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "全部"]],
+                order: [[0, 'asc']],
+                searching: false,
+            });
+        }
+
+        function setupEventHandlers() {
+            // 大項目變更時更新中項目選項
+            $('#filterMajorCategory').on('change', function () {
+                const selectedMajor = $(this).val();
+                const middleSelect = $('#filterMiddleCategory');
+
+                middleSelect.empty().append('<option value="">全部</option>');
+
+                if (selectedMajor && categoryMapping[selectedMajor]) {
+                    categoryMapping[selectedMajor].forEach(item => {
+                        middleSelect.append(`<option value="${item}">${item}</option>`);
+                    });
+                }
+            });
+
+            // 全域搜尋 Enter 鍵
+            $('#globalSearch').on('keypress', function (e) {
+                if (e.which === 13) {
+                    performGlobalSearch();
+                }
+            });
+        }
+
+        function toggleAdvancedFilter() {
+            const filterDiv = $('#advancedFilter');
+            const isVisible = filterDiv.is(':visible');
+
+            if (isVisible) {
+                filterDiv.slideUp(300);
+            } else {
+                filterDiv.slideDown(300);
+            }
+        }
+
+        function performGlobalSearch() {
+            const keyword = $('#globalSearch').val().trim();
+
+            if (!keyword) {
+                showMessage('請輸入搜尋關鍵字', 'warning');
+                return;
+            }
+
+            showLoading(true);
+
+            // 模擬 API 延遲
+            setTimeout(() => {
+                dataTable.search(keyword).draw();
+                updateSearchStats();
+                showLoading(false);
+                showMessage(`搜尋關鍵字 "${keyword}" 完成`, 'success');
+            }, 800);
+        }
+
+        function clearGlobalSearch() {
+            $('#globalSearch').val('');
+            dataTable.search('').draw();
+            updateSearchStats();
+            showMessage('已清除搜尋條件', 'info');
+        }
+
+        function applyAdvancedFilter() {
+            const filters = {
+                majorCategory: $('#filterMajorCategory').val(),
+                middleCategory: $('#filterMiddleCategory').val(),
+                unit: $('#filterUnit').val(),
+                minPrice: $('#minPrice').val(),
+                maxPrice: $('#maxPrice').val()
+            };
+
+            showLoading(true);
+
+            // 模擬篩選處理
+            setTimeout(() => {
+                let filteredData = [...sampleData];
+
+                // 應用篩選條件
+                if (filters.majorCategory) {
+                    filteredData = filteredData.filter(item => item.majorCategory === filters.majorCategory);
+                }
+                if (filters.middleCategory) {
+                    filteredData = filteredData.filter(item => item.middleCategory === filters.middleCategory);
+                }
+                if (filters.unit) {
+                    filteredData = filteredData.filter(item => item.unit === filters.unit);
+                }
+                if (filters.minPrice) {
+                    filteredData = filteredData.filter(item => item.unitPrice >= parseFloat(filters.minPrice));
+                }
+                if (filters.maxPrice) {
+                    filteredData = filteredData.filter(item => item.unitPrice <= parseFloat(filters.maxPrice));
+                }
+
+                // 更新 DataTable
+                dataTable.clear().rows.add(filteredData).draw();
+                updateSearchStats(filteredData.length);
+                showLoading(false);
+
+                const filterCount = Object.values(filters).filter(v => v).length;
+                showMessage(`已套用 ${filterCount} 個篩選條件`, 'success');
+            }, 600);
+        }
+
+        function resetAdvancedFilter() {
+            $('#filterMajorCategory').val('');
+            $('#filterMiddleCategory').empty().append('<option value="">全部</option>');
+            $('#filterUnit').val('');
+            $('#minPrice').val('');
+            $('#maxPrice').val('');
+
+            dataTable.clear().rows.add(sampleData).draw();
+            updateSearchStats();
+            showMessage('已重置篩選條件', 'info');
+        }
+
+        function refreshData() {
+            showLoading(true);
+
+            // 模擬資料重新載入
+            setTimeout(() => {
+                dataTable.clear().rows.add(sampleData).draw();
+                updateSearchStats();
+                showLoading(false);
+                showMessage('資料已重新整理', 'success');
+            }, 1000);
+        }
+
+        function exportData() {
+            // 觸發 DataTables 的 Excel 匯出功能
+            $('.buttons-excel').click();
+        }
+
+        function updateSearchStats(filteredCount = null) {
+            const totalCount = sampleData.length;
+            const displayedCount = filteredCount !== null ? filteredCount : dataTable.rows().count();
+
+            $('#totalResults').text(totalCount.toLocaleString());
+
+            if (filteredCount !== null && filteredCount < totalCount) {
+                $('#filteredResults').text(`(篩選後顯示 ${displayedCount.toLocaleString()} 筆)`);
+            } else {
+                $('#filteredResults').text('');
+            }
+
+            $('#lastUpdate').text(new Date().toLocaleString('zh-TW'));
+        }
+
+        function showLoading(show) {
+            const overlay = $('#loadingOverlay');
+            if (show) {
+                overlay.fadeIn(300);
+            } else {
+                overlay.fadeOut(300);
+            }
+        }
+
+        function showMessage(message, type = 'info') {
+            const alertClass = {
+                'success': 'alert-success',
+                'warning': 'alert-warning',
+                'error': 'alert-danger',
+                'info': 'alert-info'
+            };
+
+            const alertDiv = $(`
+                            <div class="alert ${alertClass[type]} alert-dismissible fade show position-fixed"
+                                 style="top: 20px; right: 20px; z-index: 9999; min-width: 300px;">
+                                ${message}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                            </div>
+                        `);
+
+            $('body').append(alertDiv);
+
+            // 3秒後自動移除
+            setTimeout(() => {
+                alertDiv.alert('close');
+            }, 3000);
+        }
+
+        function formatNumber(num) {
+            if (!num || num === '' || num === '-') return '-';
+            return parseFloat(num).toLocaleString();
+        }
+
+        // 模擬更多資料載入
+        function loadMoreSampleData() {
+            const moreData = [
+                {
+                    code: 'B01-002',
+                    majorCategory: '裝修',
+                    middleCategory: '天花板裝修工程',
+                    name: '矽酸鈣板天花板',
+                    spec: '6mm厚矽酸鈣板平釘天花板',
+                    unit: 'm²',
+                    quantity: 800,
+                    unitPrice: 950,
+                    totalPrice: 760000,
+                    contractUnitPrice: 920,
+                    contractTotalPrice: 736000,
+                    note: '防火等級CNS14705-1類'
+                },
+                {
+                    code: 'B02-001',
+                    majorCategory: '裝修',
+                    middleCategory: '牆面裝修工程',
+                    name: '牆面乳膠漆',
+                    spec: '室內牆面乳膠漆一底二度',
+                    unit: 'm²',
+                    quantity: 2500,
+                    unitPrice: 180,
+                    totalPrice: 450000,
+                    contractUnitPrice: 175,
+                    contractTotalPrice: 437500,
+                    note: '含批土整平'
+                },
+                {
+                    code: 'C01-002',
+                    majorCategory: '水電',
+                    middleCategory: '給水工程',
+                    name: '給水設備安裝',
+                    spec: '不鏽鋼水塔及加壓設備',
+                    unit: '組',
+                    quantity: 25,
+                    unitPrice: 8500,
+                    totalPrice: 212500,
+                    contractUnitPrice: 8200,
+                    contractTotalPrice: 205000,
+                    note: '含管路連接及測試'
+                },
+                {
+                    code: 'C02-001',
+                    majorCategory: '水電',
+                    middleCategory: '排水工程',
+                    name: '污排水管配置',
+                    spec: 'PVC污排水管路系統',
+                    unit: 'm',
+                    quantity: 800,
+                    unitPrice: 280,
+                    totalPrice: 224000,
+                    contractUnitPrice: 270,
+                    contractTotalPrice: 216000,
+                    note: '含管件及人孔蓋'
+                },
+                {
+                    code: 'C03-001',
+                    majorCategory: '水電',
+                    middleCategory: '電氣工程',
+                    name: '電氣配線工程',
+                    spec: '一般照明及動力配線',
+                    unit: 'm',
+                    quantity: 5000,
+                    unitPrice: 120,
+                    totalPrice: 600000,
+                    contractUnitPrice: 115,
+                    contractTotalPrice: 575000,
+                    note: '含電線管路及接線盒'
+                },
+                {
+                    code: 'D01-002',
+                    majorCategory: '空調',
+                    middleCategory: '空調設備',
+                    name: '風管系統',
+                    spec: '鍍鋅鋼板風管系統配置',
+                    unit: 'm²',
+                    quantity: 1500,
+                    unitPrice: 450,
+                    totalPrice: 675000,
+                    contractUnitPrice: 430,
+                    contractTotalPrice: 645000,
+                    note: '含保溫材料及支架'
+                },
+                {
+                    code: 'D02-001',
+                    majorCategory: '空調',
+                    middleCategory: '通風工程',
+                    name: '排風機設備',
+                    spec: '離心式排風機含馬達',
+                    unit: '台',
+                    quantity: 12,
+                    unitPrice: 15000,
+                    totalPrice: 180000,
+                    contractUnitPrice: 14500,
+                    contractTotalPrice: 174000,
+                    note: '含安裝及電氣連接'
+                },
+                {
+                    code: 'E01-001',
+                    majorCategory: '裝修',
+                    middleCategory: '地坪裝修工程',
+                    name: '拋光石英磚',
+                    spec: '60x60cm拋光石英磚地坪',
+                    unit: 'm²',
+                    quantity: 3000,
+                    unitPrice: 1200,
+                    totalPrice: 3600000,
+                    contractUnitPrice: 1150,
+                    contractTotalPrice: 3450000,
+                    note: '含底材及施工'
+                },
+                {
+                    code: 'E01-002',
+                    majorCategory: '裝修',
+                    middleCategory: '地坪裝修工程',
+                    name: '環氧樹脂地坪',
+                    spec: '厚度3mm環氧樹脂自平地坪',
+                    unit: 'm²',
+                    quantity: 500,
+                    unitPrice: 800,
+                    totalPrice: 400000,
+                    contractUnitPrice: 780,
+                    contractTotalPrice: 390000,
+                    note: '含底漆處理'
+                },
+                {
+                    code: 'F01-001',
+                    majorCategory: '裝修',
+                    middleCategory: '內部門工程',
+                    name: '木質防火門',
+                    spec: '90分鐘防火木質門含五金',
+                    unit: '樘',
+                    quantity: 25,
+                    unitPrice: 18000,
+                    totalPrice: 450000,
+                    contractUnitPrice: 17500,
+                    contractTotalPrice: 437500,
+                    note: '含門框及安裝'
+                }
+            ];
+
+            // 將新資料加入到原有資料中
+            allData = [...sampleData, ...moreData];
+            dataTable.clear().rows.add(allData).draw();
+            updateSearchStats();
+        }
+
+        // 頁面載入完成後載入更多資料
+        $(window).on('load', function () {
+            setTimeout(() => {
+                loadMoreSampleData();
+                showMessage('資料載入完成', 'success');
+            }, 1500);
+        });
+
+        // 額外的工具函數
+        function getSelectedRows() {
+            // 未來可用於選擇特定行的功能
+            return dataTable.rows('.selected').data();
+        }
+
+        function highlightSearchResults(keyword) {
+            // 未來可用於高亮顯示搜尋結果
+            if (!keyword) return;
+
+            // 這裡可以加入高亮邏輯
+            console.log('Highlighting keyword:', keyword);
+        }
+
+        // 鍵盤快捷鍵
+        $(document).on('keydown', function (e) {
+            // Ctrl + F 聚焦到搜尋框
+            if (e.ctrlKey && e.keyCode === 70) {
+                e.preventDefault();
+                $('#globalSearch').focus();
+            }
+
+            // Escape 鍵清除搜尋
+            if (e.keyCode === 27) {
+                if ($('#globalSearch').is(':focus')) {
+                    clearGlobalSearch();
+                }
+            }
+        });
+
+        // 表格行點擊事件（未來可擴展為選擇功能）
+        $('#oldPriceTable tbody').on('click', 'tr', function () {
+            if ($(this).hasClass('selected')) {
+                $(this).removeClass('selected');
+            } else {
+                dataTable.$('tr.selected').removeClass('selected');
+                $(this).addClass('selected');
+            }
+        });
+
+        // 窗口大小改變時重新調整表格
+        $(window).on('resize', function () {
+            if (dataTable) {
+                dataTable.columns.adjust().responsive.recalc();
+            }
+        });
+    </script>
+}

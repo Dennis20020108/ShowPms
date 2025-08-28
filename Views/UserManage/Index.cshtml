@@ -1,0 +1,95 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+<div class="app-content-header">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-6">
+                <h3 class="mb-0">
+                    使用者管理
+                </h3>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-end">
+                    <li class="breadcrumb-item">
+                        <a href="#">Home</a>
+                    </li>
+                    <li class="breadcrumb-item active" aria-current="page">使用者管理</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="app-content">
+    <div class="container-fluid">
+        <div class="mb-3 text-end">
+            <button class="btn btn-primary-green" onclick="openCreateUserModal()">
+                <i class="bi bi-person-plus-fill"></i> 新增使用者
+            </button>
+        </div>
+
+        <table id="userTable" class="table table-striped table-bordered">
+            <thead class="table-success">
+                <tr>
+                    <th>帳號</th>
+                    <th>姓名</th>
+                    <th>部門</th>
+                    <th>角色</th>
+                    <th>狀態</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>worker001</td>
+                    <td>林工務</td>
+                    <td>工務部</td>
+                    <td>一般使用者</td>
+                    <td><span class="badge bg-success">啟用</span></td>
+                    <td>
+                        <a class="btn btn-sm btn-outline-primary me-1" href="#"><i class="bi bi-pencil"></i></a>
+                        <a class="btn btn-sm btn-outline-danger me-1" href="#"><i class="bi bi-trash"></i></a>
+                        <a class="btn btn-sm btn-outline-secondary" href="#"><i class="bi bi-arrow-clockwise"></i></a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>admin001</td>
+                    <td>張主管</td>
+                    <td>採購部</td>
+                    <td>系統管理員</td>
+                    <td><span class="badge bg-danger">停用</span></td>
+                    <td>
+                        <a class="btn btn-sm btn-outline-primary me-1" href="#"><i class="bi bi-pencil"></i></a>
+                        <a class="btn btn-sm btn-outline-danger me-1" href="#"><i class="bi bi-trash"></i></a>
+                        <a class="btn btn-sm btn-outline-secondary" href="#"><i class="bi bi-arrow-clockwise"></i></a>
+                    </td>
+                </tr>
+                <!-- 可動態載入更多使用者資料 -->
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@section scripts {
+    <script>
+        $(document).ready(function () {
+            $('#userTable').DataTable({
+                language: {
+                    url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/zh-HANT.json'
+                },
+                ordering: true,
+                paging: true,
+                searching: true
+            });
+        });
+
+        function openCreateUserModal() {
+            // TODO: 開啟新增使用者 Modal
+            alert("開啟新增使用者視窗");
+        }
+    </script>
+}

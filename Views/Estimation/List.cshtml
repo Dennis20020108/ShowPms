@@ -1,0 +1,72 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+
+<div class="app-content-header">
+    <div class="container-fluid">
+        <!-- 主標題區域 -->
+        <div class="row">
+            <div class="col-sm-6">
+                <h3 class="mb-0">
+                    已建立估價單清單
+                </h3>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-end">
+                    <li class="breadcrumb-item">
+                        <a href="#">Home</a>
+                    </li>
+                    <li class="breadcrumb-item active" aria-current="page">已建立估價單清單</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="app-content">
+    <div class="container-fluid">
+        <table id="estimateTable" class="table table-striped table-bordered">
+            <thead class="table-success">
+                <tr>
+                    <th>估價單編號</th>
+                    <th>建立日期</th>
+                    <th>建立人員</th>
+                    <th>標案名稱</th>
+                    <th>場域</th>
+                    <th>動作</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>EST-001</td>
+                    <td>2025-08-20</td>
+                    <td>王小明</td>
+                    <td>辦公室裝修</td>
+                    <td>會議室</td>
+                    <td>
+                        <a class="btn btn-sm btn-outline-primary" href="#"><i class="bi bi-eye"></i> 查看</a>
+                        <a class="btn btn-sm btn-outline-success" href="#"><i class="bi bi-download"></i> 匯出</a>
+                        <a class="btn btn-sm btn-outline-danger" href="#"><i class="bi bi-trash"></i> 刪除</a>
+                    </td>
+                </tr>
+                <!-- 可重複多列 -->
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@section scripts{
+    <script>
+    $(document).ready(function () {
+        $('#estimateTable').DataTable({
+            language: {
+                url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/zh-HANT.json'
+            },
+            ordering: true,
+            paging: true,
+            searching: true
+        });
+    });
+    </script>
+
+}
