@@ -9,6 +9,8 @@ namespace ShowPms
             // Add services to the container.
             builder.Services.AddControllersWithViews();
 
+            builder.Services.AddScoped<EstimationServices>();
+            
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.

@@ -37,6 +37,8 @@
           integrity="sha256-+uGLJmmTKOqBr+2E6KDYs/NRsHxSkONXFHUL0fy2O/4="
           crossorigin="anonymous" />
     <link rel="stylesheet" href="~/plugins/DataTables/datatables.css" />
+    <!-- toastr CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet" />
 </head>
 <!--end::Head-->
 <!--begin::Body-->
@@ -221,6 +223,63 @@
                             </ul>
                         </li>
 
+                        <!-- 合約資料管理 -->
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="nav-icon bi bi-archive-fill"></i>
+                                <p>
+                                    合約價資料管理
+                                    <i class="nav-arrow bi bi-chevron-right"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a asp-area="" asp-controller="OldPrice" asp-action="Index" class="nav-link">
+                                        <i class="nav-icon bi bi-search"></i>
+                                        <p>合約價資料查詢</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a asp-area="" asp-controller="OldPrice" asp-action="Query" class="nav-link">
+                                        <i class="nav-icon bi bi-pencil-square"></i>
+                                        <p>合約價資料維護</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a asp-area="" asp-controller="OldPrice" asp-action="Import" class="nav-link">
+                                        <i class="nav-icon bi bi-cloud-upload"></i>
+                                        <p>匯入合約價資料</p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <!-- 報價單評比 -->
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="nav-icon bi bi-journal-check"></i>
+                                <p>
+                                    報價單評比作業
+                                    <i class="nav-arrow bi bi-chevron-right"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a asp-area="" asp-controller="QuotationCompare" asp-action="Index" class="nav-link">
+                                        <i class="nav-icon bi bi-search"></i>
+                                        <p>建立評比表</p>
+                                    </a>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a asp-area="" asp-controller="QuotationCompare" asp-action="Import" class="nav-link">
+                                        <i class="nav-icon bi bi-cloud-upload"></i>
+                                        <p>匯入報價單</p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+
                         <!-- 分類與模板管理 -->
                         <li class="nav-item">
                             <a href="#" class="nav-link">
@@ -316,12 +375,15 @@
             integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
             crossorigin="anonymous"></script>
     <!--end::Required Plugin(popperjs for Bootstrap 5)--><!--begin::Required Plugin(Bootstrap 5)-->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"
             integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy"
             crossorigin="anonymous"></script>
     <!--end::Required Plugin(Bootstrap 5)--><!--begin::Required Plugin(AdminLTE)-->
     <script src="~/dist/js/adminlte.js"></script>
     <!--end::Required Plugin(AdminLTE)--><!--begin::OverlayScrollbars Configure-->
+    <!-- toastr JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
     <script>
         const SELECTOR_SIDEBAR_WRAPPER = '.sidebar-wrapper';
         const Default = {

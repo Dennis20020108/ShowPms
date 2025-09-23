@@ -151,7 +151,6 @@
 
 </style>
 
-
 <div class="app-content-header">
     <div class="container-fluid">
         <!-- 主標題區域 -->
@@ -314,6 +313,7 @@
                         <thead class="table-success">
                             <tr>
                                 <th>編碼</th>
+                                <th>供應商</th>
                                 <th>大項目</th>
                                 <th>中項目</th>
                                 <th>小項目名稱</th>
@@ -356,6 +356,7 @@
         const sampleData = [
             {
                 code: 'A01-001',
+                vender: '欣禾豐',
                 majorCategory: '裝修',
                 middleCategory: '假設工程',
                 name: '臨時水、電、電信費',
@@ -370,6 +371,7 @@
             },
             {
                 code: 'A01-002',
+                vender: '欣禾豐',
                 majorCategory: '裝修',
                 middleCategory: '假設工程',
                 name: '工務所及相關設備',
@@ -384,6 +386,7 @@
             },
             {
                 code: 'A02-001',
+                vender: '欣禾豐',
                 majorCategory: '裝修',
                 middleCategory: '室內隔間工程',
                 name: '放樣工程',
@@ -398,6 +401,7 @@
             },
             {
                 code: 'A02-015-T',
+                vender: '欣禾豐',
                 majorCategory: '裝修',
                 middleCategory: '室內隔間工程',
                 name: 'Type-A 9mm單層雙面矽酸鈣板輕隔間牆至頂',
@@ -412,6 +416,7 @@
             },
             {
                 code: 'B01-001',
+                vender: '欣禾豐',
                 majorCategory: '裝修',
                 middleCategory: '天花板裝修工程',
                 name: '輕鋼架天花板',
@@ -426,6 +431,7 @@
             },
             {
                 code: 'C01-001',
+                vender: '欣禾豐',
                 majorCategory: '水電',
                 middleCategory: '給水工程',
                 name: '給水管配置',
@@ -440,6 +446,7 @@
             },
             {
                 code: 'D01-001',
+                vender: '欣禾豐',
                 majorCategory: '空調',
                 middleCategory: '空調設備',
                 name: '中央空調主機',
@@ -469,6 +476,7 @@
                 data: allData,
                 columns: [
                     { data: 'code' },
+                    { data: 'vender'},
                     { data: 'majorCategory' },
                     { data: 'middleCategory' },
                     { data: 'name' },
@@ -719,6 +727,7 @@
             const moreData = [
                 {
                     code: 'B01-002',
+                    vender: '欣禾豐',
                     majorCategory: '裝修',
                     middleCategory: '天花板裝修工程',
                     name: '矽酸鈣板天花板',
@@ -733,6 +742,7 @@
                 },
                 {
                     code: 'B02-001',
+                    vender: '欣禾豐',
                     majorCategory: '裝修',
                     middleCategory: '牆面裝修工程',
                     name: '牆面乳膠漆',
@@ -747,6 +757,7 @@
                 },
                 {
                     code: 'C01-002',
+                    vender: '欣禾豐',
                     majorCategory: '水電',
                     middleCategory: '給水工程',
                     name: '給水設備安裝',
@@ -761,6 +772,7 @@
                 },
                 {
                     code: 'C02-001',
+                    vender: '欣禾豐',
                     majorCategory: '水電',
                     middleCategory: '排水工程',
                     name: '污排水管配置',
@@ -775,6 +787,7 @@
                 },
                 {
                     code: 'C03-001',
+                    vender: '欣禾豐',
                     majorCategory: '水電',
                     middleCategory: '電氣工程',
                     name: '電氣配線工程',
@@ -789,6 +802,7 @@
                 },
                 {
                     code: 'D01-002',
+                    vender: '欣禾豐',
                     majorCategory: '空調',
                     middleCategory: '空調設備',
                     name: '風管系統',
@@ -803,6 +817,7 @@
                 },
                 {
                     code: 'D02-001',
+                    vender: '欣禾豐',
                     majorCategory: '空調',
                     middleCategory: '通風工程',
                     name: '排風機設備',
@@ -817,6 +832,7 @@
                 },
                 {
                     code: 'E01-001',
+                    vender: '欣禾豐',
                     majorCategory: '裝修',
                     middleCategory: '地坪裝修工程',
                     name: '拋光石英磚',
@@ -831,6 +847,7 @@
                 },
                 {
                     code: 'E01-002',
+                    vender: '欣禾豐',
                     majorCategory: '裝修',
                     middleCategory: '地坪裝修工程',
                     name: '環氧樹脂地坪',
@@ -845,6 +862,7 @@
                 },
                 {
                     code: 'F01-001',
+                    vender: '欣禾豐',
                     majorCategory: '裝修',
                     middleCategory: '內部門工程',
                     name: '木質防火門',
