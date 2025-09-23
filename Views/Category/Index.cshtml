@@ -1,6 +1,142 @@
 ﻿@*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
+
+<style>
+    :root {
+        --primary-green: #28a745;
+        --light-green: #d4edda;
+        --dark-green: #1e7e34;
+        --muted-green: #6c757d;
+    }
+
+    .bg-primary-green {
+        background-color: var(--primary-green) !important;
+    }
+
+    .text-primary-green {
+        color: var(--primary-green) !important;
+    }
+
+    .btn-primary-green {
+        background-color: var(--primary-green);
+        border-color: var(--primary-green);
+        color: white;
+    }
+
+        .btn-primary-green:hover {
+            background-color: var(--dark-green);
+            border-color: var(--dark-green);
+            color: white;
+        }
+
+    .btn-outline-primary-green {
+        background-color: transparent;
+        border-color: var(--primary-green);
+        color: var(--primary-green);
+    }
+
+        .btn-outline-primary-green:hover {
+            background-color: var(--primary-green);
+            border-color: var(--primary-green);
+            color: white;
+        }
+
+    .btn-secondary-green {
+        background-color: var(--muted-green);
+        border-color: var(--muted-green);
+        color: white;
+    }
+
+        .btn-secondary-green:hover {
+            background-color: #5a6268;
+            border-color: #545b62;
+            color: white;
+        }
+
+    .table-hover tbody tr:hover {
+        background-color: var(--light-green);
+    }
+
+    .card {
+        border: 1px solid var(--primary-green);
+    }
+
+    .card-header {
+        background-color: var(--light-green);
+        border-bottom: 1px solid var(--primary-green);
+    }
+
+    .form-select:focus, .form-control:focus {
+        border-color: var(--primary-green);
+        box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
+    }
+
+    .editable-cell {
+        background-color: #f8f9fa;
+        border: 1px solid transparent;
+        padding: 5px;
+        border-radius: 3px;
+    }
+
+        .editable-cell:focus {
+            background-color: white;
+            border-color: var(--primary-green);
+            outline: none;
+            box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
+        }
+
+    .category-level {
+        font-weight: 600;
+        color: var(--dark-green);
+    }
+
+    .category-tree {
+        border-left: 3px solid var(--light-green);
+        padding-left: 15px;
+        margin-left: 10px;
+    }
+
+    .drag-handle {
+        cursor: move;
+        color: var(--muted-green);
+    }
+
+        .drag-handle:hover {
+            color: var(--primary-green);
+        }
+
+    .nested-category {
+        margin-left: 30px;
+        border-left: 2px solid #e9ecef;
+        padding-left: 10px;
+    }
+
+    .category-actions {
+        opacity: 0;
+        transition: opacity 0.2s;
+    }
+
+    tr:hover .category-actions {
+        opacity: 1;
+    }
+
+    .validation-error {
+        border-color: #dc3545;
+        box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+    }
+
+    .success-indicator {
+        color: var(--primary-green);
+        opacity: 0;
+        transition: all 0.3s;
+    }
+
+        .success-indicator.show {
+            opacity: 1;
+        }
+</style>
+
 <div class="app-content-header">
     <div class="container-fluid">
         <!-- 主標題區域 -->
@@ -26,8 +162,798 @@
 
 <div class="app-content">
     <div class="container-fluid">
+        <div class="row">
+            <!-- 分類樹狀結構 -->
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0 text-primary-green">
+                            <i class="fas fa-tree"></i> 分類階層結構
+                        </h5>
+                        <div>
+                            <button class="btn btn-sm btn-primary-green" onclick="expandAll()">
+                                <i class="fas fa-expand-alt"></i> 全部展開
+                            </button>
+                            <button class="btn btn-sm btn-outline-primary-green" onclick="collapseAll()">
+                                <i class="fas fa-compress-alt"></i> 全部收合
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div id="categoryTree" class="table-responsive">
+                            <table class="table table-hover mb-0">
+                                <thead class="table-success">
+                                    <tr>
+                                        <th width="40"></th>
+                                        <th>分類名稱</th>
+                                        <th>排序</th>
+                                        <th>狀態</th>
+                                        <th>項目數量</th>
+                                        <th>操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="categoryTreeBody">
+                                    <!-- 動態生成分類樹 -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <button class="btn btn-primary-green" onclick="addMajorCategory()">
+                            <i class="fas fa-plus"></i> 新增大項目
+                        </button>
+                        <button class="btn btn-outline-primary-green" onclick="saveAllChanges()">
+                            <i class="fas fa-save"></i> 儲存所有變更
+                        </button>
+                        <button class="btn btn-secondary-green" onclick="importCategories()">
+                            <i class="fas fa-upload"></i> 匯入分類
+                        </button>
+                        <button class="btn btn-outline-secondary" onclick="exportCategories()">
+                            <i class="fas fa-download"></i> 匯出分類
+                        </button>
+                    </div>
+                </div>
+            </div>
 
+            <!-- 快速操作面板 -->
+            <div class="col-md-4">
+                <div class="card mb-3">
+                    <div class="card-header">
+                        <h6 class="mb-0 text-primary-green">
+                            <i class="fas fa-plus-circle"></i> 快速新增
+                        </h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label class="form-label">大項目</label>
+                            <select class="form-select" id="quickMajorCategory">
+                                <option value="">選擇大項目</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">中項目</label>
+                            <select class="form-select" id="quickMiddleCategory">
+                                <option value="">選擇中項目</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">新增小項目名稱</label>
+                            <input type="text" class="form-control" id="quickMinorName" placeholder="輸入小項目名稱">
+                        </div>
+                        <button class="btn btn-primary-green w-100" onclick="quickAddMinorCategory()">
+                            <i class="fas fa-plus"></i> 快速新增小項目
+                        </button>
+                    </div>
+                </div>
+
+                <div class="card mb-3">
+                    <div class="card-header">
+                        <h6 class="mb-0 text-primary-green">
+                            <i class="fas fa-chart-pie"></i> 分類統計
+                        </h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="row text-center">
+                            <div class="col-4">
+                                <div class="h4 text-primary-green mb-0" id="majorCount">0</div>
+                                <small class="text-muted">大項目</small>
+                            </div>
+                            <div class="col-4">
+                                <div class="h4 text-success mb-0" id="middleCount">0</div>
+                                <small class="text-muted">中項目</small>
+                            </div>
+                            <div class="col-4">
+                                <div class="h4 text-info mb-0" id="minorCount">0</div>
+                                <small class="text-muted">小項目</small>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="small text-muted">
+                            <i class="fas fa-info-circle"></i>
+                            最後更新：<span id="lastUpdate">未更新</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h6 class="mb-0 text-primary-green">
+                            <i class="fas fa-tools"></i> 批次操作
+                        </h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="d-grid gap-2">
+                            <button class="btn btn-outline-primary-green btn-sm" onclick="batchEditSort()">
+                                <i class="fas fa-sort"></i> 批次排序
+                            </button>
+                            <button class="btn btn-outline-secondary btn-sm" onclick="batchToggleStatus()">
+                                <i class="fas fa-toggle-on"></i> 批次啟用/停用
+                            </button>
+                            <button class="btn btn-outline-danger btn-sm" onclick="batchDelete()">
+                                <i class="fas fa-trash"></i> 批次刪除
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
 
     </div>
 </div>
+
+<!-- 編輯分類模態框 -->
+<div class="modal fade" id="editCategoryModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-primary-green">編輯分類</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="editCategoryId">
+                <input type="hidden" id="editCategoryLevel">
+
+                <div class="mb-3">
+                    <label class="form-label">分類名稱</label>
+                    <input type="text" class="form-control" id="editCategoryName" placeholder="請輸入分類名稱">
+                </div>
+
+                <div class="mb-3" id="parentCategoryGroup" style="display: none;">
+                    <label class="form-label">上級分類</label>
+                    <select class="form-select" id="editParentCategory">
+                        <option value="">請選擇上級分類</option>
+                    </select>
+                </div>
+
+                <div class="row">
+                    <div class="col-6">
+                        <label class="form-label">排序</label>
+                        <input type="number" class="form-control" id="editCategorySort" min="1">
+                    </div>
+                    <div class="col-6">
+                        <label class="form-label">狀態</label>
+                        <select class="form-select" id="editCategoryStatus">
+                            <option value="1">啟用</option>
+                            <option value="0">停用</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="mb-3 mt-3">
+                    <label class="form-label">備註</label>
+                    <textarea class="form-control" id="editCategoryNote" rows="3" placeholder="可選的備註說明"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary-green" data-bs-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary-green" onclick="saveCategory()">確認儲存</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script>
+        // 分類資料結構
+        let categories = {
+            major: [
+                {
+                    id: 1,
+                    name: '裝修',
+                    sort: 1,
+                    status: 1,
+                    itemCount: 45,
+                    children: [
+                        {
+                            id: 11,
+                            name: '假設工程',
+                            sort: 1,
+                            status: 1,
+                            itemCount: 5,
+                            children: [
+                                { id: 111, name: '臨時設施', sort: 1, status: 1, itemCount: 3 },
+                                { id: 112, name: '工務所設備', sort: 2, status: 1, itemCount: 2 }
+                            ]
+                        },
+                        {
+                            id: 12,
+                            name: '室內隔間工程',
+                            sort: 2,
+                            status: 1,
+                            itemCount: 8,
+                            children: [
+                                { id: 121, name: '輕隔間牆', sort: 1, status: 1, itemCount: 5 },
+                                { id: 122, name: '磚牆隔間', sort: 2, status: 1, itemCount: 3 }
+                            ]
+                        },
+                        {
+                            id: 13,
+                            name: '天花板裝修工程',
+                            sort: 3,
+                            status: 1,
+                            itemCount: 12,
+                            children: [
+                                { id: 131, name: '輕鋼架天花板', sort: 1, status: 1, itemCount: 6 },
+                                { id: 132, name: '矽酸鈣板天花板', sort: 2, status: 1, itemCount: 4 },
+                                { id: 133, name: '造型天花板', sort: 3, status: 1, itemCount: 2 }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    id: 2,
+                    name: '水電',
+                    sort: 2,
+                    status: 1,
+                    itemCount: 25,
+                    children: [
+                        {
+                            id: 21,
+                            name: '給水工程',
+                            sort: 1,
+                            status: 1,
+                            itemCount: 8,
+                            children: [
+                                { id: 211, name: '給水管配置', sort: 1, status: 1, itemCount: 5 },
+                                { id: 212, name: '給水設備', sort: 2, status: 1, itemCount: 3 }
+                            ]
+                        },
+                        {
+                            id: 22,
+                            name: '排水工程',
+                            sort: 2,
+                            status: 1,
+                            itemCount: 6,
+                            children: [
+                                { id: 221, name: '排水管路', sort: 1, status: 1, itemCount: 4 },
+                                { id: 222, name: '排水設備', sort: 2, status: 1, itemCount: 2 }
+                            ]
+                        },
+                        {
+                            id: 23,
+                            name: '電氣工程',
+                            sort: 3,
+                            status: 1,
+                            itemCount: 11,
+                            children: [
+                                { id: 231, name: '配電設備', sort: 1, status: 1, itemCount: 4 },
+                                { id: 232, name: '電線管路', sort: 2, status: 1, itemCount: 3 },
+                                { id: 233, name: '照明設備', sort: 3, status: 1, itemCount: 4 }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    id: 3,
+                    name: '空調',
+                    sort: 3,
+                    status: 1,
+                    itemCount: 15,
+                    children: [
+                        {
+                            id: 31,
+                            name: '空調設備',
+                            sort: 1,
+                            status: 1,
+                            itemCount: 8,
+                            children: [
+                                { id: 311, name: '分離式冷氣', sort: 1, status: 1, itemCount: 4 },
+                                { id: 312, name: '中央空調', sort: 2, status: 1, itemCount: 4 }
+                            ]
+                        },
+                        {
+                            id: 32,
+                            name: '通風工程',
+                            sort: 2,
+                            status: 1,
+                            itemCount: 7,
+                            children: [
+                                { id: 321, name: '風管系統', sort: 1, status: 1, itemCount: 4 },
+                                { id: 322, name: '排風設備', sort: 2, status: 1, itemCount: 3 }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        };
+
+        let editingCategory = null;
+
+        function renderCategoryTree() {
+            const tbody = document.getElementById('categoryTreeBody');
+            tbody.innerHTML = '';
+
+            categories.major.forEach(major => {
+                renderMajorCategory(tbody, major);
+            });
+
+            updateStatistics();
+        }
+
+        function renderMajorCategory(tbody, major) {
+            const row = createCategoryRow(major, 'major', 0);
+            tbody.appendChild(row);
+
+            if (major.expanded !== false && major.children) {
+                major.children.forEach(middle => {
+                    renderMiddleCategory(tbody, middle, major.id);
+                });
+            }
+        }
+
+        function renderMiddleCategory(tbody, middle, majorId) {
+            const row = createCategoryRow(middle, 'middle', 1);
+            tbody.appendChild(row);
+
+            if (middle.expanded !== false && middle.children) {
+                middle.children.forEach(minor => {
+                    const minorRow = createCategoryRow(minor, 'minor', 2);
+                    tbody.appendChild(minorRow);
+                });
+            }
+        }
+
+        function createCategoryRow(category, level, depth) {
+            const row = document.createElement('tr');
+            const indentStyle = `style="padding-left: ${depth * 20 + 10}px;"`;
+
+            const expandIcon = (category.children && category.children.length > 0)
+                ? `<i class="fas fa-${category.expanded !== false ? 'minus' : 'plus'}-square text-primary-green cursor-pointer" onclick="toggleExpand(${category.id}, '${level}')"></i>`
+                : '<i class="fas fa-square text-muted"></i>';
+
+            const statusBadge = category.status === 1
+                ? '<span class="badge bg-success">啟用</span>'
+                : '<span class="badge bg-secondary">停用</span>';
+
+            row.innerHTML = `
+                    <td class="text-center">
+                        <i class="fas fa-grip-vertical drag-handle"></i>
+                    </td>
+                    <td ${indentStyle}>
+                        ${expandIcon}
+                        <span class="category-level ms-2">${category.name}</span>
+                    </td>
+                    <td>
+                        <input type="number" class="form-control form-control-sm" value="${category.sort}"
+                               onchange="updateSort(${category.id}, '${level}', this.value)" style="width: 70px;">
+                    </td>
+                    <td>${statusBadge}</td>
+                    <td class="text-center">${category.itemCount || 0}</td>
+                    <td>
+                        <div class="category-actions">
+                            <button class="btn btn-sm btn-outline-primary" onclick="editCategory(${category.id}, '${level}')">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="btn btn-sm btn-outline-success" onclick="addSubCategory(${category.id}, '${level}')">
+                                <i class="fas fa-plus"></i>
+                            </button>
+                            <button class="btn btn-sm btn-outline-danger" onclick="deleteCategory(${category.id}, '${level}')">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </td>
+                `;
+
+            return row;
+        }
+
+        function toggleExpand(id, level) {
+            const category = findCategory(id, level);
+            if (category && category.children) {
+                category.expanded = !category.expanded;
+                renderCategoryTree();
+            }
+        }
+
+        function findCategory(id, level) {
+            if (level === 'major') {
+                return categories.major.find(c => c.id === id);
+            } else if (level === 'middle') {
+                for (let major of categories.major) {
+                    if (major.children) {
+                        const found = major.children.find(c => c.id === id);
+                        if (found) return found;
+                    }
+                }
+            } else if (level === 'minor') {
+                for (let major of categories.major) {
+                    if (major.children) {
+                        for (let middle of major.children) {
+                            if (middle.children) {
+                                const found = middle.children.find(c => c.id === id);
+                                if (found) return found;
+                            }
+                        }
+                    }
+                }
+            }
+            return null;
+        }
+
+        function expandAll() {
+            function expandCategory(cat) {
+                if (cat.children && cat.children.length > 0) {
+                    cat.expanded = true;
+                    cat.children.forEach(expandCategory);
+                }
+            }
+
+            categories.major.forEach(expandCategory);
+            renderCategoryTree();
+            showMessage('已展開所有分類', 'success');
+        }
+
+        function collapseAll() {
+            function collapseCategory(cat) {
+                if (cat.children && cat.children.length > 0) {
+                    cat.expanded = false;
+                    cat.children.forEach(collapseCategory);
+                }
+            }
+
+            categories.major.forEach(collapseCategory);
+            renderCategoryTree();
+            showMessage('已收合所有分類', 'info');
+        }
+
+        function editCategory(id, level) {
+            const category = findCategory(id, level);
+            if (!category) return;
+
+            editingCategory = { id, level, category };
+
+            document.getElementById('editCategoryId').value = id;
+            document.getElementById('editCategoryLevel').value = level;
+            document.getElementById('editCategoryName').value = category.name;
+            document.getElementById('editCategorySort').value = category.sort;
+            document.getElementById('editCategoryStatus').value = category.status;
+            document.getElementById('editCategoryNote').value = category.note || '';
+
+            // 設定上級分類選項
+            const parentGroup = document.getElementById('parentCategoryGroup');
+            const parentSelect = document.getElementById('editParentCategory');
+
+            if (level === 'middle') {
+                parentGroup.style.display = 'block';
+                parentSelect.innerHTML = '<option value="">請選擇大項目</option>';
+                categories.major.forEach(major => {
+                    parentSelect.innerHTML += `<option value="${major.id}">${major.name}</option>`;
+                });
+            } else if (level === 'minor') {
+                parentGroup.style.display = 'block';
+                parentSelect.innerHTML = '<option value="">請選擇中項目</option>';
+                categories.major.forEach(major => {
+                    if (major.children) {
+                        major.children.forEach(middle => {
+                            parentSelect.innerHTML += `<option value="${middle.id}">${major.name} - ${middle.name}</option>`;
+                        });
+                    }
+                });
+            } else {
+                parentGroup.style.display = 'none';
+            }
+
+            const modal = new bootstrap.Modal(document.getElementById('editCategoryModal'));
+            modal.show();
+        }
+
+        function saveCategory() {
+            const id = parseInt(document.getElementById('editCategoryId').value);
+            const level = document.getElementById('editCategoryLevel').value;
+            const name = document.getElementById('editCategoryName').value.trim();
+            const sort = parseInt(document.getElementById('editCategorySort').value);
+            const status = parseInt(document.getElementById('editCategoryStatus').value);
+            const note = document.getElementById('editCategoryNote').value.trim();
+
+            if (!name) {
+                showMessage('請輸入分類名稱', 'warning');
+                return;
+            }
+
+            const category = findCategory(id, level);
+            if (category) {
+                category.name = name;
+                category.sort = sort;
+                category.status = status;
+                category.note = note;
+
+                renderCategoryTree();
+
+                const modal = bootstrap.Modal.getInstance(document.getElementById('editCategoryModal'));
+                modal.hide();
+
+                showMessage('分類更新成功', 'success');
+            }
+        }
+
+        function deleteCategory(id, level) {
+            const category = findCategory(id, level);
+            if (!category) return;
+
+            if (category.children && category.children.length > 0) {
+                showMessage('無法刪除包含子分類的項目', 'warning');
+                return;
+            }
+
+            if (!confirm(`確定要刪除分類「${category.name}」嗎？`)) {
+                return;
+            }
+
+            // 執行刪除邏輯
+            if (level === 'major') {
+                categories.major = categories.major.filter(c => c.id !== id);
+            } else if (level === 'middle') {
+                for (let major of categories.major) {
+                    if (major.children) {
+                        major.children = major.children.filter(c => c.id !== id);
+                    }
+                }
+            } else if (level === 'minor') {
+                for (let major of categories.major) {
+                    if (major.children) {
+                        for (let middle of major.children) {
+                            if (middle.children) {
+                                middle.children = middle.children.filter(c => c.id !== id);
+                            }
+                        }
+                    }
+                }
+            }
+
+            renderCategoryTree();
+            showMessage('分類刪除成功', 'success');
+        }
+
+        function updateSort(id, level, newSort) {
+            const category = findCategory(id, level);
+            if (category) {
+                category.sort = parseInt(newSort);
+                showMessage('排序已更新', 'success');
+            }
+        }
+
+        function updateStatistics() {
+            let majorCount = categories.major.length;
+            let middleCount = 0;
+            let minorCount = 0;
+
+            categories.major.forEach(major => {
+                if (major.children) {
+                    middleCount += major.children.length;
+                    major.children.forEach(middle => {
+                        if (middle.children) {
+                            minorCount += middle.children.length;
+                        }
+                    });
+                }
+            });
+
+            document.getElementById('majorCount').textContent = majorCount;
+            document.getElementById('middleCount').textContent = middleCount;
+            document.getElementById('minorCount').textContent = minorCount;
+            document.getElementById('lastUpdate').textContent = new Date().toLocaleString();
+        }
+
+        function addMajorCategory() {
+            const name = prompt('請輸入大項目名稱：');
+            if (!name || !name.trim()) return;
+
+            const newId = Math.max(...categories.major.map(c => c.id)) + 1;
+            const newCategory = {
+                id: newId,
+                name: name.trim(),
+                sort: categories.major.length + 1,
+                status: 1,
+                itemCount: 0,
+                children: []
+            };
+
+            categories.major.push(newCategory);
+            renderCategoryTree();
+            showMessage(`已新增大項目「${name}」`, 'success');
+        }
+
+        function quickAddMinorCategory() {
+            const majorId = document.getElementById('quickMajorCategory').value;
+            const middleId = document.getElementById('quickMiddleCategory').value;
+            const minorName = document.getElementById('quickMinorName').value.trim();
+
+            if (!majorId || !middleId || !minorName) {
+                showMessage('請完整填寫所有欄位', 'warning');
+                return;
+            }
+
+            // 找到對應的中項目
+            let targetMiddle = null;
+            for (let major of categories.major) {
+                if (major.children) {
+                    targetMiddle = major.children.find(middle => middle.id == middleId);
+                    if (targetMiddle) break;
+                }
+            }
+
+            if (!targetMiddle) {
+                showMessage('找不到對應的中項目', 'error');
+                return;
+            }
+
+            if (!targetMiddle.children) {
+                targetMiddle.children = [];
+            }
+
+            const newId = Date.now(); // 簡單的ID生成
+            const newMinor = {
+                id: newId,
+                name: minorName,
+                sort: targetMiddle.children.length + 1,
+                status: 1,
+                itemCount: 0
+            };
+
+            targetMiddle.children.push(newMinor);
+            renderCategoryTree();
+
+            // 清空表單
+            document.getElementById('quickMinorName').value = '';
+
+            showMessage(`已新增小項目「${minorName}」`, 'success');
+        }
+
+        function populateQuickSelectors() {
+            const majorSelect = document.getElementById('quickMajorCategory');
+            const middleSelect = document.getElementById('quickMiddleCategory');
+
+            // 更新大項目選單
+            majorSelect.innerHTML = '<option value="">選擇大項目</option>';
+            categories.major.forEach(major => {
+                majorSelect.innerHTML += `<option value="${major.id}">${major.name}</option>`;
+            });
+
+            // 大項目改變時更新中項目
+            majorSelect.addEventListener('change', function () {
+                middleSelect.innerHTML = '<option value="">選擇中項目</option>';
+
+                if (this.value) {
+                    const selectedMajor = categories.major.find(m => m.id == this.value);
+                    if (selectedMajor && selectedMajor.children) {
+                        selectedMajor.children.forEach(middle => {
+                            middleSelect.innerHTML += `<option value="${middle.id}">${middle.name}</option>`;
+                        });
+                    }
+                }
+            });
+        }
+
+        function saveAllChanges() {
+            // 這裡應該呼叫後端 API 儲存資料
+            console.log('儲存分類資料:', categories);
+            showMessage('所有變更已儲存', 'success');
+        }
+
+        function importCategories() {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = '.json,.csv,.xlsx';
+            input.onchange = function (e) {
+                const file = e.target.files[0];
+                if (file) {
+                    showMessage('匯入功能開發中...', 'info');
+                }
+            };
+            input.click();
+        }
+
+        function exportCategories() {
+            const dataStr = JSON.stringify(categories, null, 2);
+            const dataUri = 'data:application/json;charset=utf-8,' + encodeURIComponent(dataStr);
+
+            const exportFileDefaultName = 'categories_' + new Date().toISOString().slice(0, 10) + '.json';
+
+            const linkElement = document.createElement('a');
+            linkElement.setAttribute('href', dataUri);
+            linkElement.setAttribute('download', exportFileDefaultName);
+            linkElement.click();
+
+            showMessage('分類資料匯出完成', 'success');
+        }
+
+        function batchEditSort() {
+            showMessage('批次排序功能開發中...', 'info');
+        }
+
+        function batchToggleStatus() {
+            showMessage('批次狀態切換功能開發中...', 'info');
+        }
+
+        function batchDelete() {
+            showMessage('批次刪除功能開發中...', 'info');
+        }
+
+        function addSubCategory(id, level) {
+            let subCategoryName = '';
+            let targetCategory = findCategory(id, level);
+
+            if (level === 'major') {
+                subCategoryName = prompt('請輸入中項目名稱：');
+            } else if (level === 'middle') {
+                subCategoryName = prompt('請輸入小項目名稱：');
+            }
+
+            if (!subCategoryName || !subCategoryName.trim()) return;
+
+            if (!targetCategory.children) {
+                targetCategory.children = [];
+            }
+
+            const newId = Date.now();
+            const newSubCategory = {
+                id: newId,
+                name: subCategoryName.trim(),
+                sort: targetCategory.children.length + 1,
+                status: 1,
+                itemCount: 0,
+                children: level === 'major' ? [] : undefined
+            };
+
+            targetCategory.children.push(newSubCategory);
+            targetCategory.expanded = true; // 自動展開父分類
+            renderCategoryTree();
+
+            const categoryType = level === 'major' ? '中項目' : '小項目';
+            showMessage(`已新增${categoryType}「${subCategoryName}」`, 'success');
+        }
+
+        function showMessage(message, type = 'info') {
+            const alertClass = {
+                'success': 'alert-success',
+                'warning': 'alert-warning',
+                'error': 'alert-danger',
+                'info': 'alert-info'
+            };
+
+            const alertDiv = document.createElement('div');
+            alertDiv.className = `alert ${alertClass[type]} alert-dismissible fade show position-fixed`;
+            alertDiv.style.cssText = 'top: 20px; right: 20px; z-index: 9999; min-width: 300px;';
+            alertDiv.innerHTML = `
+                    ${message}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                `;
+
+            document.body.appendChild(alertDiv);
+
+            setTimeout(() => {
+                if (alertDiv.parentNode) {
+                    alertDiv.remove();
+                }
+            }, 3000);
+        }
+
+        // 初始化
+        document.addEventListener('DOMContentLoaded', function () {
+            renderCategoryTree();
+            populateQuickSelectors();
+        });
+    </script>
+
+}
