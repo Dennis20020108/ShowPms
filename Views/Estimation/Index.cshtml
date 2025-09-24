@@ -682,19 +682,24 @@
         // 模擬資料庫資料 - 更豐富的舊價資料
         const allOldPriceData = [
             // 裝修 - 假設工程
-            { code: 'A01-001', vender: '欣禾豐', name: '臨時水、電、電信費', unit: '式', quantity: '1', unitPrice: '378000', totalPrice: '378000', note: '包含施工期間所有臨時用電', majorCategory: '裝修', middleCategory: '假設工程' },
-            { code: 'A01-002', vender: '欣禾豐', name: '工務所及相關設備', unit: '式', quantity: '1', unitPrice: '252000', totalPrice: '252000', note: '含辦公桌椅、電腦設備', majorCategory: '裝修', middleCategory: '假設工程' },
-            { code: 'A01-003', vender: '欣禾豐', name: '臨時廁所、設備與維護清潔費', unit: '式', quantity: '1', unitPrice: '126000', totalPrice: '126000', note: '每日清潔維護', majorCategory: '裝修', middleCategory: '假設工程' },
+            { code: 'A01-001', vender: '欣禾豐', name: '臨時水、電、電信費', unit: '式', quantity: '1', unitPrice: '378000', totalPrice: '378000', note: '現有廠商協商撥付(含院方、監造辦公空間、會議室、電腦設備、事務性耗材...等)', majorCategory: '裝修', middleCategory: '假設工程' },
+            { code: 'A01-002', vender: '欣禾豐', name: '工務所及相關設備', unit: '式', quantity: '1', unitPrice: '252000', totalPrice: '252000', note: '', majorCategory: '裝修', middleCategory: '假設工程' },
+            { code: 'A01-003', vender: '欣禾豐', name: '臨時廁所、設備與維護清潔費', unit: '式', quantity: '1', unitPrice: '126000', totalPrice: '126000', note: '', majorCategory: '裝修', middleCategory: '假設工程' },
 
             // 裝修 - 室內隔間工程
             { code: 'A02-001', vender: '欣禾豐', name: '放樣工程', unit: 'm²', quantity: '32555', unitPrice: '47', totalPrice: '1530085', note: '總樓地板面積', majorCategory: '裝修', middleCategory: '室內隔間工程' },
-            { code: 'A02-015-T', vender: '欣禾豐', name: 'Type-A 9mm單層雙面矽酸鈣板輕隔間牆至頂', unit: 'm²', quantity: '3468', unitPrice: '1292', totalPrice: '4480656', note: 'C型立柱92x35x0.95mm骨架@406mm,60K/50mm岩棉', majorCategory: '裝修', middleCategory: '室內隔間工程' },
-            { code: 'A02-016-T', vender: '欣禾豐', name: 'Type-B 9,12mm單層雙面矽酸鈣板輕隔間牆', unit: 'm²', quantity: '35', unitPrice: '1870', totalPrice: '65450', note: '外立面防火處理', majorCategory: '裝修', middleCategory: '室內隔間工程' },
+            {
+                code: 'A02-015-T', vender: '欣禾豐', name: 'Type-A 9mm單層雙面矽酸鈣板輕隔間牆至頂(C型立柱92x35x0.95mm骨架@406mm, 60K / 50mm岩棉) ', unit: 'm²', quantity: '3468', unitPrice: '1292', totalPrice: '4480656', note: 'A13-21', majorCategory: '裝修', middleCategory: '室內隔間工程' },
+            {
+                code: 'A02-016-T', vender: '欣禾豐', name: 'Type-B 9,12mm單層雙面矽酸鈣板輕隔間牆,面刷一底二度水泥漆(外立面)(CH型立柱92x35x0.95mm骨架@610mm,60K/50mm岩棉)', unit: 'm²', quantity: '41', unitPrice: '3244', totalPrice: '133004', note: 'A13-21虹牌、得利', majorCategory: '裝修', middleCategory: '室內隔間工程' },
 
             // 裝修 - 天花板裝修工程
-            { code: 'B01-001', vender: '欣禾豐', name: '輕鋼架天花板', unit: 'm²', quantity: '1200', unitPrice: '850', totalPrice: '1020000', note: '含燈具配置開孔', majorCategory: '裝修', middleCategory: '天花板裝修工程' },
-            { code: 'B01-002', vender: '欣禾豐', name: '矽酸鈣板天花板', unit: 'm²', quantity: '800', unitPrice: '950', totalPrice: '760000', note: '防火等級一級', majorCategory: '裝修', middleCategory: '天花板裝修工程' },
-            { code: 'B01-003', vender: '達豐', name: '造型天花板設計施工', unit: 'm²', quantity: '150', unitPrice: '2200', totalPrice: '330000', note: '含LED間接照明', majorCategory: '裝修', middleCategory: '天花板裝修工程' },
+            {
+                code: 'B01-001', vender: '欣禾豐', name: '明架矽酸鈣天花板。60cm*60cm*3.5mm(±0.3mm) 耐燃一級，二分螺桿吊筋@120cm', unit: 'm²', quantity: '3821', unitPrice: '1358', totalPrice: '5188918', note: 'A12-1色樣送選 南亞明架天花3.5mm + 青鋼112型抗震骨架', majorCategory: '裝修', middleCategory: '天花板裝修工程' },
+            {
+                code: 'B01-002', vender: '欣禾豐', name: '明架矽酸鈣天花板+暗架矽酸鈣板收邊+間接照明。60cm*60cm*3.5mm(±0.3mm)耐燃一級明架天花板，6mm厚耐燃一級暗架矽酸鈣板，二分螺桿吊筋明架@120cm，暗架@90cm', unit: 'm²', quantity: '41', unitPrice: '3244', totalPrice: '133004', note: 'A12-1國浦，色樣送選、 南亞明架天花3.5mm + 青鋼112型抗震骨架', majorCategory: '裝修', middleCategory: '天花板裝修工程' },
+            {
+                code: 'B01-003', vender: '達豐', name: '明架矽酸鈣天花板+暗架收邊+間接照明。60cm*60cm*3.5mm(±0.3mm)耐燃一級明架天花板 ，6mm厚耐燃一級暗架矽酸鈣板，二分螺桿吊筋明架@120cm，暗架@90cm', unit: 'm²', quantity: '710', unitPrice: '3184', totalPrice: '2260640', note: 'A12-1國浦，色樣送選、 南亞明架天花3.5mm + 青鋼112型抗震骨架', majorCategory: '裝修', middleCategory: '天花板裝修工程' },
 
             // 水電 - 給水工程
             { code: 'C01-001', vender: '欣禾豐', name: '給水管配置', unit: 'm', quantity: '500', unitPrice: '320', totalPrice: '160000', note: 'PVC管材 4分管', majorCategory: '水電', middleCategory: '給水工程' },
