@@ -235,9 +235,7 @@
                     </label>
                     <select class="form-select" id="domainModuleSelect">
                         <option value="">請選擇場域類型</option>
-                        <option value="urology">泌尿科門診 (97項)</option>
-                        <option value="orthopedics">骨科門診 (12項)</option>
-                        <option value="surgery">手術室 (18項)</option>
+                        <option value="urology">泌尿科門診 (116項)</option>
                     </select>
                 </div>
                 <div class="col-md-6">
@@ -613,7 +611,7 @@
     </div>
 </div>
 
-<!-- Modal -->
+<!-- 工程名稱 Modal -->
 <div class="modal fade" id="projectNameModal" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -627,10 +625,10 @@
                         <label for="location" class="form-label">地點</label>
                         <select class="form-select" id="location" required>
                             <option value="" selected disabled>請選擇地點</option>
-                            <option value="台北">台北</option>
-                            <option value="新北">新北</option>
-                            <option value="台中">台中</option>
-                            <option value="高雄">高雄</option>
+                            <option value="彰秀">彰秀</option>
+                            <option value="濱秀">濱秀</option>
+                            <option value="高秀">高秀</option>
+                            <option value="南市醫">南市醫</option>
                         </select>
                     </div>
                     <div class="mb-3">
@@ -649,7 +647,9 @@
                             <option value="1樓">1樓</option>
                             <option value="2樓">2樓</option>
                             <option value="3樓">3樓</option>
-                            <option value="頂樓">頂樓</option>
+                            <option value="4樓">4樓</option>
+                            <option value="5樓">5樓</option>
+                            <option value="6樓">6樓</option>
                         </select>
                     </div>
                     <div class="mb-3">
@@ -727,69 +727,1373 @@
         // 場域模組資料
         const domainModules = {
             'urology': {
-                name: '泌尿科門診',
+                name: '泌尿科門診裝修工程',
                 description: '包含拆除、泥作、隔間等完整裝修工程',
                 totalItems: 97,
                 items: [
                     // 裝修工程 - 拆除工程
-                    { code: 'UR-D-001', vender: '欣禾豐', name: '現場配合業主進行斷水斷電及消防氣體關閉，裝設助警器', spec: '', unit: '式', quantity: '1', unitPrice: '15000', totalPrice: '15000', note: '含安全防護', majorCategory: '裝修', middleCategory: '拆除工程' },
-                    { code: 'UR-D-002', vender: '欣禾豐', name: '室內及公區廁所天花板拆除', spec: '', unit: '式', quantity: '1', unitPrice: '25000', totalPrice: '25000', note: '含垃圾清運', majorCategory: '裝修', middleCategory: '拆除工程' },
-                    { code: 'UR-D-003', vender: '欣禾豐', name: '廁所設備拆除', spec: '', unit: '式', quantity: '1', unitPrice: '18000', totalPrice: '18000', note: '保護既有設備', majorCategory: '裝修', middleCategory: '拆除工程' },
-                    { code: 'UR-D-004', vender: '欣禾豐', name: '垃圾清運車資', spec: '', unit: '式', quantity: '1', unitPrice: '12000', totalPrice: '12000', note: '含搬運工資', majorCategory: '裝修', middleCategory: '拆除工程' },
-                    { code: 'UR-D-005', vender: '欣禾豐', name: '廁所地面刨除見底', spec: '', unit: 'm²', quantity: '45', unitPrice: '350', totalPrice: '15750', note: '含地面清理', majorCategory: '裝修', middleCategory: '拆除工程' },
-
+                    { code: 'UR-D-001', vender: '', name: '現場配合業主進行斷水斷電及消防氣體關閉，裝設助警器', spec: '', unit: '式', quantity: '1', unitPrice: '15000', totalPrice: '15000', note: '含安全防護', majorCategory: '裝修', middleCategory: '拆除工程' },
+                    { code: 'UR-D-002', vender: '', name: '室內及公區廁所天花板拆除', spec: '', unit: '式', quantity: '1', unitPrice: '25000', totalPrice: '25000', note: '含垃圾清運', majorCategory: '裝修', middleCategory: '拆除工程' },
+                    { code: 'UR-D-003', vender: '', name: '廁所設備拆除', spec: '', unit: '式', quantity: '1', unitPrice: '18000', totalPrice: '18000', note: '保護既有設備', majorCategory: '裝修', middleCategory: '拆除工程' },
+                    { code: 'UR-D-004', vender: '', name: '垃圾清運車資', spec: '', unit: '式', quantity: '1', unitPrice: '12000', totalPrice: '12000', note: '含搬運工資', majorCategory: '裝修', middleCategory: '拆除工程' },
+                    { code: 'UR-D-005', vender: '', name: '廁所地面刨除見底', spec: '', unit: 'm²', quantity: '45', unitPrice: '350', totalPrice: '15750', note: '含地面清理', majorCategory: '裝修', middleCategory: '拆除工程' },
+                    { code: 'UR-D-006', vender: '', name: '舊管線拆除', spec: '', unit: '式', quantity: '1', unitPrice: '10000', totalPrice: '10000', note: '', majorCategory: '裝修', middleCategory: '拆除工程' },
+                    { code: 'UR-D-007', vender: '', name: '原有櫃台上下櫃拆除', spec: '', unit: '式', quantity: '1', unitPrice: '8000', totalPrice: '8000', note: '', majorCategory: '裝修', middleCategory: '拆除工程' },
                     // 裝修工程 - 泥作工程
-                    { code: 'UR-M-001', vender: '欣禾豐', name: '吊運/搬運，泥沙、紅磚、材料(工程前中後)', spec: '', unit: '式', quantity: '1', unitPrice: '35000', totalPrice: '35000', note: '全期搬運費用', majorCategory: '裝修', middleCategory: '泥作工程' },
-                    { code: 'UR-M-002', vender: '欣禾豐', name: '廁所地/壁面粉光', spec: '', unit: 'm²', quantity: '120', unitPrice: '180', totalPrice: '21600', note: '平整度±3mm', majorCategory: '裝修', middleCategory: '泥作工程' },
-                    { code: 'UR-M-003', vender: '欣禾豐', name: '廁所地面水泥墊高(依照磁磚計劃)', spec: '', unit: 'm²', quantity: '45', unitPrice: '280', totalPrice: '12600', note: '含洩水坡度', majorCategory: '裝修', middleCategory: '泥作工程' },
-                    { code: 'UR-M-004', vender: '欣禾豐', name: '廁所(地面)不織布+彈性水泥', spec: '', unit: 'm²', quantity: '45', unitPrice: '320', totalPrice: '14400', note: '防水前置處理', majorCategory: '裝修', middleCategory: '泥作工程' },
-                    { code: 'UR-M-005', vender: '欣禾豐', name: '廁所(地面)防水工程', spec: '', unit: 'm²', quantity: '45', unitPrice: '450', totalPrice: '20250', note: '二度防水施工', majorCategory: '裝修', middleCategory: '泥作工程' },
-
+                    { code: 'UR-M-001', vender: '', name: '吊運/搬運，泥沙、紅磚、材料(工程前中後)', spec: '', unit: '式', quantity: '1', unitPrice: '35000', totalPrice: '35000', note: '', majorCategory: '裝修', middleCategory: '泥作工程' },
+                    { code: 'UR-M-002', vender: '', name: '廁所地/壁面粉光', spec: '', unit: 'm²', quantity: '120', unitPrice: '180', totalPrice: '21600', note: '', majorCategory: '裝修', middleCategory: '泥作工程' },
+                    { code: 'UR-M-003', vender: '', name: '廁所地面水泥墊高(依照磁磚計劃)', spec: '', unit: 'm²', quantity: '45', unitPrice: '280', totalPrice: '12600', note: '', majorCategory: '裝修', middleCategory: '泥作工程' },
+                    { code: 'UR-M-004', vender: '', name: '廁所(地面)不織布+彈性水泥', spec: '', unit: 'm²', quantity: '45', unitPrice: '320', totalPrice: '14400', note: '', majorCategory: '裝修', middleCategory: '泥作工程' },
+                    { code: 'UR-M-005', vender: '', name: '廁所(地面)防水工程', spec: '', unit: 'm²', quantity: '45', unitPrice: '450', totalPrice: '20250', note: '', majorCategory: '裝修', middleCategory: '泥作工程' },
+                    { code: 'UR-M-006', vender: '', name: '廁所(地面)磁磚貼磚工資', spec: '', unit: 'm²', quantity: '45', unitPrice: '400', totalPrice: '18000', note: '', majorCategory: '裝修', middleCategory: '泥作工程' },
+                    { code: 'UR-M-007', vender: '', name: '打鑿管溝泥作修補', spec: '', unit: '式', quantity: '1', unitPrice: '6000', totalPrice: '6000', note: '', majorCategory: '裝修', middleCategory: '泥作工程' },
                     // 裝修工程 - 室內隔間工程
-                    { code: 'UR-P-001', vender: '欣禾豐', name: '輕隔間骨料92X35X1MM，間距40公分雙面封矽酸鈣板9公分', spec: '含補土及收邊60K岩棉填充', unit: 'm²', quantity: '85', unitPrice: '1650', totalPrice: '140250', note: '防火隔間牆', majorCategory: '裝修', middleCategory: '室內隔間工程' },
+                    {
+                        code: 'UR-P-001',
+                        vender: '',
+                        name: '輕隔間 骨料92X35X1MM，間距40公分 雙面封矽酸鈣板9公分，含補土及收邊60K岩棉填充',
+                        spec: '',
+                        unit: 'm²',
+                        quantity: '85',
+                        unitPrice: '1650',
+                        totalPrice: '140250',
+                        note: '',
+                        majorCategory: '裝修',
+                        middleCategory: '室內隔間工程'
+                    },
 
                     // 裝修工程 - 室內地坪工程
-                    { code: 'UR-Q-001', vender: '欣禾豐', name: 'PVC耐磨透心無縫地板', spec: '厚度2mm', unit: 'm²', quantity: '150', unitPrice: '1200', totalPrice: '180000', note: '含踢腳板', majorCategory: '裝修', middleCategory: '室內地坪工程' },
+                    {
+                        code: 'UR-Q-001',
+                        vender: '',
+                        name: 'PVC耐磨透心無縫地板(厚度2mm)',
+                        spec: '',
+                        unit: 'm²',
+                        quantity: '150',
+                        unitPrice: '1200',
+                        totalPrice: '180000',
+                        note: '',
+                        majorCategory: '裝修',
+                        middleCategory: '室內地坪工程'
+                    },
 
                     // 裝修工程 - 壁面工程
-                    { code: 'UR-W-001', vender: '欣禾豐', name: '入口區:全區造型天花板打底處理', spec: '補批土+研磨+底漆+面漆', unit: '式', quantity: '1', unitPrice: '45000', totalPrice: '45000', note: '含造型處理', majorCategory: '裝修', middleCategory: '壁面工程' },
-                    { code: 'UR-W-002', vender: '欣禾豐', name: '公區:全室隔間牆打底處理', spec: '補批土+研磨+底漆+面漆', unit: '式', quantity: '1', unitPrice: '35000', totalPrice: '35000', note: '平整度處理', majorCategory: '裝修', middleCategory: '壁面工程' },
+                    {
+                        code: 'UR-W-001',
+                        vender: '',
+                        name: '入口區:全區造型天花板打底處理(補批土+研磨+底漆+面漆)',
+                        spec: '',
+                        unit: '式',
+                        quantity: '1',
+                        unitPrice: '45000',
+                        totalPrice: '45000',
+                        note: '',
+                        majorCategory: '裝修',
+                        middleCategory: '壁面工程'
+                    },
+                    {
+                        code: 'UR-W-002',
+                        vender: '',
+                        name: '公區:全室隔間牆打底處理(補批土+研磨+底漆+面漆)',
+                        spec: '',
+                        unit: '式',
+                        quantity: '1',
+                        unitPrice: '35000',
+                        totalPrice: '35000',
+                        note: '',
+                        majorCategory: '裝修',
+                        middleCategory: '壁面工程'
+                    },
 
                     // 裝修工程 - 室內天花板工程
-                    { code: 'UR-C-001', vender: '欣禾豐', name: '入口區:暗架天花板', spec: '', unit: 'm²', quantity: '60', unitPrice: '950', totalPrice: '57000', note: '含燈具開孔', majorCategory: '裝修', middleCategory: '室內天花板工程' },
-                    { code: 'UR-C-002', vender: '欣禾豐', name: '公區及廁所:明架天花板', spec: '', unit: 'm²', quantity: '120', unitPrice: '850', totalPrice: '102000', note: '輕鋼架系統', majorCategory: '裝修', middleCategory: '室內天花板工程' },
 
-                    // 機電工程 - 照明系統
-                    { code: 'UR-L-001', vender: '東亞照明', name: 'LED崁燈15w暖白15CM', spec: '', unit: '個', quantity: '25', unitPrice: '1200', totalPrice: '30000', note: '含安裝配線', majorCategory: '機電工程', middleCategory: '照明系統' },
-                    { code: 'UR-L-002', vender: '東亞照明', name: 'LED崁燈15w暖白9CM', spec: '', unit: '個', quantity: '15', unitPrice: '1000', totalPrice: '15000', note: '崁入式安裝', majorCategory: '機電工程', middleCategory: '照明系統' },
-                    { code: 'UR-L-003', vender: '東亞照明', name: 'LED軟條燈8W4000K', spec: '', unit: 'm', quantity: '30', unitPrice: '280', totalPrice: '8400', note: '間接照明', majorCategory: '機電工程', middleCategory: '照明系統' }
+                        {
+                            code: 'UR-C-001',
+                            vender: '',
+                            name: '入口區:暗架天花板',
+                            spec: '',
+                            unit: 'm²',
+                            quantity: '60',
+                            unitPrice: '950',
+                            totalPrice: '57000',
+                            note: '',
+                            majorCategory: '裝修',
+                            middleCategory: '室內天花板工程'
+                        },
+                        {
+                            code: 'UR-C-002',
+                            vender: '',
+                            name: '公區及廁所:明架天花板',
+                            spec: '',
+                            unit: 'm²',
+                            quantity: '120',
+                            unitPrice: '850',
+                            totalPrice: '102000',
+                            note: '',
+                            majorCategory: '裝修',
+                            middleCategory: '室內天花板工程'
+                        },
+                    // 裝修工程 - 造型裝修工程
+                        {
+                            code: 'UR-Z-001',
+                            vender: '',
+                            name: '公區掛號領藥區 倒R造型櫃台(含淺抽)H80',
+                            spec: '',
+                            unit: '式',
+                            quantity: '1',
+                            unitPrice: '0',
+                            totalPrice: '0',
+                            note: '',
+                            majorCategory: '裝修',
+                            middleCategory: '造型裝修工程'
+                        },
+                        {
+                            code: 'UR-Z-002',
+                            vender: '',
+                            name: '公區掛號領藥區 牛仔雙開門W90CMxH80',
+                            spec: '',
+                            unit: '式',
+                            quantity: '1',
+                            unitPrice: '0',
+                            totalPrice: '0',
+                            note: '',
+                            majorCategory: '裝修',
+                            middleCategory: '造型裝修工程'
+                        },
+                        {
+                            code: 'UR-Z-003',
+                            vender: '',
+                            name: '公區走道造型廊道 面美耐板或同等面材',
+                            spec: '',
+                            unit: '式',
+                            quantity: '1',
+                            unitPrice: '0',
+                            totalPrice: '0',
+                            note: '',
+                            majorCategory: '裝修',
+                            middleCategory: '造型裝修工程'
+                        },
+                        {
+                            code: 'UR-Z-004',
+                            vender: '',
+                            name: '廁所壁面貼防防潮壁板H240CM',
+                            spec: '',
+                            unit: '式',
+                            quantity: '1',
+                            unitPrice: '0',
+                            totalPrice: '0',
+                            note: '',
+                            majorCategory: '裝修',
+                            middleCategory: '造型裝修工程'
+                        },
+                        {
+                            code: 'UR-Z-005',
+                            vender: '',
+                            name: '廁所壁面造型美耐板含木作2分底板(半腰壁板)H120',
+                            spec: '',
+                            unit: '式',
+                            quantity: '1',
+                            unitPrice: '0',
+                            totalPrice: '0',
+                            note: '',
+                            majorCategory: '裝修',
+                            middleCategory: '造型裝修工程'
+                        },
+                        {
+                            code: 'UR-Z-006',
+                            vender: '',
+                            name: '入口區:木作主櫃面弧形造型牆',
+                            spec: '',
+                            unit: '式',
+                            quantity: '1',
+                            unitPrice: '0',
+                            totalPrice: '0',
+                            note: '',
+                            majorCategory: '裝修',
+                            middleCategory: '造型裝修工程'
+                        },
+                        {
+                            code: 'UR-Z-007',
+                            vender: '',
+                            name: '公區:壁面造型美耐板含木作2分底板(半腰壁板)H120',
+                            spec: '',
+                            unit: '式',
+                            quantity: '1',
+                            unitPrice: '0',
+                            totalPrice: '0',
+                            note: '',
+                            majorCategory: '裝修',
+                            middleCategory: '造型裝修工程'
+                        },
+                        {
+                            code: 'UR-Z-008',
+                            vender: '',
+                            name: '公區:壁面柱面造型包覆',
+                            spec: '',
+                            unit: '式',
+                            quantity: '1',
+                            unitPrice: '0',
+                            totalPrice: '0',
+                            note: '',
+                            majorCategory: '裝修',
+                            middleCategory: '造型裝修工程'
+                        },
+                        {
+                            code: 'UR-Z-009',
+                            vender: '',
+                            name: '公區:梯下告型木作包覆(含木門附鎖*1)面美耐板',
+                            spec: '',
+                            unit: '式',
+                            quantity: '1',
+                            unitPrice: '0',
+                            totalPrice: '0',
+                            note: '',
+                            majorCategory: '裝修',
+                            middleCategory: '造型裝修工程'
+                    },
+                    // 櫥櫃工程
+                    {
+                        code: 'UR-K-001',
+                        vender: '',
+                        name: '插座系統',
+                        spec: '',
+                        unit: '式',
+                        quantity: '1',
+                        unitPrice: '0',
+                        totalPrice: '0',
+                        note: '',
+                        majorCategory: '裝修',
+                        middleCategory: '櫥櫃工程'
+                    },
+                    {
+                        code: 'UR-K-002',
+                        vender: '',
+                        name: '廁所上項垃圾投擲口，檯面式五金或同功能五金',
+                        spec: '',
+                        unit: '式',
+                        quantity: '1',
+                        unitPrice: '0',
+                        totalPrice: '0',
+                        note: '',
+                        majorCategory: '裝修',
+                        middleCategory: '櫥櫃工程'
+                    },
+                    {
+                        code: 'UR-K-003',
+                        vender: '',
+                        name: '廁所上项人造石檯面W364*D60',
+                        spec: '',
+                        unit: '式',
+                        quantity: '1',
+                        unitPrice: '0',
+                        totalPrice: '0',
+                        note: '',
+                        majorCategory: '裝修',
+                        middleCategory: '櫥櫃工程'
+                    },
+                    {
+                        code: 'UR-K-004',
+                        vender: '',
+                        name: '廁所洗手台下吊體W364*D60*H80',
+                        spec: '',
+                        unit: '式',
+                        quantity: '1',
+                        unitPrice: '0',
+                        totalPrice: '0',
+                        note: '',
+                        majorCategory: '裝修',
+                        middleCategory: '櫥櫃工程'
+                    },
+                    // 門樘工程
+                    {
+                        code: 'UR-DM-001',
+                        vender: '',
+                        name: '公區防火單面貼波英軟片',
+                        spec: '',
+                        unit: '式',
+                        quantity: '1',
+                        unitPrice: '0',
+                        totalPrice: '0',
+                        note: '',
+                        majorCategory: '裝修',
+                        middleCategory: '門樘工程'
+                    },
+                    {
+                        code: 'UR-DM-002',
+                        vender: '',
+                        name: '公區防火單波英軟片',
+                        spec: '',
+                        unit: '式',
+                        quantity: '1',
+                        unitPrice: '0',
+                        totalPrice: '0',
+                        note: '',
+                        majorCategory: '裝修',
+                        middleCategory: '門樘工程'
+                    },
+                    {
+                        code: 'UR-DM-003',
+                        vender: '',
+                        name: '廁所木質美耐板門(含框)D4D5',
+                        spec: '',
+                        unit: '式',
+                        quantity: '1',
+                        unitPrice: '0',
+                        totalPrice: '0',
+                        note: '',
+                        majorCategory: '裝修',
+                        middleCategory: '門樘工程'
+                    },
+                    {
+                        code: 'UR-DM-004',
+                        vender: '',
+                        name: '廁所木質美耐板拉門(含框)D3',
+                        spec: '',
+                        unit: '式',
+                        quantity: '1',
+                        unitPrice: '0',
+                        totalPrice: '0',
+                        note: '',
+                        majorCategory: '裝修',
+                        middleCategory: '門樘工程'
+                    },
+                    {
+                        code: 'UR-DM-005',
+                        vender: '',
+                        name: '入口區鋁框自動門/窗 WD1',
+                        spec: '',
+                        unit: '式',
+                        quantity: '1',
+                        unitPrice: '0',
+                        totalPrice: '0',
+                        note: '',
+                        majorCategory: '裝修',
+                        middleCategory: '門樘工程'
+                    },
+                    {
+                        code: 'UR-DM-006',
+                        vender: '',
+                        name: '入口區鋁框自動門/窗 WD2',
+                        spec: '',
+                        unit: '式',
+                        quantity: '1',
+                        unitPrice: '0',
+                        totalPrice: '0',
+                        note: '',
+                        majorCategory: '裝修',
+                        middleCategory: '門樘工程'
+                    },
+                    {
+                        code: 'UR-DM-007',
+                        vender: '',
+                        name: '入口區鋁框自動門/窗 WD3',
+                        spec: '',
+                        unit: '式',
+                        quantity: '1',
+                        unitPrice: '0',
+                        totalPrice: '0',
+                        note: '',
+                        majorCategory: '裝修',
+                        middleCategory: '門樘工程'
+                    },
+                    {
+                        code: 'UR-DM-008',
+                        vender: '',
+                        name: '施作及安裝(含運費)',
+                        spec: '',
+                        unit: '式',
+                        quantity: '1',
+                        unitPrice: '0',
+                        totalPrice: '0',
+                        note: '',
+                        majorCategory: '裝修',
+                        middleCategory: '門樘工程'
+                    },
+                    // 其他工程
+                    {
+                        code: 'UR-O-001',
+                        vender: '',
+                        name: '公區初步清潔',
+                        spec: '',
+                        unit: '式',
+                        quantity: '1',
+                        unitPrice: '0',
+                        totalPrice: '0',
+                        note: '',
+                        majorCategory: '裝修',
+                        middleCategory: '其他工程'
+                    },
+                    {
+                        code: 'UR-O-002',
+                        vender: '',
+                        name: '廁所初步清潔',
+                        spec: '',
+                        unit: '式',
+                        quantity: '1',
+                        unitPrice: '0',
+                        totalPrice: '0',
+                        note: '',
+                        majorCategory: '裝修',
+                        middleCategory: '其他工程'
+                    },
+                    {
+                        code: 'UR-O-003',
+                        vender: '',
+                        name: '入口區初步清潔',
+                        spec: '',
+                        unit: '式',
+                        quantity: '1',
+                        unitPrice: '0',
+                        totalPrice: '0',
+                        note: '',
+                        majorCategory: '裝修',
+                        middleCategory: '其他工程'
+                    },
+                    {
+                        code: 'UR-O-004',
+                        vender: '',
+                        name: '垃圾搬運工資本(含保護板拆卸)',
+                        spec: '',
+                        unit: '式',
+                        quantity: '1',
+                        unitPrice: '0',
+                        totalPrice: '0',
+                        note: '',
+                        majorCategory: '裝修',
+                        middleCategory: '其他工程'
+                    },
+                    {
+                        code: 'UR-O-005',
+                        vender: '',
+                        name: '垃圾清運',
+                        spec: '',
+                        unit: '式',
+                        quantity: '1',
+                        unitPrice: '0',
+                        totalPrice: '0',
+                        note: '',
+                        majorCategory: '裝修',
+                        middleCategory: '其他工程'
+                    },
+                    {
+                        code: 'UR-O-006',
+                        vender: '',
+                        name: '廁所壓克力LOGO門牌',
+                        spec: '',
+                        unit: '面',
+                        quantity: '1',
+                        unitPrice: '0',
+                        totalPrice: '0',
+                        note: '',
+                        majorCategory: '裝修',
+                        middleCategory: '其他工程'
+                    },
+                    {
+                        code: 'UR-O-007',
+                        vender: '',
+                        name: '入口區造型LOGO背發光',
+                        spec: '',
+                        unit: '組',
+                        quantity: '1',
+                        unitPrice: '0',
+                        totalPrice: '0',
+                        note: '',
+                        majorCategory: '裝修',
+                        middleCategory: '其他工程'
+                    },
+                    {
+                        code: 'UR-O-008',
+                        vender: '',
+                        name: '浴廁造型掛鏡(含工資)',
+                        spec: '',
+                        unit: '面',
+                        quantity: '1',
+                        unitPrice: '0',
+                        totalPrice: '0',
+                        note: '',
+                        majorCategory: '裝修',
+                        middleCategory: '其他工程'
+                    },
+                    // 插座系統
+                    {
+                        code: 'UR-PS-001',
+                        vender: '',
+                        name: '雙聯暗插座接地型2P125V20A一般白色蓋板國際牌',
+                        spec: '',
+                        unit: '個',
+                        quantity: '1',
+                        unitPrice: '0',
+                        totalPrice: '0',
+                        note: '',
+                        majorCategory: '裝修',
+                        middleCategory: '插座系統'
+                    },
+                    {
+                        code: 'UR-PS-002',
+                        vender: '',
+                        name: '雙聯暗插座接地型2P110V15A專用廻路白色蓋板國際牌',
+                        spec: '',
+                        unit: '個',
+                        quantity: '1',
+                        unitPrice: '0',
+                        totalPrice: '0',
+                        note: '',
+                        majorCategory: '裝修',
+                        middleCategory: '插座系統'
+                    },
+                    {
+                        code: 'UR-PS-003',
+                        vender: '',
+                        name: '配管另料(含固定吊管架)',
+                        spec: '',
+                        unit: '式',
+                        quantity: '1',
+                        unitPrice: '0',
+                        totalPrice: '0',
+                        note: '',
+                        majorCategory: '裝修',
+                        middleCategory: '插座系統'
+                    },
+                    {
+                        code: 'UR-PS-004',
+                        vender: '',
+                        name: '打洞修補',
+                        spec: '',
+                        unit: '式',
+                        quantity: '1',
+                        unitPrice: '0',
+                        totalPrice: '0',
+                        note: '',
+                        majorCategory: '裝修',
+                        middleCategory: '插座系統'
+                    },
+                    {
+                        code: 'UR-PS-005',
+                        vender: '',
+                        name: '穿牆開孔、穿樓板洗孔',
+                        spec: '',
+                        unit: '式',
+                        quantity: '1',
+                        unitPrice: '0',
+                        totalPrice: '0',
+                        note: '',
+                        majorCategory: '裝修',
+                        middleCategory: '插座系統'
+                    },
+                    {
+                        code: 'UR-PS-006',
+                        vender: '',
+                        name: '管路填補',
+                        spec: '',
+                        unit: '式',
+                        quantity: '1',
+                        unitPrice: '0',
+                        totalPrice: '0',
+                        note: '',
+                        majorCategory: '裝修',
+                        middleCategory: '插座系統'
+                    },
+                    {
+                        code: 'UR-PS-007',
+                        vender: '',
+                        name: '配管線工資',
+                        spec: '',
+                        unit: '式',
+                        quantity: '1',
+                        unitPrice: '0',
+                        totalPrice: '0',
+                        note: '',
+                        majorCategory: '裝修',
+                        middleCategory: '插座系統'
+                    },
+                    {
+                        code: 'UR-PS-008',
+                        vender: '',
+                        name: '3/4英吋2.0mm',
+                        spec: '',
+                        unit: 'm',
+                        quantity: '1',
+                        unitPrice: '0',
+                        totalPrice: '0',
+                        note: '',
+                        majorCategory: '裝修',
+                        middleCategory: '插座系統'
+                    },
+                    {
+                        code: 'UR-PS-009',
+                        vender: '',
+                        name: '600v5.5mm^23c電纜',
+                        spec: '',
+                        unit: 'm',
+                        quantity: '1',
+                        unitPrice: '0',
+                        totalPrice: '0',
+                        note: '',
+                        majorCategory: '裝修',
+                        middleCategory: '插座系統'
+                    },
+                    {
+                        code: 'UR-PS-010',
+                        vender: '',
+                        name: '600v22mm^21c電纜',
+                        spec: '',
+                        unit: 'm',
+                        quantity: '1',
+                        unitPrice: '0',
+                        totalPrice: '0',
+                        note: '',
+                        majorCategory: '裝修',
+                        middleCategory: '插座系統'
+                    },
+                    // 照明系統
+                    {
+                        code: 'UR-L-001',
+                        vender: '',
+                        name: 'LED崁燈15w暖白15CM',
+                        spec: '',
+                        unit: '個',
+                        quantity: '1',
+                        unitPrice: '0',
+                        totalPrice: '0',
+                        note: '',
+                        majorCategory: '裝修',
+                        middleCategory: '照明系統'
+                    },
+                    {
+                        code: 'UR-L-002',
+                        vender: '',
+                        name: 'LED崁燈15w暖白9CM',
+                        spec: '',
+                        unit: '個',
+                        quantity: '1',
+                        unitPrice: '0',
+                        totalPrice: '0',
+                        note: '',
+                        majorCategory: '裝修',
+                        middleCategory: '照明系統'
+                    },
+                    {
+                        code: 'UR-L-003',
+                        vender: '',
+                        name: 'LED軟條燈8W4000K',
+                        spec: '',
+                        unit: '個',
+                        quantity: '1',
+                        unitPrice: '0',
+                        totalPrice: '0',
+                        note: '',
+                        majorCategory: '裝修',
+                        middleCategory: '照明系統'
+                    },
+                    {
+                        code: 'UR-L-004',
+                        vender: '',
+                        name: 'LED矽膠條燈8W4000K',
+                        spec: '',
+                        unit: '個',
+                        quantity: '1',
+                        unitPrice: '0',
+                        totalPrice: '0',
+                        note: '',
+                        majorCategory: '裝修',
+                        middleCategory: '照明系統'
+                    },
+                    {
+                        code: 'UR-L-005',
+                        vender: '',
+                        name: 'LED平板燈22W晝光色',
+                        spec: '',
+                        unit: '個',
+                        quantity: '1',
+                        unitPrice: '0',
+                        totalPrice: '0',
+                        note: '',
+                        majorCategory: '裝修',
+                        middleCategory: '照明系統'
+                    },
+                    {
+                        code: 'UR-L-006',
+                        vender: '',
+                        name: 'LED造型壁燈',
+                        spec: '',
+                        unit: '個',
+                        quantity: '1',
+                        unitPrice: '0',
+                        totalPrice: '0',
+                        note: '',
+                        majorCategory: '裝修',
+                        middleCategory: '照明系統'
+                    },
+                    {
+                        code: 'UR-L-007',
+                        vender: '',
+                        name: '單切開關金屬蓋板/螢光指示',
+                        spec: '',
+                        unit: '個',
+                        quantity: '1',
+                        unitPrice: '0',
+                        totalPrice: '0',
+                        note: '',
+                        majorCategory: '裝修',
+                        middleCategory: '照明系統'
+                    },
+                    {
+                        code: 'UR-L-008',
+                        vender: '',
+                        name: '超薄磁吸軌道(拉菲爾)',
+                        spec: '',
+                        unit: 'm',
+                        quantity: '1',
+                        unitPrice: '0',
+                        totalPrice: '0',
+                        note: '',
+                        majorCategory: '裝修',
+                        middleCategory: '照明系統'
+                    },
+                    {
+                        code: 'UR-L-009',
+                        vender: '',
+                        name: '超薄磁吸基礎排燈(拉菲爾)',
+                        spec: '',
+                        unit: 'm',
+                        quantity: '1',
+                        unitPrice: '0',
+                        totalPrice: '0',
+                        note: '',
+                        majorCategory: '裝修',
+                        middleCategory: '照明系統'
+                    },
+                    {
+                        code: 'UR-L-010',
+                        vender: '',
+                        name: '上項驅動器',
+                        spec: '',
+                        unit: '個',
+                        quantity: '1',
+                        unitPrice: '0',
+                        totalPrice: '0',
+                        note: '',
+                        majorCategory: '裝修',
+                        middleCategory: '照明系統'
+                    },
+                    {
+                        code: 'UR-L-011',
+                        vender: '',
+                        name: '燈具、插座安裝工資',
+                        spec: '',
+                        unit: '式',
+                        quantity: '1',
+                        unitPrice: '0',
+                        totalPrice: '0',
+                        note: '',
+                        majorCategory: '裝修',
+                        middleCategory: '照明系統'
+                    },
+                    {
+                        code: 'UR-L-012',
+                        vender: '',
+                        name: '穿牆開孔、穿樓板洗孔',
+                        spec: '',
+                        unit: '式',
+                        quantity: '1',
+                        unitPrice: '0',
+                        totalPrice: '0',
+                        note: '',
+                        majorCategory: '裝修',
+                        middleCategory: '照明系統'
+                    },
+                    {
+                        code: 'UR-L-013',
+                        vender: '',
+                        name: '照明燈具出線口(天花板及立板間照)',
+                        spec: '',
+                        unit: '式',
+                        quantity: '1',
+                        unitPrice: '0',
+                        totalPrice: '0',
+                        note: '',
+                        majorCategory: '裝修',
+                        middleCategory: '照明系統'
+                    },
+                    // 衛浴設備工程
+                    {
+                        code: 'UR-B-001',
+                        vender: '',
+                        name: '配管另料含吊管架(給水、污水、透氣)',
+                        spec: '',
+                        unit: '式',
+                        quantity: '1',
+                        unitPrice: '0',
+                        totalPrice: '0',
+                        note: '',
+                        majorCategory: '裝修',
+                        middleCategory: '衛浴設備工程'
+                    },
+                    {
+                        code: 'UR-B-002',
+                        vender: '',
+                        name: '試水、試壓',
+                        spec: '',
+                        unit: '式',
+                        quantity: '1',
+                        unitPrice: '0',
+                        totalPrice: '0',
+                        note: '',
+                        majorCategory: '裝修',
+                        middleCategory: '衛浴設備工程'
+                    },
+                    {
+                        code: 'UR-B-003',
+                        vender: '',
+                        name: '開挖回填',
+                        spec: '',
+                        unit: '式',
+                        quantity: '1',
+                        unitPrice: '0',
+                        totalPrice: '0',
+                        note: '',
+                        majorCategory: '裝修',
+                        middleCategory: '衛浴設備工程'
+                    },
+                    {
+                        code: 'UR-B-004',
+                        vender: '',
+                        name: '配管工資',
+                        spec: '',
+                        unit: '式',
+                        quantity: '1',
+                        unitPrice: '0',
+                        totalPrice: '0',
+                        note: '',
+                        majorCategory: '裝修',
+                        middleCategory: '衛浴設備工程'
+                    },
+                    {
+                        code: 'UR-B-005',
+                        vender: '',
+                        name: '衛生設備安裝工資',
+                        spec: '',
+                        unit: '式',
+                        quantity: '1',
+                        unitPrice: '0',
+                        totalPrice: '0',
+                        note: '',
+                        majorCategory: '裝修',
+                        middleCategory: '衛浴設備工程'
+                    },
+                    {
+                        code: 'UR-B-006',
+                        vender: '',
+                        name: '女廁、男廁 HCG兩件式馬桶',
+                        spec: '',
+                        unit: '個',
+                        quantity: '1',
+                        unitPrice: '0',
+                        totalPrice: '0',
+                        note: '',
+                        majorCategory: '裝修',
+                        middleCategory: '衛浴設備工程'
+                    },
+                    {
+                        code: 'UR-B-007',
+                        vender: '',
+                        name: '女廁HCG蹲式馬桶',
+                        spec: '',
+                        unit: '個',
+                        quantity: '1',
+                        unitPrice: '0',
+                        totalPrice: '0',
+                        note: '',
+                        majorCategory: '裝修',
+                        middleCategory: '衛浴設備工程'
+                    },
+                    {
+                        code: 'UR-B-008',
+                        vender: '',
+                        name: '廁所面盆CAESAR',
+                        spec: '',
+                        unit: '個',
+                        quantity: '1',
+                        unitPrice: '0',
+                        totalPrice: '0',
+                        note: '',
+                        majorCategory: '裝修',
+                        middleCategory: '衛浴設備工程'
+                    },
+                    {
+                        code: 'UR-B-009',
+                        vender: '',
+                        name: '男廁拖布盆HCG拖布盆+S管+水龍頭',
+                        spec: '',
+                        unit: '個',
+                        quantity: '1',
+                        unitPrice: '0',
+                        totalPrice: '0',
+                        note: '',
+                        majorCategory: '裝修',
+                        middleCategory: '衛浴設備工程'
+                    },
+                    {
+                        code: 'UR-B-010',
+                        vender: '',
+                        name: '男廁、女廁 HCG擡面盆',
+                        spec: '',
+                        unit: '個',
+                        quantity: '1',
+                        unitPrice: '0',
+                        totalPrice: '0',
+                        note: '',
+                        majorCategory: '裝修',
+                        middleCategory: '衛浴設備工程'
+                    },
+                    {
+                        code: 'UR-B-011',
+                        vender: '',
+                        name: '男廁、女廁 CAESAR感應式龍頭',
+                        spec: '',
+                        unit: '個',
+                        quantity: '1',
+                        unitPrice: '0',
+                        totalPrice: '0',
+                        note: '',
+                        majorCategory: '裝修',
+                        middleCategory: '衛浴設備工程'
+                    },
+                    {
+                        code: 'UR-B-012',
+                        vender: '',
+                        name: '男廁HCG立式小便斗',
+                        spec: '',
+                        unit: '個',
+                        quantity: '1',
+                        unitPrice: '0',
+                        totalPrice: '0',
+                        note: '',
+                        majorCategory: '裝修',
+                        middleCategory: '衛浴設備工程'
+                    },
+                    {
+                        code: 'UR-B-013',
+                        vender: '',
+                        name: '無障礙廁所馬桶HCG無障礙空間系列',
+                        spec: '',
+                        unit: '個',
+                        quantity: '1',
+                        unitPrice: '0',
+                        totalPrice: '0',
+                        note: '',
+                        majorCategory: '裝修',
+                        middleCategory: '衛浴設備工程'
+                    },
+                    {
+                        code: 'UR-B-014',
+                        vender: '',
+                        name: '無障礙廁所小便斗HCG無障礙空間系列',
+                        spec: '',
+                        unit: '個',
+                        quantity: '1',
+                        unitPrice: '0',
+                        totalPrice: '0',
+                        note: '',
+                        majorCategory: '裝修',
+                        middleCategory: '衛浴設備工程'
+                    },
+                    {
+                        code: 'UR-B-015',
+                        vender: '',
+                        name: '無障礙廁所面盆扶手感應龍頭CAESAR無障礙壁掛洗臉盆',
+                        spec: '',
+                        unit: '個',
+                        quantity: '1',
+                        unitPrice: '0',
+                        totalPrice: '0',
+                        note: '',
+                        majorCategory: '裝修',
+                        middleCategory: '衛浴設備工程'
+                    },
+                    {
+                        code: 'UR-B-016',
+                        vender: '',
+                        name: '穿牆開孔、穿樓板洗孔及修補',
+                        spec: '',
+                        unit: '式',
+                        quantity: '1',
+                        unitPrice: '0',
+                        totalPrice: '0',
+                        note: '',
+                        majorCategory: '裝修',
+                        middleCategory: '衛浴設備工程'
+                    },
+                    // 給排水系統
+                    {
+                        code: 'UR-WP-001',
+                        vender: '',
+                        name: '1英吋4.0mm',
+                        spec: '',
+                        unit: 'm',
+                        quantity: '1',
+                        unitPrice: '0',
+                        totalPrice: '0',
+                        note: '',
+                        majorCategory: '裝修',
+                        middleCategory: '給排水系統'
+                    },
+                    {
+                        code: 'UR-WP-002',
+                        vender: '',
+                        name: '2英吋4.5mm',
+                        spec: '',
+                        unit: 'm',
+                        quantity: '1',
+                        unitPrice: '0',
+                        totalPrice: '0',
+                        note: '',
+                        majorCategory: '裝修',
+                        middleCategory: '給排水系統'
+                    },
+                    {
+                        code: 'UR-WP-003',
+                        vender: '',
+                        name: '3英吋5.5mm',
+                        spec: '',
+                        unit: 'm',
+                        quantity: '1',
+                        unitPrice: '0',
+                        totalPrice: '0',
+                        note: '',
+                        majorCategory: '裝修',
+                        middleCategory: '給排水系統'
+                    },
+                    {
+                        code: 'UR-WP-004',
+                        vender: '',
+                        name: '地板水刀及打鑿',
+                        spec: '',
+                        unit: '式',
+                        quantity: '1',
+                        unitPrice: '0',
+                        totalPrice: '0',
+                        note: '',
+                        majorCategory: '裝修',
+                        middleCategory: '給排水系統'
+                    },
+                    {
+                        code: 'UR-WP-005',
+                        vender: '',
+                        name: 'ST壓接管被覆1/2英吋',
+                        spec: '',
+                        unit: 'm',
+                        quantity: '1',
+                        unitPrice: '0',
+                        totalPrice: '0',
+                        note: '',
+                        majorCategory: '裝修',
+                        middleCategory: '給排水系統'
+                    },
+                    // 弱電系統
+                    {
+                        code: 'UR-ELV-001',
+                        vender: '',
+                        name: '資訊插座出口3/4英吋PVC管含BOX',
+                        spec: '',
+                        unit: '個',
+                        quantity: '1',
+                        unitPrice: '0',
+                        totalPrice: '0',
+                        note: '',
+                        majorCategory: '裝修',
+                        middleCategory: '弱電系統'
+                    },
+                    {
+                        code: 'UR-ELV-002',
+                        vender: '',
+                        name: '叫號機出口配3/4英吋PVC管含BOX',
+                        spec: '',
+                        unit: '個',
+                        quantity: '1',
+                        unitPrice: '0',
+                        totalPrice: '0',
+                        note: '',
+                        majorCategory: '裝修',
+                        middleCategory: '弱電系統'
+                    },
+                    {
+                        code: 'UR-ELV-003',
+                        vender: '',
+                        name: '開門按鈕出口及無接觸感應開關配管1/2英吋含BOX',
+                        spec: '',
+                        unit: '個',
+                        quantity: '1',
+                        unitPrice: '0',
+                        totalPrice: '0',
+                        note: '',
+                        majorCategory: '裝修',
+                        middleCategory: '弱電系統'
+                    },
+                    {
+                        code: 'UR-ELV-004',
+                        vender: '',
+                        name: 'PVC管 3/4英吋3.0mm',
+                        spec: '',
+                        unit: 'm',
+                        quantity: '1',
+                        unitPrice: '0',
+                        totalPrice: '0',
+                        note: '',
+                        majorCategory: '裝修',
+                        middleCategory: '弱電系統'
+                    },
+                    {
+                        code: 'UR-ELV-005',
+                        vender: '',
+                        name: '配管另料(含固定吊管架)',
+                        spec: '',
+                        unit: '式',
+                        quantity: '1',
+                        unitPrice: '0',
+                        totalPrice: '0',
+                        note: '',
+                        majorCategory: '裝修',
+                        middleCategory: '弱電系統'
+                    },
+                    {
+                        code: 'UR-ELV-006',
+                        vender: '',
+                        name: '線材',
+                        spec: '',
+                        unit: 'm',
+                        quantity: '1',
+                        unitPrice: '0',
+                        totalPrice: '0',
+                        note: '',
+                        majorCategory: '裝修',
+                        middleCategory: '弱電系統'
+                    },
+                    {
+                        code: 'UR-ELV-007',
+                        vender: '',
+                        name: '配管工資',
+                        spec: '',
+                        unit: '式',
+                        quantity: '1',
+                        unitPrice: '0',
+                        totalPrice: '0',
+                        note: '',
+                        majorCategory: '裝修',
+                        middleCategory: '弱電系統'
+                    },
+                    {
+                        code: 'UR-ELV-008',
+                        vender: '',
+                        name: '求助鈴配管配線',
+                        spec: '',
+                        unit: '式',
+                        quantity: '1',
+                        unitPrice: '0',
+                        totalPrice: '0',
+                        note: '',
+                        majorCategory: '裝修',
+                        middleCategory: '弱電系統'
+                    },
+                    {
+                        code: 'UR-ELV-009',
+                        vender: '',
+                        name: '求助鈴按鈕',
+                        spec: '',
+                        unit: '個',
+                        quantity: '1',
+                        unitPrice: '0',
+                        totalPrice: '0',
+                        note: '',
+                        majorCategory: '裝修',
+                        middleCategory: '弱電系統'
+                    },
+                    {
+                        code: 'UR-ELV-010',
+                        vender: '',
+                        name: '求助鈴閃光警報器',
+                        spec: '',
+                        unit: '個',
+                        quantity: '1',
+                        unitPrice: '0',
+                        totalPrice: '0',
+                        note: '',
+                        majorCategory: '裝修',
+                        middleCategory: '弱電系統'
+                    },
+                    // 空調系統
+                    {
+                        code: 'UR-AC-001',
+                        vender: '',
+                        name: '冰點冰水埋入送風機(清洗及維修)',
+                        spec: '',
+                        unit: '式',
+                        quantity: '1',
+                        unitPrice: '0',
+                        totalPrice: '0',
+                        note: '',
+                        majorCategory: '裝修',
+                        middleCategory: '空調系統'
+                    },
+                    {
+                        code: 'UR-AC-002',
+                        vender: '',
+                        name: '埋入室內機集風箱(原有設備)',
+                        spec: '',
+                        unit: '式',
+                        quantity: '1',
+                        unitPrice: '0',
+                        totalPrice: '0',
+                        note: '',
+                        majorCategory: '裝修',
+                        middleCategory: '空調系統'
+                    },
+                    {
+                        code: 'UR-AC-003',
+                        vender: '',
+                        name: '自由保溫軟管10英吋',
+                        spec: '',
+                        unit: 'm',
+                        quantity: '1',
+                        unitPrice: '0',
+                        totalPrice: '0',
+                        note: '',
+                        majorCategory: '裝修',
+                        middleCategory: '空調系統'
+                    },
+                    {
+                        code: 'UR-AC-004',
+                        vender: '',
+                        name: '新增方型出(廻)風口',
+                        spec: '',
+                        unit: '個',
+                        quantity: '1',
+                        unitPrice: '0',
+                        totalPrice: '0',
+                        note: '',
+                        majorCategory: '裝修',
+                        middleCategory: '空調系統'
+                    },
+                    {
+                        code: 'UR-AC-005',
+                        vender: '',
+                        name: '風箱+安裝',
+                        spec: '',
+                        unit: '式',
+                        quantity: '1',
+                        unitPrice: '0',
+                        totalPrice: '0',
+                        note: '',
+                        majorCategory: '裝修',
+                        middleCategory: '空調系統'
+                    },
+                    {
+                        code: 'UR-AC-006',
+                        vender: '',
+                        name: '風管+安裝',
+                        spec: '',
+                        unit: 'm',
+                        quantity: '1',
+                        unitPrice: '0',
+                        totalPrice: '0',
+                        note: '',
+                        majorCategory: '裝修',
+                        middleCategory: '空調系統'
+                    },
+                    {
+                        code: 'UR-AC-007',
+                        vender: '',
+                        name: 'HONWELL三速開關',
+                        spec: '',
+                        unit: '個',
+                        quantity: '1',
+                        unitPrice: '0',
+                        totalPrice: '0',
+                        note: '',
+                        majorCategory: '裝修',
+                        middleCategory: '空調系統'
+                    },
+                    {
+                        code: 'UR-AC-008',
+                        vender: '',
+                        name: '線型出(廻)風口',
+                        spec: '',
+                        unit: '個',
+                        quantity: '1',
+                        unitPrice: '0',
+                        totalPrice: '0',
+                        note: '',
+                        majorCategory: '裝修',
+                        middleCategory: '空調系統'
+                    },
+                    {
+                        code: 'UR-AC-009',
+                        vender: '',
+                        name: '線型集風箱',
+                        spec: '',
+                        unit: '個',
+                        quantity: '1',
+                        unitPrice: '0',
+                        totalPrice: '0',
+                        note: '',
+                        majorCategory: '裝修',
+                        middleCategory: '空調系統'
+                    },
+                    // 雜項
+                    {
+                        code: 'UR-MIS-001',
+                        vender: '',
+                        name: '現場清潔、安全防護及文書資處理',
+                        spec: '',
+                        unit: '式',
+                        quantity: '1',
+                        unitPrice: '0',
+                        totalPrice: '0',
+                        note: '',
+                        majorCategory: '裝修',
+                        middleCategory: '雜項'
+                    },
+                    {
+                        code: 'UR-MIS-002',
+                        vender: '',
+                        name: '勞工安全衛生管理費',
+                        spec: '',
+                        unit: '式',
+                        quantity: '1',
+                        unitPrice: '0',
+                        totalPrice: '0',
+                        note: '',
+                        majorCategory: '裝修',
+                        middleCategory: '雜項'
+                    },
+                    {
+                        code: 'UR-MIS-003',
+                        vender: '',
+                        name: '工程營造綜合保險',
+                        spec: '',
+                        unit: '式',
+                        quantity: '1',
+                        unitPrice: '0',
+                        totalPrice: '0',
+                        note: '',
+                        majorCategory: '裝修',
+                        middleCategory: '雜項'
+                    },
+                    {
+                        code: 'UR-MIS-004',
+                        vender: '',
+                        name: '工程品管及包商利費',
+                        spec: '',
+                        unit: '式',
+                        quantity: '1',
+                        unitPrice: '0',
+                        totalPrice: '0',
+                        note: '',
+                        majorCategory: '裝修',
+                        middleCategory: '雜項'
+                    }
                 ]
             },
-            'orthopedics': {
-                name: '骨科門診',
-                description: '包含拆除、裝修、機電等完整工程',
-                totalItems: 12,
-                items: [
-                    { code: 'OR-D-001', vender: '欣禾豐', name: '既有診療設備拆除', spec: '含設備保護及暫存', unit: '式', quantity: '1', unitPrice: '35000', totalPrice: '35000', note: '需配合醫院作業時間', majorCategory: '裝修', middleCategory: '拆除工程' },
-                    { code: 'OR-D-002', vender: '欣禾豐', name: '舊有地板拆除', spec: '含底層清理', unit: 'm²', quantity: '60', unitPrice: '280', totalPrice: '16800', note: '注意粉塵控制', majorCategory: '裝修', middleCategory: '拆除工程' },
-                    { code: 'OR-F-001', vender: '欣禾豐', name: '抗菌地板施作', spec: '醫療級PVC地板', unit: 'm²', quantity: '180', unitPrice: '1200', totalPrice: '216000', note: '含防滑處理', majorCategory: '裝修', middleCategory: '地坪工程' },
-                    { code: 'OR-F-002', vender: '欣禾豐', name: '地板收邊條安裝', spec: '不鏽鋼收邊條', unit: 'm', quantity: '120', unitPrice: '450', totalPrice: '54000', note: '圓弧收邊設計', majorCategory: '裝修', middleCategory: '地坪工程' },
-                    { code: 'OR-H-001', vender: '三菱電機', name: '診療室空調系統', spec: '變頻空調含新風系統', unit: '坪', quantity: '45', unitPrice: '4500', totalPrice: '202500', note: '含空氣清淨功能', majorCategory: '機電工程', middleCategory: '空調工程' }
-                ]
-            },
-            'surgery': {
-                name: '手術室',
-                description: '包含無塵室裝修、醫療氣體、空調等專業工程',
-                totalItems: 18,
-                items: [
-                    { code: 'SU-C-001', vender: '無塵室專業', name: '手術室無塵隔間系統', spec: '不鏽鋼夾芯板隔間', unit: 'm²', quantity: '200', unitPrice: '3500', totalPrice: '700000', note: '符合Class 100標準', majorCategory: '裝修', middleCategory: '無塵室工程' },
-                    { code: 'SU-C-002', vender: '無塵室專業', name: '無塵室天花板系統', spec: 'HEPA過濾天花板', unit: 'm²', quantity: '80', unitPrice: '4200', totalPrice: '336000', note: '含照明整合', majorCategory: '裝修', middleCategory: '無塵室工程' },
-                    { code: 'SU-H-001', vender: '三菱電機', name: '手術室專用空調系統', spec: '含HEPA過濾系統', unit: '式', quantity: '2', unitPrice: '450000', totalPrice: '900000', note: '符合醫療級標準', majorCategory: '機電工程', middleCategory: '空調工程' },
-                    { code: 'SU-H-002', vender: '三菱電機', name: '溫濕度控制系統', spec: '自動控制系統', unit: '組', quantity: '2', unitPrice: '85000', totalPrice: '170000', note: '含監控面板', majorCategory: '機電工程', middleCategory: '空調工程' },
-                    { code: 'SU-G-001', vender: '醫療氣體', name: '醫療氧氣管路系統', spec: '不鏽鋼管路含調壓裝置', unit: '式', quantity: '2', unitPrice: '120000', totalPrice: '240000', note: '含氣體偵測系統', majorCategory: '機電工程', middleCategory: '醫療氣體工程' },
-                    { code: 'SU-G-002', vender: '醫療氣體', name: '麻醉氣體回收系統', spec: '含廢氣處理設備', unit: '套', quantity: '2', unitPrice: '95000', totalPrice: '190000', note: '環保合規設計', majorCategory: '機電工程', middleCategory: '醫療氣體工程' }
-                ]
-            }
         };
 
         // 分類對應關係
