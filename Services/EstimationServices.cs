@@ -1,4 +1,5 @@
-﻿using NPOI.SS.UserModel;
+﻿using NPOI.OOXML.XSSF.UserModel;
+using NPOI.SS.UserModel;
 using NPOI.SS.Util;
 using NPOI.XSSF.UserModel;
 using ShowPms.DTOs;
@@ -26,6 +27,8 @@ public class EstimationServices
 
         // ===== 工程名稱 / 日期 =====
         IRow infoRow = sheet.CreateRow(rowIndex++);
+        infoRow.HeightInPoints = 20; //  設定列高為 20pt
+
         var projectNameCell = infoRow.CreateCell(0);
         projectNameCell.SetCellValue("工程名稱：" + request.ProjectName);
         projectNameCell.CellStyle = styles.cellStyle;
@@ -35,6 +38,7 @@ public class EstimationServices
         dateCell.SetCellValue("日期：　　年　　月　　日");
         dateCell.CellStyle = styles.cellStyle;
         sheet.AddMergedRegion(new CellRangeAddress(1, 1, 6, 7));
+
 
         // ===== 加入總表區塊 =====
         GenerateSummaryBlock(sheet, request, styles, ref rowIndex);
@@ -55,7 +59,7 @@ public class EstimationServices
         // 設定欄位寬度 (單位: 1/256 字符寬度)
         sheet.SetColumnWidth(0, 7.5 * 256);   // A欄：項次 - 較小
         sheet.SetColumnWidth(1, 61.25 * 256);  // B欄：工程項目 - 較寬
-        sheet.SetColumnWidth(2, 5.88 * 256);   // C欄：數量 - 較小
+        sheet.SetColumnWidth(2, 7.5 * 256);   // C欄：數量 - 較小
         sheet.SetColumnWidth(3, 7.75 * 256);   // D欄：單位 - 較小
         sheet.SetColumnWidth(4, 22 * 256);  // E欄：單價 - 中等
         sheet.SetColumnWidth(5, 23.13 * 256);  // F欄：金額 - 中等
@@ -63,7 +67,7 @@ public class EstimationServices
         sheet.SetColumnWidth(7, 14.63 * 256);  // H欄：圖號 - 中等
     }
 
-    private void GenerateSummaryBlock(ISheet sheet, ExportRequest request, (ICellStyle titleStyle, ICellStyle headerStyle, ICellStyle cellStyle, ICellStyle numberStyle) styles, ref int rowIndex)
+    private void GenerateSummaryBlock(ISheet sheet, ExportRequest request, (ICellStyle titleStyle, ICellStyle headerStyle, ICellStyle cellStyle, ICellStyle numberStyle, ICellStyle orangeBgStyle, ICellStyle grayBgStyle, ICellStyle grayCenterStyle, ICellStyle centerCellStyle) styles, ref int rowIndex)
     {
         // 總表表頭
         IRow header = sheet.CreateRow(rowIndex++);
@@ -81,10 +85,10 @@ public class EstimationServices
             foreach (var middle in major.MiddleItems)
             {
                 IRow row = sheet.CreateRow(rowIndex++);
-                row.CreateCell(0).SetCellValue(ToChineseNumber(sectionNo)).CellStyle = styles.cellStyle;
+                row.CreateCell(0).SetCellValue(ToChineseNumber(sectionNo)).CellStyle = styles.centerCellStyle;
                 row.CreateCell(1).SetCellValue(middle.Name).CellStyle = styles.cellStyle;
-                row.CreateCell(2).SetCellValue(1).CellStyle = styles.numberStyle;
-                row.CreateCell(3).SetCellValue("式").CellStyle = styles.cellStyle;
+                row.CreateCell(2).SetCellValue(1).CellStyle = styles.centerCellStyle;
+                row.CreateCell(3).SetCellValue("式").CellStyle = styles.centerCellStyle;
                 row.CreateCell(4).SetCellValue("-").CellStyle = styles.numberStyle;
                 row.CreateCell(5).SetCellValue("-").CellStyle = styles.numberStyle;
                 row.CreateCell(6).SetCellValue("").CellStyle = styles.cellStyle;
@@ -96,21 +100,27 @@ public class EstimationServices
         // 小計 - 為每個欄位都加上邊框
         IRow subTotal = sheet.CreateRow(rowIndex++);
         subTotal.CreateCell(0).SetCellValue("").CellStyle = styles.cellStyle;
-        subTotal.CreateCell(1).SetCellValue("小計").CellStyle = styles.cellStyle;
-        subTotal.CreateCell(2).SetCellValue("").CellStyle = styles.cellStyle;
-        subTotal.CreateCell(3).SetCellValue("").CellStyle = styles.cellStyle;
-        subTotal.CreateCell(4).SetCellValue("").CellStyle = styles.cellStyle;
-        subTotal.CreateCell(5).SetCellValue("-").CellStyle = styles.numberStyle;
-        subTotal.CreateCell(6).SetCellValue("").CellStyle = styles.cellStyle;
-        subTotal.CreateCell(7).SetCellValue("").CellStyle = styles.cellStyle;
+        subTotal.CreateCell(1).SetCellValue("小計").CellStyle = styles.orangeBgStyle;
+        subTotal.CreateCell(2).SetCellValue("").CellStyle = styles.orangeBgStyle;
+        subTotal.CreateCell(3).SetCellValue("").CellStyle = styles.orangeBgStyle;
+        subTotal.CreateCell(4).SetCellValue("").CellStyle = styles.orangeBgStyle;
+        subTotal.CreateCell(5).SetCellValue("-").CellStyle = styles.orangeBgStyle;
+        subTotal.CreateCell(6).SetCellValue("").CellStyle = styles.orangeBgStyle;
+        subTotal.CreateCell(7).SetCellValue("").CellStyle = styles.cellStyle; // H欄無需上底色
 
         // 其他費用 
         IRow other = sheet.CreateRow(rowIndex++);
         other.CreateCell(0).SetCellValue(ToChineseNumber(sectionNo)).CellStyle = styles.cellStyle;
         // 應與其他工程項目資料一樣來自資料庫...
-        other.CreateCell(1).SetCellValue("1.現場清潔及安全防護,文書資料整理2.勞工安全衛生管理費3.工程營造綜合保險4.工程品管及包商利潤費").CellStyle = styles.cellStyle; 
-        other.CreateCell(2).SetCellValue("6.65").CellStyle = styles.cellStyle;
-        other.CreateCell(3).SetCellValue("%").CellStyle = styles.cellStyle;
+        var otherDesc = "1.現場清潔及安全防護,文書資料整理\n" +
+                        "2.勞工安全衛生管理費\n" +
+                        "3.工程營造綜合保險\n" +
+                        "4.工程品管及包商利潤費";
+
+        other.CreateCell(1).SetCellValue(otherDesc);
+        other.GetCell(1).CellStyle = styles.cellStyle; // 確保 WrapText = true
+        other.CreateCell(2).SetCellValue("6.65").CellStyle = styles.centerCellStyle;
+        other.CreateCell(3).SetCellValue("%").CellStyle = styles.centerCellStyle;
         other.CreateCell(4).SetCellValue("").CellStyle = styles.cellStyle;
         other.CreateCell(5).SetCellValue("-").CellStyle = styles.numberStyle;
         other.CreateCell(6).SetCellValue("").CellStyle = styles.cellStyle;
@@ -119,20 +129,20 @@ public class EstimationServices
         // 小計 - 為每個欄位都加上邊框
         IRow subTotal2 = sheet.CreateRow(rowIndex++);
         subTotal2.CreateCell(0).SetCellValue("").CellStyle = styles.cellStyle;
-        subTotal2.CreateCell(1).SetCellValue("小計").CellStyle = styles.cellStyle;
-        subTotal2.CreateCell(2).SetCellValue("").CellStyle = styles.cellStyle;
-        subTotal2.CreateCell(3).SetCellValue("").CellStyle = styles.cellStyle;
-        subTotal2.CreateCell(4).SetCellValue("").CellStyle = styles.cellStyle;
-        subTotal2.CreateCell(5).SetCellValue("-").CellStyle = styles.numberStyle;
-        subTotal2.CreateCell(6).SetCellValue("").CellStyle = styles.cellStyle;
+        subTotal2.CreateCell(1).SetCellValue("小計").CellStyle = styles.orangeBgStyle;
+        subTotal2.CreateCell(2).SetCellValue("").CellStyle = styles.orangeBgStyle;
+        subTotal2.CreateCell(3).SetCellValue("").CellStyle = styles.orangeBgStyle;
+        subTotal2.CreateCell(4).SetCellValue("").CellStyle = styles.orangeBgStyle;
+        subTotal2.CreateCell(5).SetCellValue("-").CellStyle = styles.orangeBgStyle;
+        subTotal2.CreateCell(6).SetCellValue("").CellStyle = styles.orangeBgStyle;
         subTotal2.CreateCell(7).SetCellValue("").CellStyle = styles.cellStyle;
 
         // 營業稅 - 為每個欄位都加上邊框
         IRow tax = sheet.CreateRow(rowIndex++);
         tax.CreateCell(0).SetCellValue("").CellStyle = styles.cellStyle;
         tax.CreateCell(1).SetCellValue("營業稅").CellStyle = styles.cellStyle;
-        tax.CreateCell(2).SetCellValue(5).CellStyle = styles.numberStyle;
-        tax.CreateCell(3).SetCellValue("%").CellStyle = styles.cellStyle;
+        tax.CreateCell(2).SetCellValue(5).CellStyle = styles.centerCellStyle;
+        tax.CreateCell(3).SetCellValue("%").CellStyle = styles.centerCellStyle;
         tax.CreateCell(4).SetCellValue("").CellStyle = styles.cellStyle;
         tax.CreateCell(5).SetCellValue("-").CellStyle = styles.numberStyle;
         tax.CreateCell(6).SetCellValue("").CellStyle = styles.cellStyle;
@@ -141,12 +151,12 @@ public class EstimationServices
         // 總價 - 為每個欄位都加上邊框
         IRow total = sheet.CreateRow(rowIndex++);
         total.CreateCell(0).SetCellValue("").CellStyle = styles.cellStyle;
-        total.CreateCell(1).SetCellValue("總價").CellStyle = styles.cellStyle;
-        total.CreateCell(2).SetCellValue("").CellStyle = styles.cellStyle;
-        total.CreateCell(3).SetCellValue("").CellStyle = styles.cellStyle;
-        total.CreateCell(4).SetCellValue("").CellStyle = styles.cellStyle;
-        total.CreateCell(5).SetCellValue("").CellStyle = styles.cellStyle;
-        total.CreateCell(6).SetCellValue("").CellStyle = styles.cellStyle;
+        total.CreateCell(1).SetCellValue("總價").CellStyle = styles.orangeBgStyle;
+        total.CreateCell(2).SetCellValue("").CellStyle = styles.orangeBgStyle;
+        total.CreateCell(3).SetCellValue("").CellStyle = styles.orangeBgStyle;
+        total.CreateCell(4).SetCellValue("").CellStyle = styles.orangeBgStyle;
+        total.CreateCell(5).SetCellValue("").CellStyle = styles.orangeBgStyle;
+        total.CreateCell(6).SetCellValue("").CellStyle = styles.orangeBgStyle;
         total.CreateCell(7).SetCellValue("").CellStyle = styles.cellStyle;
 
         // 附註（多行） - 每行每個欄位都加邊框
@@ -230,7 +240,7 @@ public class EstimationServices
         return "零"; // 簡單示範，實際需要完整實作
     }
 
-    private void GenerateDetailBlock(ISheet sheet, ExportRequest request, (ICellStyle titleStyle, ICellStyle headerStyle, ICellStyle cellStyle, ICellStyle numberStyle) styles, ref int rowIndex)
+    private void GenerateDetailBlock(ISheet sheet, ExportRequest request, (ICellStyle titleStyle, ICellStyle headerStyle, ICellStyle cellStyle, ICellStyle numberStyle, ICellStyle orangeBgStyle, ICellStyle grayBgStyle, ICellStyle grayCenterStyle, ICellStyle centerCellStyle) styles, ref int rowIndex)
     {
         // 明細表標頭
         IRow header = sheet.CreateRow(rowIndex++);
@@ -249,24 +259,23 @@ public class EstimationServices
             {
                 // 中項標題列 - 確保所有欄位都有邊框
                 IRow middleRow = sheet.CreateRow(rowIndex++);
-                middleRow.CreateCell(0).SetCellValue(ToChineseNumber(sectionNo)).CellStyle = styles.cellStyle;
-                middleRow.CreateCell(1).SetCellValue(middle.Name).CellStyle = styles.cellStyle;
+                middleRow.CreateCell(0).SetCellValue(ToChineseNumber(sectionNo)).CellStyle = styles.grayCenterStyle;
+                middleRow.CreateCell(1).SetCellValue(middle.Name).CellStyle = styles.grayBgStyle;
 
                 // 為其他欄位也加上空白內容和邊框
                 for (int i = 2; i < 8; i++)
                 {
                     middleRow.CreateCell(i).SetCellValue("").CellStyle = styles.cellStyle;
                 }
-                sheet.AddMergedRegion(new CellRangeAddress(rowIndex - 1, rowIndex - 1, 1, 7));
 
                 int itemIndex = 1;
                 foreach (var item in middle.Items)
                 {
                     IRow row = sheet.CreateRow(rowIndex++);
-                    row.CreateCell(0).SetCellValue(itemIndex++).CellStyle = styles.cellStyle;
+                    row.CreateCell(0).SetCellValue(itemIndex++).CellStyle = styles.centerCellStyle;
                     row.CreateCell(1).SetCellValue(item.Name).CellStyle = styles.cellStyle;
-                    row.CreateCell(2).SetCellValue((double)item.QuantityDecimal).CellStyle = styles.numberStyle;
-                    row.CreateCell(3).SetCellValue(item.Unit).CellStyle = styles.cellStyle;
+                    row.CreateCell(2).SetCellValue((double)item.QuantityDecimal).CellStyle = styles.centerCellStyle;
+                    row.CreateCell(3).SetCellValue(item.Unit).CellStyle = styles.centerCellStyle;
                     row.CreateCell(4).SetCellValue("").CellStyle = styles.numberStyle;
                     row.CreateCell(5).SetCellValue("").CellStyle = styles.numberStyle;
                     row.CreateCell(6).SetCellValue(item.Note).CellStyle = styles.cellStyle;
@@ -275,21 +284,30 @@ public class EstimationServices
 
                 // 小計 - 確保所有欄位都有邊框
                 IRow subtotalRow = sheet.CreateRow(rowIndex++);
-                subtotalRow.CreateCell(0).SetCellValue("").CellStyle = styles.cellStyle;
-                subtotalRow.CreateCell(1).SetCellValue("小計").CellStyle = styles.cellStyle;
-                subtotalRow.CreateCell(2).SetCellValue("").CellStyle = styles.cellStyle;
-                subtotalRow.CreateCell(3).SetCellValue("").CellStyle = styles.cellStyle;
-                subtotalRow.CreateCell(4).SetCellValue("").CellStyle = styles.cellStyle;
-                subtotalRow.CreateCell(5).SetCellValue("").CellStyle = styles.numberStyle;
-                subtotalRow.CreateCell(6).SetCellValue("").CellStyle = styles.cellStyle;
-                subtotalRow.CreateCell(7).SetCellValue("").CellStyle = styles.cellStyle;
+                subtotalRow.CreateCell(0).SetCellValue("").CellStyle = styles.orangeBgStyle;
+                subtotalRow.CreateCell(1).SetCellValue("小計").CellStyle = styles.orangeBgStyle;
+                subtotalRow.CreateCell(2).SetCellValue("").CellStyle = styles.orangeBgStyle;
+                subtotalRow.CreateCell(3).SetCellValue("").CellStyle = styles.orangeBgStyle;
+                subtotalRow.CreateCell(4).SetCellValue("").CellStyle = styles.orangeBgStyle;
+                subtotalRow.CreateCell(5).SetCellValue("").CellStyle = styles.orangeBgStyle;
+                subtotalRow.CreateCell(6).SetCellValue("").CellStyle = styles.orangeBgStyle;
+                subtotalRow.CreateCell(7).SetCellValue("").CellStyle = styles.orangeBgStyle;
+
+                // 空白列（有邊框）
+                IRow blankRow = sheet.CreateRow(rowIndex++);
+                for (int i = 0; i < 8; i++)
+                {
+                    var cell = blankRow.CreateCell(i);
+                    cell.SetCellValue("");
+                    cell.CellStyle = styles.cellStyle;
+                }
 
                 sectionNo++;
             }
         }
     }
 
-    private (ICellStyle titleStyle, ICellStyle headerStyle, ICellStyle cellStyle, ICellStyle numberStyle) CreateStyles(XSSFWorkbook workbook)
+    private (ICellStyle titleStyle, ICellStyle headerStyle, ICellStyle cellStyle, ICellStyle numberStyle, ICellStyle orangeBgStyle, ICellStyle grayBgStyle, ICellStyle grayCenterStyle, ICellStyle centerCellStyle) CreateStyles(XSSFWorkbook workbook)
     {
         // ===== 字型定義 =====
         IFont titleFont = workbook.CreateFont();
@@ -325,15 +343,45 @@ public class EstimationServices
         cellStyle.SetFont(normalFont);
         cellStyle.VerticalAlignment = VerticalAlignment.Center;
         SetBorder(cellStyle);
+        cellStyle.WrapText = true;
+
+        // ===== 置中樣式（用於項次、數量） =====
+        ICellStyle centerCellStyle = workbook.CreateCellStyle();
+        centerCellStyle.CloneStyleFrom(cellStyle);
+        centerCellStyle.Alignment = HorizontalAlignment.Center;
 
         // ===== 數字儲存格樣式 (靠右) =====
         ICellStyle numberStyle = workbook.CreateCellStyle();
         numberStyle.CloneStyleFrom(cellStyle);
         numberStyle.Alignment = HorizontalAlignment.Right;
 
+        // ===== 橘色底色樣式 (#FCD5B4) =====
+        ICellStyle orangeBgStyle = workbook.CreateCellStyle();
+        orangeBgStyle.CloneStyleFrom(cellStyle);
+        XSSFColor orangeColor = new XSSFColor(new byte[] { 252, 213, 180 }, new DefaultIndexedColorMap());
+        ((XSSFCellStyle)orangeBgStyle).SetFillForegroundColor(orangeColor);
+        orangeBgStyle.FillPattern = FillPattern.SolidForeground;
+        orangeBgStyle.Alignment = HorizontalAlignment.Center;
+
+        // 先定義 grayColor
+        XSSFColor grayColor = new XSSFColor(new byte[] { 208, 206, 206 }, new DefaultIndexedColorMap());
+
+        // ===== 灰色底色樣式 (#D0CECE) =====
+        ICellStyle grayBgStyle = workbook.CreateCellStyle();
+        grayBgStyle.CloneStyleFrom(cellStyle);
+        ((XSSFCellStyle)grayBgStyle).SetFillForegroundColor(grayColor);
+        grayBgStyle.FillPattern = FillPattern.SolidForeground;
+
+        // ===== 灰底 + 置中樣式 =====
+        ICellStyle grayCenterStyle = workbook.CreateCellStyle();
+        grayCenterStyle.CloneStyleFrom(cellStyle);
+        ((XSSFCellStyle)grayCenterStyle).SetFillForegroundColor(grayColor);
+        grayCenterStyle.FillPattern = FillPattern.SolidForeground;
+        grayCenterStyle.Alignment = HorizontalAlignment.Center;
+        grayCenterStyle.VerticalAlignment = VerticalAlignment.Center;
 
 
-        return (titleStyle, headerStyle, cellStyle, numberStyle);
+        return (titleStyle, headerStyle, cellStyle, numberStyle, orangeBgStyle, grayBgStyle, grayCenterStyle, centerCellStyle);
     }
 
     // 設定邊框
@@ -348,9 +396,35 @@ public class EstimationServices
     // 阿拉伯數字轉中文大寫 (1 → 一, 2 → 二)
     private string ToChineseNumber(int num)
     {
-        string[] map = { "零", "一", "二", "三", "四", "五", "六", "七", "八", "九", "十" };
-        if (num < map.Length)
-            return map[num];
-        return num.ToString();
+        string[] digits = { "零", "一", "二", "三", "四", "五", "六", "七", "八", "九" };
+
+        if (num < 0)
+            return num.ToString(); // 防呆處理：負數直接返回阿拉伯數字
+
+        if (num < 10)
+            return digits[num];
+
+        if (num == 10)
+            return "十";
+
+        if (num < 20)
+            return "十" + digits[num % 10];
+
+        if (num < 100)
+        {
+            int ten = num / 10;
+            int one = num % 10;
+
+            string result = digits[ten] + "十";
+
+            if (one != 0)
+                result += digits[one];
+
+            return result;
+        }
+
+        return num.ToString(); // 超過99就直接顯示阿拉伯數字
     }
+
+
 }
