@@ -493,7 +493,25 @@
                 <h5 class="mb-0 text-primary-green">
                     <i class="fas fa-edit"></i> 已選項目（可編輯）
                 </h5>
+
+                <!-- 使用 ms-auto 推到右側 -->
+                <div class="d-flex gap-2 ms-auto">
+                    <button class="btn btn-primary-green" onclick="addNewItem()">
+                        <i class="fas fa-plus"></i> 新增項目
+                    </button>
+                    <button class="btn btn-secondary-green" onclick="deleteSelected()">
+                        <i class="fas fa-trash"></i> 刪除選取
+                    </button>
+                    <button class="btn btn-outline-primary-green" onclick="saveData()">
+                        <i class="fas fa-save"></i> 儲存資料
+                    </button>
+                    <button class="btn btn-success" onclick="exportExcel()">
+                        <i class="fas fa-file-export"></i> 匯出空白估價單
+                    </button>
+                </div>
             </div>
+
+
             <div class="card-body p-0">
                 <div class="table-responsive">
                     <table class="table table-hover mb-0">
@@ -528,22 +546,6 @@
                             </tr>
                         </tbody>
                     </table>
-                </div>
-            </div>
-            <div class="card-footer">
-                <div class="d-flex gap-2">
-                    <button class="btn btn-primary-green" onclick="addNewItem()">
-                        <i class="fas fa-plus"></i> 新增項目
-                    </button>
-                    <button class="btn btn-secondary-green" onclick="deleteSelected()">
-                        <i class="fas fa-trash"></i> 刪除選取
-                    </button>
-                    <button class="btn btn-outline-primary-green" onclick="saveData()">
-                        <i class="fas fa-save"></i> 儲存資料
-                    </button>
-                    <button class="btn btn-success" onclick="exportExcel()">
-                        <i class="fas fa-file-export"></i> 匯出空白估價單
-                    </button>
                 </div>
             </div>
         </div>
