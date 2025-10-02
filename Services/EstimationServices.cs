@@ -30,76 +30,48 @@ public class EstimationServices
         sheet.AddMergedRegion(new CellRangeAddress(0, 0, 0, 7));
         titleRow.HeightInPoints = 30;
 
-        // ===== 工程名稱 / 日期 =====
         IRow infoRow = sheet.CreateRow(rowIndex++);
         infoRow.HeightInPoints = 20;
 
+        // 工程名稱（A欄）和空白欄（B欄）
         var projectNameCell = infoRow.CreateCell(0);
         projectNameCell.SetCellValue("工程名稱：" + request.ProjectName);
-        projectNameCell.CellStyle = styles.CellStyle;
-        sheet.AddMergedRegion(new CellRangeAddress(1, 1, 0, 1));
+        projectNameCell.CellStyle = styles.NoteCellStyle;  // 無框線樣式
 
+        var projectNameCellRight = infoRow.CreateCell(1);
+        projectNameCellRight.CellStyle = styles.NoteCellStyle;  // 無框線樣式（空白）
+
+        sheet.AddMergedRegion(new CellRangeAddress(infoRow.RowNum, infoRow.RowNum, 0, 1));
+
+        // 製表日期（G欄）和空白欄（H欄）
         var dateCell = infoRow.CreateCell(6);
         dateCell.SetCellValue("製表日期：　　年　　月　　日");
-        dateCell.CellStyle = styles.CellStyle;
-        sheet.AddMergedRegion(new CellRangeAddress(1, 1, 6, 7));
+        dateCell.CellStyle = styles.NoteCellStyle;  // 無框線樣式
+
+        var dateCellRight = infoRow.CreateCell(7);
+        dateCellRight.CellStyle = styles.NoteCellStyle;  // 無框線樣式（空白）
+
+        sheet.AddMergedRegion(new CellRangeAddress(infoRow.RowNum, infoRow.RowNum, 6, 7));
+
 
         // 記錄總表開始的位置
         int summaryHeaderRowIndex = rowIndex;
 
-        // ===== 加入總表區塊（第一次先不加公式）=====
-        GenerateSummaryBlock(sheet, request, styles, ref rowIndex, null);
+        // ===== 加入總表區塊，並取得總價和總價大寫行的索引 =====
+        var (totalInWordsRowIndex, finalTotalRowIndex) = GenerateSummaryBlock(sheet, request, styles, ref rowIndex, null, workbook);
 
         // 空一列
         rowIndex++;
 
-        // ===== 加入明細表區塊，並收集小計行號 =====
+        // ===== 加入明細表區塊，並收集小計行號和標題行號 =====
         detailSubtotalRowMap.Clear();
-        GenerateDetailBlock(sheet, request, styles, ref rowIndex);
+        Dictionary<int, int> detailHeaderRowMap = GenerateDetailBlock(sheet, request, styles, ref rowIndex, workbook);
+
+        // ===== 在總表中添加超連結到明細表 =====
+        AddHyperlinksToSummary(sheet, workbook, request, detailHeaderRowMap);
 
         // ===== 回填總表的複價公式 =====
         FillSummaryPriceFormulas(sheet, request, styles);
-
-        // ===== 計算並填入中文大寫金額 =====
-        try
-        {
-            // 先評估所有公式
-            var evaluator = workbook.GetCreationHelper().CreateFormulaEvaluator();
-            evaluator.EvaluateAll();
-
-            // 計算總表各行位置
-            int totalItems = 0;
-            foreach (var major in request.MajorItems)
-            {
-                totalItems += major.MiddleItems.Count;
-            }
-
-            int firstDataRow = summaryHeaderRowIndex + 2;
-            int finalTotalRow = firstDataRow + totalItems + 5;
-            int totalInWordsRowIndex = finalTotalRow + 22;
-
-            // 取得總價值
-            IRow finalTotalRowObj = sheet.GetRow(finalTotalRow - 1);
-            ICell finalTotalCell = finalTotalRowObj?.GetCell(5);
-
-            if (finalTotalCell != null)
-            {
-                var cellValue = evaluator.Evaluate(finalTotalCell);
-                double totalAmount = cellValue.NumberValue;
-
-                IRow totalInWordsRow = sheet.GetRow(totalInWordsRowIndex - 1);
-                ICell chineseAmountCell = totalInWordsRow?.GetCell(1);
-
-                if (chineseAmountCell != null)
-                {
-                    chineseAmountCell.SetCellValue(ConvertToChineseCurrency((decimal)totalAmount));
-                }
-            }
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"計算中文金額失敗: {ex.Message}");
-        }
 
         // ===== 新增：產生備註頁面 =====
         GenerateNoteSheet(sheet2, "結構體及外牆裝修", styles, request);
@@ -109,13 +81,12 @@ public class EstimationServices
         workbook.Write(ms);
         return ms.ToArray();
     }
-
     private void SetColumnWidths(ISheet sheet)
     {
         // 設定欄位寬度 (單位: 1/256 字符寬度)
-        sheet.SetColumnWidth(0, 7.5 * 256);   // A欄：項次 - 較小
+        sheet.SetColumnWidth(0, 9 * 256);   // A欄：項次 - 較小
         sheet.SetColumnWidth(1, 61.25 * 256);  // B欄：工程項目 - 較寬
-        sheet.SetColumnWidth(2, 7.5 * 256);   // C欄：數量 - 較小
+        sheet.SetColumnWidth(2, 8 * 256);   // C欄：數量 - 較小
         sheet.SetColumnWidth(3, 7.75 * 256);   // D欄：單位 - 較小
         sheet.SetColumnWidth(4, 22 * 256);  // E欄：單價 - 中等
         sheet.SetColumnWidth(5, 23.13 * 256);  // F欄：金額 - 中等
@@ -124,8 +95,9 @@ public class EstimationServices
     }
 
     // 空白估價單總表
-    private void GenerateSummaryBlock(ISheet sheet, ExportRequest request,
-        EstimationStyles styles, ref int rowIndex, Dictionary<int, int> detailSubtotalRowMap)
+    private (int totalInWordsRowIndex, int finalTotalRowIndex) GenerateSummaryBlock(
+        ISheet sheet, ExportRequest request,
+        EstimationStyles styles, ref int rowIndex, Dictionary<int, int> detailSubtotalRowMap, XSSFWorkbook workbook)
     {
         // 總表表頭
         IRow header = sheet.CreateRow(rowIndex++);
@@ -141,12 +113,26 @@ public class EstimationServices
         int totalItems = 0;
         int firstRowIndex = rowIndex;
 
+        // 用來記錄每個中項在明細表的行號
+        Dictionary<int, int> detailPositionMap = new Dictionary<int, int>();
+        int middleItemIndex = 0;
+
         foreach (var major in request.MajorItems)
         {
             foreach (var middle in major.MiddleItems)
             {
                 IRow row = sheet.CreateRow(rowIndex++);
                 row.CreateCell(0).SetCellValue(ToChineseNumber(sectionNo)).CellStyle = styles.CenterCellStyle;
+
+                // 創建帶超連結的中項名稱
+                ICell nameCell = row.CreateCell(1);
+                nameCell.SetCellValue(middle.Name);
+                nameCell.CellStyle = styles.CellStyle;
+
+                // 預先記錄中項索引，稍後會設置超連結
+                detailPositionMap[middleItemIndex] = sectionNo;
+                middleItemIndex++;
+
                 row.CreateCell(1).SetCellValue(middle.Name).CellStyle = styles.CellStyle;
                 row.CreateCell(2).SetCellValue(1).CellStyle = styles.CenterCellStyle;
                 row.CreateCell(3).SetCellValue("式").CellStyle = styles.CenterCellStyle;
@@ -190,7 +176,7 @@ public class EstimationServices
         other.GetCell(1).CellStyle = styles.CellStyle;
         other.CreateCell(2).SetCellValue("6.65").CellStyle = styles.CenterCellStyle;
         other.CreateCell(3).SetCellValue("%").CellStyle = styles.CenterCellStyle;
-        other.CreateCell(4).SetCellValue("-").CellStyle = styles.CellStyle;
+        other.CreateCell(4).SetCellValue("-").CellStyle = styles.NumberStyle;
         other.CreateCell(5).SetCellValue("-").CellStyle = styles.NumberStyle;
         other.CreateCell(6).SetCellValue("").CellStyle = styles.CellStyle;
         other.CreateCell(7).SetCellValue("").CellStyle = styles.CellStyle;
@@ -217,13 +203,14 @@ public class EstimationServices
         tax.CreateCell(1).SetCellValue("營業稅").CellStyle = styles.CellStyle;
         tax.CreateCell(2).SetCellValue(5).CellStyle = styles.CenterCellStyle;
         tax.CreateCell(3).SetCellValue("%").CellStyle = styles.CenterCellStyle;
-        tax.CreateCell(4).SetCellValue("-").CellStyle = styles.CellStyle;
+        tax.CreateCell(4).SetCellValue("-").CellStyle = styles.NumberStyle;
         tax.CreateCell(5).SetCellValue("-").CellStyle = styles.NumberStyle;
         tax.CreateCell(6).SetCellValue("").CellStyle = styles.CellStyle;
         tax.CreateCell(7).SetCellValue("").CellStyle = styles.CellStyle;
 
         // 總價 - 為每個欄位都加上邊框
         IRow total = sheet.CreateRow(rowIndex++);
+        int finalTotalRowIndex = rowIndex - 1; // 記錄總價行的索引（0-based）
         total.CreateCell(0).SetCellValue("").CellStyle = styles.CellStyle;
         total.CreateCell(1).SetCellValue("總價").CellStyle = styles.OrangeBgStyle;
         total.CreateCell(2).SetCellValue("").CellStyle = styles.OrangeBgStyle;
@@ -299,25 +286,64 @@ public class EstimationServices
         for (int i = 0; i < noteHeaders.Length; i++)
         {
             IRow noteRow = sheet.CreateRow(rowIndex++);
+
+            // 取得是否為第一行或最後一行
+            bool isFirstRow = i == 0;
+            bool isLastRow = i == noteHeaders.Length - 1;
+
+            // 建立樣式
+            ICellStyle noteCellStyle = workbook.CreateCellStyle();
+            noteCellStyle.CloneStyleFrom(styles.NoteCellStyle);
+
+            // 設定左右邊框
+            noteCellStyle.BorderLeft = BorderStyle.Thin;
+            noteCellStyle.BorderRight = BorderStyle.Thin;
+
+            if (isFirstRow)
+                noteCellStyle.BorderTop = BorderStyle.Thin;
+
+            if (isLastRow)
+                noteCellStyle.BorderBottom = BorderStyle.Thin;
+
+            // 設定 HeaderCell（左側）
             var headerCell = noteRow.CreateCell(0);
             headerCell.SetCellValue(noteHeaders[i]);
-            headerCell.CellStyle = styles.CellStyle;
+            headerCell.CellStyle = noteCellStyle;
 
+            // 設定 ContentCell（右側合併欄位）
             var contentCell = noteRow.CreateCell(1);
             contentCell.SetCellValue(noteContents[i]);
-            contentCell.CellStyle = styles.CellStyle;
+            contentCell.CellStyle = noteCellStyle;
+
+            // 合併 B ~ H 欄
             sheet.AddMergedRegion(new CellRangeAddress(rowIndex - 1, rowIndex - 1, 1, 7));
+
+            // 針對合併儲存格最右側補上右邊框
+            var lastMergedCell = noteRow.CreateCell(7); // 第7欄 (Index從0開始)
+            ICellStyle rightEdgeStyle = workbook.CreateCellStyle();
+            rightEdgeStyle.CloneStyleFrom(noteCellStyle);
+            rightEdgeStyle.BorderRight = BorderStyle.Thin;
+            lastMergedCell.CellStyle = rightEdgeStyle;
         }
 
         // 總價大寫行 - 每個欄位都加邊框
         IRow totalInWordsRow = sheet.CreateRow(rowIndex++);
+        int totalInWordsRowIndex = rowIndex - 1;
+
         var totalCell = totalInWordsRow.CreateCell(0);
         totalCell.SetCellValue("總價");
         totalCell.CellStyle = styles.CellStyle;
 
         var chineseAmountCell = totalInWordsRow.CreateCell(1);
-        // 中文金額先留空，稍後在 ExportExcel 方法最後統一計算
-        chineseAmountCell.SetCellValue("");
+        // 設定公式直接參照總價儲存格
+        chineseAmountCell.SetCellFormula($"F{finalTotalRow}");
+
+        // 建立中文大寫數字格式的樣式
+        ICellStyle chineseNumberStyle = workbook.CreateCellStyle();
+        chineseNumberStyle.CloneStyleFrom(styles.CellStyle);
+        IDataFormat format = workbook.CreateDataFormat();
+        // 中文大寫（整數）格式：[DBNum2]0
+        chineseAmountCell.SetCellFormula($"TEXT(F{finalTotalRow}, \"[DBNum2]0\")");
         chineseAmountCell.CellStyle = styles.CellStyle;
 
         var currencyCell = totalInWordsRow.CreateCell(2);
@@ -327,23 +353,49 @@ public class EstimationServices
         var ntCell = totalInWordsRow.CreateCell(3);
         ntCell.SetCellValue("NT$:");
         ntCell.CellStyle = styles.CellStyle;
+        // 要合併的欄位範圍
+        int fromCol = 4; // E
+        int toCol = 7;   // H
 
-        var numberAmountCell = totalInWordsRow.CreateCell(4);
-        numberAmountCell.SetCellFormula($"TEXT(F{finalTotalRow},\"#,##0\")");
-        numberAmountCell.CellStyle = styles.NumberStyle;
-        sheet.AddMergedRegion(new CellRangeAddress(rowIndex - 1, rowIndex - 1, 4, 7));
+        // 建立合併儲存格樣式（含四邊框）
+        ICellStyle mergedCellStyle = workbook.CreateCellStyle();
+        mergedCellStyle.CloneStyleFrom(styles.CellStyle);
+        mergedCellStyle.BorderTop = BorderStyle.Thin;
+        mergedCellStyle.BorderBottom = BorderStyle.Thin;
+        mergedCellStyle.BorderLeft = BorderStyle.Thin;
+        mergedCellStyle.BorderRight = BorderStyle.Thin;
+
+        // 對合併區域每一欄都建立儲存格並套樣式
+        for (int col = fromCol; col <= toCol; col++)
+        {
+            var cell = totalInWordsRow.GetCell(col) ?? totalInWordsRow.CreateCell(col);
+            cell.CellStyle = mergedCellStyle;
+
+            if (col == fromCol)
+            {
+                // 只有第一欄要填公式
+                cell.SetCellFormula($"TEXT(F{finalTotalRow},\"#,##0\")");
+            }
+        }
+
+        // 最後合併儲存格
+        sheet.AddMergedRegion(new CellRangeAddress(rowIndex - 1, rowIndex - 1, fromCol, toCol));
+
 
         // 廠商與用印欄位 - 加邊框
         IRow signRow = sheet.CreateRow(rowIndex++);
         var vendorCell = signRow.CreateCell(0);
         vendorCell.SetCellValue("廠商");
-        vendorCell.CellStyle = styles.CellStyle;
+        vendorCell.CellStyle = styles.CenterCellStyle;
         sheet.AddMergedRegion(new CellRangeAddress(rowIndex - 1, rowIndex - 1, 0, 2));
 
         var stampCell = signRow.CreateCell(3);
         stampCell.SetCellValue("用印");
-        stampCell.CellStyle = styles.CellStyle;
+        stampCell.CellStyle = styles.CenterCellStyle;
         sheet.AddMergedRegion(new CellRangeAddress(rowIndex - 1, rowIndex - 1, 3, 7));
+        // 補齊右側儲存格，讓邊框顯示
+        var rightEdgeCell = signRow.CreateCell(7); // index 7 = H欄
+        rightEdgeCell.CellStyle = styles.CellStyle;
 
         // 簽章空白區域 - 建立5列空白但有邊框的儲存格
         int signStartRow = rowIndex;
@@ -361,12 +413,17 @@ public class EstimationServices
         // 合併簽章區域
         sheet.AddMergedRegion(new CellRangeAddress(signStartRow, signStartRow + 4, 0, 2)); // A-C欄
         sheet.AddMergedRegion(new CellRangeAddress(signStartRow, signStartRow + 4, 3, 7)); // D-H欄
+
+        return (totalInWordsRowIndex, finalTotalRowIndex); 
     }
 
     // 空白估價單明細表
-    private void GenerateDetailBlock(ISheet sheet, ExportRequest request,
-        EstimationStyles styles, ref int rowIndex)
+    private Dictionary<int, int> GenerateDetailBlock(ISheet sheet, ExportRequest request,
+        EstimationStyles styles, ref int rowIndex, XSSFWorkbook workbook)
     {
+        // 用來記錄每個中項標題在明細表的行號
+        Dictionary<int, int> detailHeaderRowMap = new Dictionary<int, int>();
+
         // 明細表標頭
         IRow header = sheet.CreateRow(rowIndex++);
         string[] headers = { "項次", "工程項目", "數量", "單位", "單價", "複價", "備註", "圖號" };
@@ -379,15 +436,31 @@ public class EstimationServices
 
         int sectionNo = 1;
         int middleItemIndex = 0; // 用來對應總表中的中項索引
+        int summaryHeaderRow = 3; // 總表表頭的行號（Excel行號，從1開始）
 
         foreach (var major in request.MajorItems)
         {
             foreach (var middle in major.MiddleItems)
             {
+                // 記錄中項標題列的行號（在創建之前記錄，因為 Excel 行號是 rowIndex + 1）
+                int currentDetailHeaderRow = rowIndex + 1; // Excel 行號
+                detailHeaderRowMap[middleItemIndex] = currentDetailHeaderRow;
+
                 // 中項標題列 - 確保所有欄位都有邊框
                 IRow middleRow = sheet.CreateRow(rowIndex++);
                 middleRow.CreateCell(0).SetCellValue(ToChineseNumber(sectionNo)).CellStyle = styles.GrayCenterStyle;
-                middleRow.CreateCell(1).SetCellValue(middle.Name).CellStyle = styles.GrayBgStyle;
+
+                // 創建帶超連結的中項名稱（返回總表）
+                ICell middleNameCell = middleRow.CreateCell(1);
+                middleNameCell.SetCellValue(middle.Name);
+                middleNameCell.CellStyle = styles.GrayBgStyle;
+
+                // 添加返回總表的超連結
+                int summaryRowForThisItem = summaryHeaderRow + 1 + middleItemIndex; // 總表對應行號
+                XSSFHyperlink backLink = (XSSFHyperlink)workbook.GetCreationHelper()
+                    .CreateHyperlink(HyperlinkType.Document);
+                backLink.Address = $"'估價單'!B{summaryRowForThisItem}";
+                middleNameCell.Hyperlink = backLink;
 
                 // 為其他欄位也加上空白內容和邊框
                 for (int i = 2; i < 8; i++)
@@ -453,6 +526,45 @@ public class EstimationServices
                 }
 
                 sectionNo++;
+            }
+        }
+
+        return detailHeaderRowMap;
+    }
+
+    private void AddHyperlinksToSummary(ISheet sheet, XSSFWorkbook workbook,
+    ExportRequest request, Dictionary<int, int> detailHeaderRowMap)
+    {
+        int summaryDataStartRow = 4; // 總表數據開始行號（Excel行號）
+        int middleItemIndex = 0;
+
+        foreach (var major in request.MajorItems)
+        {
+            foreach (var middle in major.MiddleItems)
+            {
+                if (detailHeaderRowMap.ContainsKey(middleItemIndex))
+                {
+                    int summaryRowIndex = summaryDataStartRow + middleItemIndex - 1; // 轉換為0-based索引
+                    int detailRowNumber = detailHeaderRowMap[middleItemIndex]; // Excel行號
+
+                    IRow summaryRow = sheet.GetRow(summaryRowIndex);
+                    if (summaryRow != null)
+                    {
+                        ICell nameCell = summaryRow.GetCell(1);
+                        if (nameCell != null)
+                        {
+                            // 創建超連結
+                            XSSFHyperlink link = (XSSFHyperlink)workbook.GetCreationHelper()
+                                .CreateHyperlink(HyperlinkType.Document);
+                            link.Address = $"'估價單'!B{detailRowNumber}";
+                            nameCell.Hyperlink = link;
+
+                            // 可選：為超連結添加特殊樣式（藍色文字）
+                            // 如果需要，可以在 styles 中創建一個新的超連結樣式
+                        }
+                    }
+                }
+                middleItemIndex++;
             }
         }
     }
@@ -559,108 +671,6 @@ public class EstimationServices
         }
 
         return num.ToString(); // 超過99就直接顯示阿拉伯數字
-    }
-
-    /// <summary>
-    /// 將數字金額轉換為中文大寫金額
-    /// </summary>
-    /// <param name="amount">金額數字</param>
-    /// <returns>中文大寫金額字串</returns>
-    private string ConvertToChineseCurrency(decimal amount)
-    {
-        if (amount == 0)
-            return "零元整";
-
-        // 處理負數
-        string prefix = "";
-        if (amount < 0)
-        {
-            prefix = "負";
-            amount = Math.Abs(amount);
-        }
-
-        // 中文數字
-        string[] numbers = { "零", "壹", "貳", "參", "肆", "伍", "陸", "柒", "捌", "玖" };
-        // 單位
-        string[] units = { "", "拾", "佰", "仟" };
-        string[] bigUnits = { "", "萬", "億", "兆" };
-
-        // 分離整數部分
-        long integerPart = (long)Math.Floor(amount);
-
-        string result = "";
-
-        // 處理整數部分
-        if (integerPart == 0)
-        {
-            result = "零元";
-        }
-        else
-        {
-            string integerStr = integerPart.ToString();
-            int length = integerStr.Length;
-
-            // 從高位到低位處理
-            for (int i = 0; i < length; i++)
-            {
-                int digit = int.Parse(integerStr[i].ToString());
-                int position = length - i - 1; // 當前位置（從右往左數）
-                int unitIndex = position % 4; // 個十百千的位置
-                int bigUnitIndex = position / 4; // 萬億兆的位置
-
-                if (digit == 0)
-                {
-                    // 處理零的特殊情況
-                    // 如果不是最後一位，且後面還有非零數字，才加零
-                    if (position > 0 && !result.EndsWith("零"))
-                    {
-                        // 檢查後面是否還有非零數字
-                        bool hasNonZeroAfter = false;
-                        for (int j = i + 1; j < length && (length - j - 1) / 4 == bigUnitIndex; j++)
-                        {
-                            if (int.Parse(integerStr[j].ToString()) != 0)
-                            {
-                                hasNonZeroAfter = true;
-                                break;
-                            }
-                        }
-                        if (hasNonZeroAfter)
-                        {
-                            result += numbers[0];
-                        }
-                    }
-                }
-                else
-                {
-                    result += numbers[digit] + units[unitIndex];
-                }
-
-                // 添加大單位（萬、億、兆）
-                if (unitIndex == 0 && bigUnitIndex > 0)
-                {
-                    // 檢查這一節是否全為零
-                    bool isAllZero = true;
-                    for (int j = Math.Max(0, i - 3); j <= i; j++)
-                    {
-                        if (int.Parse(integerStr[j].ToString()) != 0)
-                        {
-                            isAllZero = false;
-                            break;
-                        }
-                    }
-
-                    if (!isAllZero)
-                    {
-                        result += bigUnits[bigUnitIndex];
-                    }
-                }
-            }
-
-            result += "元";
-        }
-
-        // 只需要整數部分，不處理角和分
-        return prefix + result;
     }
 
     // 產生備註頁面
