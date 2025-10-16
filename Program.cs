@@ -1,3 +1,6 @@
+using ShowPms.Data;
+using ShowPms.Repositories;
+
 namespace ShowPms
 {
     public class Program
@@ -10,7 +13,9 @@ namespace ShowPms
             builder.Services.AddControllersWithViews();
 
             builder.Services.AddScoped<EstimationServices>();
-            
+            builder.Services.AddScoped<OldPriceRepository>();
+            builder.Services.AddSingleton<DapperContext>();
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.

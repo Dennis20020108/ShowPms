@@ -197,6 +197,53 @@
             padding: 12px 8px;
             color: var(--dark-green);
         }
+
+    /* 樹狀圖樣式 */
+    .category-group-row {
+        background-color: #e8f5e9;
+        font-weight: 700;
+        border-top: 3px solid var(--primary-green);
+        border-bottom: 2px solid var(--primary-green);
+    }
+
+        .category-group-row td {
+            padding: 15px 12px;
+            color: var(--dark-green);
+            font-size: 1.05em;
+        }
+
+    .table-active {
+        background-color: #f1f8f4 !important;
+        font-weight: 600;
+        border-bottom: 1px solid #c8e6c9;
+    }
+
+        .table-active td {
+            padding: 12px 8px;
+            color: #2e7d32;
+        }
+
+        .table-active .badge {
+            font-size: 0.7em;
+            padding: 0.3em 0.6em;
+        }
+
+    .category-group-row .badge {
+        font-size: 0.75em;
+        padding: 0.4em 0.8em;
+    }
+    /* 折疊動畫 */
+    .toggle-icon {
+        transition: transform 0.2s ease;
+    }
+
+    .collapsible-header:hover {
+        background-color: rgba(40, 167, 69, 0.1);
+    }
+
+    .category-group-row.collapsible-header:hover {
+        background-color: rgba(40, 167, 69, 0.2);
+    }
 </style>
 
 <div class="app-content-header">
@@ -411,6 +458,12 @@
                     <small class="text-muted">[☑] 表示已勾選加入估價單 | 點擊列可快速勾選</small>
                 </div>
                 <div>
+                    <button class="btn btn-sm btn-outline-secondary me-2" onclick="expandAllCategories()">
+                        <i class="fas fa-expand-alt"></i> 全部展開
+                    </button>
+                    <button class="btn btn-sm btn-outline-secondary me-2" onclick="collapseAllCategories()">
+                        <i class="fas fa-compress-alt"></i> 全部折疊
+                    </button>
                     <button class="btn btn-sm btn-outline-primary-green me-2" onclick="selectAllSearchResults()">
                         <i class="fas fa-check-square"></i> 全選可見
                     </button>
@@ -2194,30 +2247,201 @@
             updateSelectionInfo();
         });
 
+        // ===== 顯示搜尋結果（可折疊樹狀圖版本） =====
         function displaySearchResults(results, keyword = '') {
             const tbody = document.getElementById('oldPriceList');
             tbody.innerHTML = '';
 
             if (results.length === 0) {
                 tbody.innerHTML = `
-                            <tr>
-                                <td colspan="13" class="text-center text-muted py-4">
-                                    <i class="fas fa-search-minus fa-2x mb-2"></i><br>
-                                    未找到符合條件的項目，請調整搜尋條件
-                                </td>
-                            </tr>
-                        `;
+            <tr>
+                <td colspan="13" class="text-center text-muted py-4">
+                    <i class="fas fa-search-minus fa-2x mb-2"></i><br>
+                    未找到符合條件的項目，請調整搜尋條件
+                </td>
+            </tr>
+        `;
                 return;
             }
 
-            results.forEach((item, index) => {
-                const row = createItemRow(item, index, keyword);
-                tbody.appendChild(row);
+            // 按大項目和中項目分組
+            const groupedData = {};
+            results.forEach(item => {
+                const majorKey = item.majorCategory || '未分類';
+                const middleKey = item.middleCategory || '未分類';
+
+                if (!groupedData[majorKey]) {
+                    groupedData[majorKey] = {};
+                }
+                if (!groupedData[majorKey][middleKey]) {
+                    groupedData[majorKey][middleKey] = [];
+                }
+                groupedData[majorKey][middleKey].push(item);
+            });
+
+            // 渲染樹狀結構
+            let itemIndex = 0;
+            Object.keys(groupedData).sort().forEach((majorCategory, majorIdx) => {
+                const majorId = `major-${majorIdx}`;
+
+                // 大項目標題列
+                const majorRow = document.createElement('tr');
+                majorRow.className = 'category-group-row collapsible-header';
+                majorRow.dataset.target = majorId;
+                majorRow.innerHTML = `
+            <td colspan="13" style="cursor: pointer; user-select: none;">
+                <i class="fas fa-chevron-down toggle-icon me-2"></i>
+                <i class="fas fa-folder-open me-2"></i>
+                <strong>${majorCategory}</strong>
+                <span class="badge bg-secondary ms-2">${Object.values(groupedData[majorCategory]).flat().length} 項</span>
+            </td>
+        `;
+
+                // 大項目點擊事件
+                majorRow.addEventListener('click', function () {
+                    toggleCategory(majorId, this);
+                });
+
+                tbody.appendChild(majorRow);
+
+                // 中項目和項目容器
+                Object.keys(groupedData[majorCategory]).sort().forEach((middleCategory, middleIdx) => {
+                    const middleId = `${majorId}-middle-${middleIdx}`;
+
+                    // 中項目標題列
+                    const middleRow = document.createElement('tr');
+                    middleRow.className = 'table-active collapsible-header';
+                    middleRow.dataset.parent = majorId;
+                    middleRow.dataset.target = middleId;
+                    middleRow.innerHTML = `
+                <td></td>
+                <td colspan="12" style="cursor: pointer; user-select: none;">
+                    <i class="fas fa-chevron-down toggle-icon me-2 ms-3"></i>
+                    <i class="fas fa-folder me-2"></i>
+                    <strong>${middleCategory}</strong>
+                    <span class="badge bg-info ms-2">${groupedData[majorCategory][middleCategory].length} 項</span>
+                </td>
+            `;
+
+                    // 中項目點擊事件
+                    middleRow.addEventListener('click', function () {
+                        toggleCategory(middleId, this);
+                    });
+
+                    tbody.appendChild(middleRow);
+
+                    // 項目列
+                    groupedData[majorCategory][middleCategory].forEach(item => {
+                        const row = createItemRow(item, itemIndex, keyword);
+                        row.dataset.parent = middleId;
+                        row.style.backgroundColor = '#f8f9fa';
+                        tbody.appendChild(row);
+                        itemIndex++;
+                    });
+                });
             });
 
             updateSelectionInfo();
         }
 
+        // ===== 折疊/展開分類 =====
+        function toggleCategory(categoryId, headerRow) {
+            const icon = headerRow.querySelector('.toggle-icon');
+            const childRows = document.querySelectorAll(`[data-parent="${categoryId}"]`);
+
+            const isCollapsed = icon.classList.contains('fa-chevron-right');
+
+            if (isCollapsed) {
+                // 展開
+                icon.classList.remove('fa-chevron-right');
+                icon.classList.add('fa-chevron-down');
+                childRows.forEach(row => {
+                    row.style.display = '';
+                    // 如果子項目是中項目標題，檢查其展開狀態
+                    if (row.classList.contains('collapsible-header')) {
+                        const childIcon = row.querySelector('.toggle-icon');
+                        if (childIcon && childIcon.classList.contains('fa-chevron-right')) {
+                            // 子項目是折疊狀態，不展開其子項目
+                            const subChildId = row.dataset.target;
+                            const subChildRows = document.querySelectorAll(`[data-parent="${subChildId}"]`);
+                            subChildRows.forEach(subRow => {
+                                subRow.style.display = 'none';
+                            });
+                        }
+                    }
+                });
+            } else {
+                // 折疊
+                icon.classList.remove('fa-chevron-down');
+                icon.classList.add('fa-chevron-right');
+                childRows.forEach(row => {
+                    row.style.display = 'none';
+                    // 遞迴折疊所有子項目
+                    if (row.dataset.target) {
+                        const subChildRows = document.querySelectorAll(`[data-parent="${row.dataset.target}"]`);
+                        subChildRows.forEach(subRow => {
+                            subRow.style.display = 'none';
+                        });
+                    }
+                });
+            }
+        }
+
+        // ===== 全部展開/折疊功能 =====
+        function expandAllCategories() {
+            const allHeaders = document.querySelectorAll('.collapsible-header');
+            allHeaders.forEach(header => {
+                const icon = header.querySelector('.toggle-icon');
+                const categoryId = header.dataset.target;
+
+                if (icon.classList.contains('fa-chevron-right')) {
+                    icon.classList.remove('fa-chevron-right');
+                    icon.classList.add('fa-chevron-down');
+
+                    const childRows = document.querySelectorAll(`[data-parent="${categoryId}"]`);
+                    childRows.forEach(row => {
+                        row.style.display = '';
+                    });
+                }
+            });
+            showMessage('已展開所有分類', 'info');
+        }
+
+        function collapseAllCategories() {
+            // 先折疊所有中項目
+            const middleHeaders = document.querySelectorAll('.table-active.collapsible-header');
+            middleHeaders.forEach(header => {
+                const icon = header.querySelector('.toggle-icon');
+                const categoryId = header.dataset.target;
+
+                icon.classList.remove('fa-chevron-down');
+                icon.classList.add('fa-chevron-right');
+
+                const childRows = document.querySelectorAll(`[data-parent="${categoryId}"]`);
+                childRows.forEach(row => {
+                    row.style.display = 'none';
+                });
+            });
+
+            // 再折疊所有大項目
+            const majorHeaders = document.querySelectorAll('.category-group-row.collapsible-header');
+            majorHeaders.forEach(header => {
+                const icon = header.querySelector('.toggle-icon');
+                const categoryId = header.dataset.target;
+
+                icon.classList.remove('fa-chevron-down');
+                icon.classList.add('fa-chevron-right');
+
+                const childRows = document.querySelectorAll(`[data-parent="${categoryId}"]`);
+                childRows.forEach(row => {
+                    row.style.display = 'none';
+                });
+            });
+
+            showMessage('已折疊所有分類', 'info');
+        }
+
+        // ===== 創建項目列（保持不變） =====
         function createItemRow(item, index, keyword = '') {
             const row = document.createElement('tr');
 
@@ -2230,28 +2454,26 @@
 
             const isSelected = selectedItems.some(selected => selected.code === item.code);
 
-            // 分類標籤樣式
-            const majorCategoryBadge = `<span class="badge bg-primary me-1">${item.majorCategory}</span>`;
-            const middleCategoryBadge = `<span class="badge bg-secondary">${item.middleCategory}</span>`;
-
             row.innerHTML = `
-                        <td class="text-center">
-                            <input type="checkbox" class="form-check-input checkbox-custom old-price-checkbox"
-                                   id="item${index}" ${isSelected ? 'checked' : ''} data-code="${item.code}">
-                        </td>
-                        <td>${highlightKeyword(majorCategoryBadge, keyword)}</td>
-                        <td>${highlightKeyword(middleCategoryBadge, keyword)}</td>
-                        <td>${highlightKeyword(item.code, keyword)}</td>
-                        <td>${highlightKeyword(item.vender, keyword)}</td>
-                        <td>${highlightKeyword(item.name, keyword)}</td>
-                        <td>${item.unit}</td>
-                        <td>${formatNumber(item.quantity)}</td>
-                        <td>${formatNumber(item.unitPrice)}</td>
-                        <td>${formatNumber(item.totalPrice)}</td>
-                        <td>-</td>
-                        <td>-</td>
-                        <td>${highlightKeyword(item.note, keyword)}</td>
-                    `;
+        <td class="text-center">
+            <input type="checkbox" class="form-check-input checkbox-custom old-price-checkbox"
+                   id="item${index}" ${isSelected ? 'checked' : ''} data-code="${item.code}">
+        </td>
+        <td colspan="2" class="ps-5">
+            <i class="fas fa-file-alt me-2 text-muted"></i>
+            ${highlightKeyword(item.name, keyword)}
+        </td>
+        <td>${highlightKeyword(item.code, keyword)}</td>
+        <td>${highlightKeyword(item.vender, keyword)}</td>
+        <td></td>
+        <td>${item.unit}</td>
+        <td>${formatNumber(item.quantity)}</td>
+        <td>${formatNumber(item.unitPrice)}</td>
+        <td>${formatNumber(item.totalPrice)}</td>
+        <td>-</td>
+        <td>-</td>
+        <td>${highlightKeyword(item.note, keyword)}</td>
+    `;
 
             // checkbox事件
             const checkbox = row.querySelector('input[type="checkbox"]');
@@ -2264,7 +2486,7 @@
                 updateSelectionInfo();
             });
 
-            // 行點擊事件
+            // 行點擊事件（排除checkbox）
             row.addEventListener('click', function (e) {
                 if (e.target.tagName !== 'INPUT') {
                     checkbox.checked = !checkbox.checked;
