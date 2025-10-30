@@ -3,3 +3,1236 @@
 *@
 @{
 }
+
+<style>
+    :root {
+        --primary-green: #28a745;
+        --light-green: #d4edda;
+        --dark-green: #1e7e34;
+        --muted-green: #6c757d;
+        --danger-red: #dc3545;
+        --warning-orange: #fd7e14;
+        --info-blue: #17a2b8;
+    }
+
+    .bg-primary-green {
+        background-color: var(--primary-green) !important;
+    }
+
+    .text-primary-green {
+        color: var(--primary-green) !important;
+    }
+
+    .btn-primary-green {
+        background-color: var(--primary-green);
+        border-color: var(--primary-green);
+        color: white;
+    }
+
+        .btn-primary-green:hover {
+            background-color: var(--dark-green);
+            border-color: var(--dark-green);
+            color: white;
+        }
+
+    .btn-outline-primary-green {
+        background-color: transparent;
+        border-color: var(--primary-green);
+        color: var(--primary-green);
+    }
+
+        .btn-outline-primary-green:hover {
+            background-color: var(--primary-green);
+            border-color: var(--primary-green);
+            color: white;
+        }
+
+    .card {
+        border: 1px solid var(--primary-green);
+        box-shadow: 0 2px 4px rgba(40, 167, 69, 0.1);
+    }
+
+    .card-header {
+        background-color: var(--light-green);
+        border-bottom: 1px solid var(--primary-green);
+    }
+
+    .form-select:focus, .form-control:focus {
+        border-color: var(--primary-green);
+        box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
+    }
+
+    /* 檔案上傳區域樣式 */
+    .upload-area {
+        border: 2px dashed var(--primary-green);
+        border-radius: 10px;
+        padding: 40px 20px;
+        text-align: center;
+        transition: all 0.3s ease;
+        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        cursor: pointer;
+        position: relative;
+    }
+
+        .upload-area.dragover {
+            border-color: var(--dark-green);
+            background-color: var(--light-green);
+            transform: scale(1.02);
+        }
+
+        .upload-area:hover {
+            border-color: var(--dark-green);
+            background-color: rgba(40, 167, 69, 0.05);
+        }
+
+    .upload-icon {
+        font-size: 3rem;
+        color: var(--primary-green);
+        margin-bottom: 1rem;
+    }
+
+    .file-input {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        cursor: pointer;
+    }
+
+    .file-info {
+        background: var(--light-green);
+        border-radius: 8px;
+        padding: 15px;
+        margin: 10px 0;
+        border-left: 4px solid var(--primary-green);
+    }
+
+    .file-name {
+        font-weight: 600;
+        color: var(--dark-green);
+    }
+
+    .file-size {
+        font-size: 0.9rem;
+        color: var(--muted-green);
+    }
+
+    .step-indicator {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 2rem;
+    }
+
+    .step {
+        display: flex;
+        align-items: center;
+        padding: 0 2rem;
+        position: relative;
+    }
+
+    .step-number {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        margin-right: 10px;
+        transition: all 0.3s ease;
+    }
+
+    .step.active .step-number {
+        background-color: var(--primary-green);
+        color: white;
+    }
+
+    .step.completed .step-number {
+        background-color: var(--dark-green);
+        color: white;
+    }
+
+    .step.pending .step-number {
+        background-color: #e9ecef;
+        color: var(--muted-green);
+    }
+
+    .step-connector {
+        position: absolute;
+        top: 20px;
+        left: 100%;
+        width: 100px;
+        height: 2px;
+        background-color: #e9ecef;
+    }
+
+    .step.completed .step-connector {
+        background-color: var(--primary-green);
+    }
+
+    .step:last-child .step-connector {
+        display: none;
+    }
+
+    .progress-custom {
+        height: 8px;
+        border-radius: 4px;
+        background-color: #e9ecef;
+        overflow: hidden;
+    }
+
+    .progress-bar-custom {
+        height: 100%;
+        background: linear-gradient(90deg, var(--primary-green), var(--dark-green));
+        transition: width 0.3s ease;
+        border-radius: 4px;
+    }
+
+    .validation-summary {
+        max-height: 300px;
+        overflow-y: auto;
+        border: 1px solid #dee2e6;
+        border-radius: 8px;
+        padding: 15px;
+        background-color: #f8f9fa;
+    }
+
+    .validation-item {
+        padding: 8px 12px;
+        margin: 5px 0;
+        border-radius: 6px;
+        border-left: 4px solid;
+    }
+
+    .validation-error {
+        background-color: #f8d7da;
+        border-left-color: var(--danger-red);
+        color: #721c24;
+    }
+
+    .validation-warning {
+        background-color: #fff3cd;
+        border-left-color: var(--warning-orange);
+        color: #856404;
+    }
+
+    .validation-success {
+        background-color: var(--light-green);
+        border-left-color: var(--primary-green);
+        color: var(--dark-green);
+    }
+
+    .loading-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(255, 255, 255, 0.9);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 1000;
+        border-radius: 8px;
+    }
+
+    .spinner-border-custom {
+        color: var(--primary-green);
+    }
+
+    .import-stats {
+        background: linear-gradient(135deg, var(--light-green) 0%, #ffffff 100%);
+        border-radius: 8px;
+        padding: 20px;
+        margin: 15px 0;
+        border: 1px solid var(--primary-green);
+    }
+
+    .stat-item {
+        text-align: center;
+        padding: 10px;
+    }
+
+    .stat-number {
+        font-size: 1.8rem;
+        font-weight: bold;
+        color: var(--primary-green);
+    }
+
+    .stat-label {
+        font-size: 0.9rem;
+        color: var(--muted-green);
+        margin-top: 5px;
+    }
+
+    .template-card {
+        border: 1px solid #dee2e6;
+        border-radius: 8px;
+        padding: 20px;
+        margin: 10px 0;
+        transition: all 0.3s ease;
+        cursor: pointer;
+    }
+
+        .template-card:hover {
+            border-color: var(--primary-green);
+            box-shadow: 0 2px 8px rgba(40, 167, 69, 0.1);
+            transform: translateY(-2px);
+        }
+
+    .template-icon {
+        font-size: 2rem;
+        color: var(--primary-green);
+        margin-bottom: 10px;
+    }
+</style>
+
+<div class="app-content-header">
+    <div class="container-fluid">
+        <!-- 主標題區域 -->
+        <div class="row">
+            <div class="col-sm-6">
+                <h3 class="mb-0">
+                    匯入報價單
+                </h3>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-end">
+                    <li class="breadcrumb-item">
+                        <a href="#">Home</a>
+                    </li>
+                    <li class="breadcrumb-item active" aria-current="page">
+                        匯入報價單
+                    </li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="app-content">
+    <div class="container-fluid">
+
+        <!-- 步驟指示器 -->
+        <div class="step-indicator">
+            <div class="step active" id="step1">
+                <div class="step-number">1</div>
+                <div class="step-text">上傳檔案</div>
+                <div class="step-connector"></div>
+            </div>
+            <div class="step pending" id="step2">
+                <div class="step-number">2</div>
+                <div class="step-text">資料驗證</div>
+                <div class="step-connector"></div>
+            </div>
+            <div class="step pending" id="step3">
+                <div class="step-number">3</div>
+                <div class="step-text">確認匯入</div>
+            </div>
+        </div>
+
+        <!-- 檔案上傳區域 -->
+        <div class="card" id="uploadSection">
+            <div class="card-header">
+                <h5 class="mb-0 text-primary-green">
+                    <i class="bi bi-cloud-upload"></i> 檔案上傳
+                </h5>
+            </div>
+            <div class="card-body">
+                <!-- 上傳區域 -->
+                <div class="upload-area" id="uploadArea">
+                    <input type="file" class="file-input" id="fileInput"
+                           accept=".xlsx,.xls,.csv" multiple>
+                    <div class="upload-icon">
+                        <i class="bi bi-cloud-upload"></i>
+                    </div>
+                    <h5 class="text-primary-green">拖放檔案到此處或點擊選擇</h5>
+                    <p class="text-muted">
+                        支援格式：Excel (.xlsx, .xls) 或 CSV (.csv)<br>
+                        最大檔案大小：10MB | 一次最多上傳5個檔案
+                    </p>
+                </div>
+
+                <!-- 已選擇的檔案清單 -->
+                <div id="fileList" class="mt-3" style="display: none;">
+                    <h6 class="text-primary-green">已選擇的檔案：</h6>
+                    <div id="fileItems"></div>
+                </div>
+
+                <!-- 操作按鈕 -->
+                <div class="text-center mt-4">
+                    <button class="btn btn-outline-primary-green me-2" onclick="clearFiles()">
+                        <i class="bi bi-x-lg"></i> 清除檔案
+                    </button>
+                    <button class="btn btn-primary-green" onclick="uploadFiles()" disabled id="uploadBtn">
+                        <i class="bi bi-upload"></i> 開始上傳
+                    </button>
+                </div>
+
+                <!-- 上傳進度 -->
+                <div id="uploadProgress" class="mt-4" style="display: none;">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <span class="fw-bold">上傳進度</span>
+                        <span id="progressText">0%</span>
+                    </div>
+                    <div class="progress-custom">
+                        <div class="progress-bar-custom" id="progressBar" style="width: 0%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 範本下載區域 -->
+        <div class="card mt-4">
+            <div class="card-header">
+                <h5 class="mb-0 text-primary-green">
+                    <i class="bi bi-file-earmark-excel"></i> 範本下載
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="template-card" onclick="downloadTemplate('standard')">
+                            <div class="template-icon">
+                                <i class="bi bi-file-earmark-spreadsheet"></i>
+                            </div>
+                            <h6 class="text-primary-green">標準匯入範本</h6>
+                            <p class="text-muted mb-0">
+                                包含所有必填欄位的標準Excel範本，適用於完整的舊價資料匯入
+                            </p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="template-card" onclick="downloadTemplate('simple')">
+                            <div class="template-icon">
+                                <i class="bi bi-file-earmark-text"></i>
+                            </div>
+                            <h6 class="text-primary-green">簡化匯入範本</h6>
+                            <p class="text-muted mb-0">
+                                包含基本必要欄位的簡化範本，適用於快速資料匯入
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 資料驗證區域 -->
+        <div class="card mt-4" id="validationSection" style="display: none;">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0 text-primary-green">
+                    <i class="bi bi-check-circle"></i> 資料驗證結果
+                </h5>
+                <div class="btn-group" role="group">
+                    <button class="btn btn-sm btn-outline-primary-green" onclick="exportValidationResult()">
+                        <i class="bi bi-download"></i> 匯出驗證報告
+                    </button>
+                </div>
+            </div>
+            <div class="card-body" style="position: relative;">
+                <!-- 載入指示器 -->
+                <div class="loading-overlay" id="validationLoading" style="display: none;">
+                    <div class="text-center">
+                        <div class="spinner-border spinner-border-custom" role="status">
+                            <span class="visually-hidden">驗證中...</span>
+                        </div>
+                        <div class="mt-2 text-muted">正在驗證資料...</div>
+                    </div>
+                </div>
+
+                <!-- 驗證統計 -->
+                <div class="import-stats">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="stat-item">
+                                <div class="stat-number" id="totalRecords">0</div>
+                                <div class="stat-label">總記錄數</div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="stat-item">
+                                <div class="stat-number text-success" id="validRecords">0</div>
+                                <div class="stat-label">有效記錄</div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="stat-item">
+                                <div class="stat-number text-warning" id="warningRecords">0</div>
+                                <div class="stat-label">警告記錄</div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="stat-item">
+                                <div class="stat-number text-danger" id="errorRecords">0</div>
+                                <div class="stat-label">錯誤記錄</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 驗證詳細結果 -->
+                <div id="validationDetails">
+                    <div class="validation-summary" id="validationMessages">
+                        <!-- 驗證訊息將在這裡顯示 -->
+                    </div>
+                </div>
+
+                <!-- 操作按鈕 -->
+                <div class="text-center mt-4">
+                    <button class="btn btn-outline-primary-green me-2" onclick="backToUpload()">
+                        <i class="bi bi-arrow-left"></i> 重新上傳
+                    </button>
+                    <button class="btn btn-primary-green" onclick="proceedToConfirm()" id="proceedBtn" disabled>
+                        <i class="bi bi-arrow-right"></i> 下一步
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 確認匯入區域 -->
+        <div class="card mt-4" id="confirmSection" style="display: none;">
+            <div class="card-header">
+                <h5 class="mb-0 text-primary-green">
+                    <i class="bi bi-check-square"></i> 確認匯入
+                </h5>
+            </div>
+            <div class="card-body" style="position: relative;">
+                <!-- 載入指示器 -->
+                <div class="loading-overlay" id="importLoading" style="display: none;">
+                    <div class="text-center">
+                        <div class="spinner-border spinner-border-custom" role="status">
+                            <span class="visually-hidden">匯入中...</span>
+                        </div>
+                        <div class="mt-2 text-muted">正在匯入資料...</div>
+                    </div>
+                </div>
+
+                <!-- 匯入設定 -->
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">匯入模式</label>
+                            <select class="form-select" id="importMode">
+                                <option value="insert">僅新增（不覆蓋現有資料）</option>
+                                <option value="update">更新（覆蓋相同編碼的資料）</option>
+                                <option value="merge">合併（新增+更新）</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">資料來源標註</label>
+                            <input type="text" class="form-control" id="dataSource"
+                                   placeholder="例：2024年度標案資料" maxlength="100">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 匯入選項 -->
+                <div class="row">
+                    <div class="col-12">
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">匯入選項</label>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="skipErrors" checked>
+                                <label class="form-check-label" for="skipErrors">
+                                    跳過錯誤記錄，僅匯入有效資料
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="createBackup" checked>
+                                <label class="form-check-label" for="createBackup">
+                                    匯入前建立資料備份
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="sendNotification">
+                                <label class="form-check-label" for="sendNotification">
+                                    匯入完成後發送通知郵件
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 匯入預覽 -->
+                <div class="import-stats">
+                    <h6 class="text-primary-green mb-3">匯入預覽</h6>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="stat-item">
+                                <div class="stat-number" id="previewTotal">0</div>
+                                <div class="stat-label">將要匯入的記錄數</div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="stat-item">
+                                <div class="stat-number text-info" id="previewNew">0</div>
+                                <div class="stat-label">新增記錄</div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="stat-item">
+                                <div class="stat-number text-warning" id="previewUpdate">0</div>
+                                <div class="stat-label">更新記錄</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 操作按鈕 -->
+                <div class="text-center mt-4">
+                    <button class="btn btn-outline-primary-green me-2" onclick="backToValidation()">
+                        <i class="bi bi-arrow-left"></i> 上一步
+                    </button>
+                    <button class="btn btn-success" onclick="executeImport()">
+                        <i class="bi bi-database-add"></i> 執行匯入
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 匯入結果區域 -->
+        <div class="card mt-4" id="resultSection" style="display: none;">
+            <div class="card-header">
+                <h5 class="mb-0 text-success">
+                    <i class="bi bi-check-circle"></i> 匯入完成
+                </h5>
+            </div>
+            <div class="card-body">
+                <!-- 匯入結果統計 -->
+                <div class="import-stats">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="stat-item">
+                                <div class="stat-number text-success" id="resultSuccess">0</div>
+                                <div class="stat-label">成功匯入</div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="stat-item">
+                                <div class="stat-number text-info" id="resultInserted">0</div>
+                                <div class="stat-label">新增記錄</div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="stat-item">
+                                <div class="stat-number text-warning" id="resultUpdated">0</div>
+                                <div class="stat-label">更新記錄</div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="stat-item">
+                                <div class="stat-number text-danger" id="resultFailed">0</div>
+                                <div class="stat-label">失敗記錄</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="text-center mt-4">
+                    <button class="btn btn-outline-primary-green me-2" onclick="downloadImportReport()">
+                        <i class="bi bi-download"></i> 下載匯入報告
+                    </button>
+                    <button class="btn btn-primary-green me-2" onclick="viewImportedData()">
+                        <i class="bi bi-eye"></i> 查看匯入資料
+                    </button>
+                    <button class="btn btn-success" onclick="startNewImport()">
+                        <i class="bi bi-plus-circle"></i> 新增匯入
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+@section scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+
+    <script>
+        let selectedFiles = [];
+        let validationResult = null;
+        let currentStep = 1;
+
+        // 初始化
+        $(document).ready(function () {
+            setupFileUpload();
+            setupDragAndDrop();
+        });
+
+        // 設定檔案上傳
+        function setupFileUpload() {
+            $('#fileInput').on('change', function (e) {
+                handleFileSelect(e.target.files);
+            });
+        }
+
+        // 設定拖放功能
+        function setupDragAndDrop() {
+            const uploadArea = $('#uploadArea')[0];
+
+            uploadArea.addEventListener('dragover', function (e) {
+                e.preventDefault();
+                $(this).addClass('dragover');
+            });
+
+            uploadArea.addEventListener('dragleave', function (e) {
+                e.preventDefault();
+                $(this).removeClass('dragover');
+            });
+
+            uploadArea.addEventListener('drop', function (e) {
+                e.preventDefault();
+                $(this).removeClass('dragover');
+                handleFileSelect(e.dataTransfer.files);
+            });
+        }
+
+        // 處理檔案選擇
+        function handleFileSelect(files) {
+            selectedFiles = [];
+            const maxFiles = 5;
+            const maxSize = 10 * 1024 * 1024; // 10MB
+            const allowedTypes = [
+                'application/vnd.ms-excel',
+                'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                'text/csv'
+            ];
+
+            // 檔案驗證
+            for (let i = 0; i < Math.min(files.length, maxFiles); i++) {
+                const file = files[i];
+
+                // 檢查檔案大小
+                if (file.size > maxSize) {
+                    showMessage(`檔案 "${file.name}" 超過大小限制 (10MB)`, 'warning');
+                    continue;
+                }
+
+                // 檢查檔案類型
+                if (!allowedTypes.includes(file.type) && !file.name.match(/\.(xlsx?|csv)$/i)) {
+                    showMessage(`檔案 "${file.name}" 格式不支援`, 'warning');
+                    continue;
+                }
+
+                selectedFiles.push(file);
+            }
+
+            if (selectedFiles.length > 0) {
+                displaySelectedFiles();
+                $('#uploadBtn').prop('disabled', false);
+            } else {
+                $('#fileList').hide();
+                $('#uploadBtn').prop('disabled', true);
+            }
+        }
+
+        // 顯示選擇的檔案
+        function displaySelectedFiles() {
+            const fileItems = $('#fileItems');
+            fileItems.empty();
+
+            selectedFiles.forEach((file, index) => {
+                const fileSize = formatFileSize(file.size);
+                const fileItem = $(`
+                    <div class="file-info">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <div class="file-name">
+                                    <i class="bi bi-file-earmark-excel text-primary-green me-2"></i>
+                                    ${file.name}
+                                </div>
+                                <div class="file-size">大小: ${fileSize}</div>
+                            </div>
+                            <button class="btn btn-sm btn-outline-danger" onclick="removeFile(${index})">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                `);
+                fileItems.append(fileItem);
+            });
+
+            $('#fileList').show();
+        }
+
+        // 移除檔案
+        function removeFile(index) {
+            selectedFiles.splice(index, 1);
+            if (selectedFiles.length > 0) {
+                displaySelectedFiles();
+            } else {
+                $('#fileList').hide();
+                $('#uploadBtn').prop('disabled', true);
+            }
+        }
+
+        // 清除檔案
+        function clearFiles() {
+            selectedFiles = [];
+            $('#fileInput').val('');
+            $('#fileList').hide();
+            $('#uploadBtn').prop('disabled', true);
+            showMessage('已清除所有選擇的檔案', 'info');
+        }
+
+        // 上傳檔案
+        function uploadFiles() {
+            if (selectedFiles.length === 0) {
+                showMessage('請先選擇要上傳的檔案', 'warning');
+                return;
+            }
+
+            $('#uploadProgress').show();
+            $('#uploadBtn').prop('disabled', true);
+
+            // 模擬上傳進度
+            let progress = 0;
+            const uploadInterval = setInterval(() => {
+                progress += Math.random() * 15 + 5;
+                if (progress >= 100) {
+                    progress = 100;
+                    clearInterval(uploadInterval);
+
+                    setTimeout(() => {
+                        $('#uploadProgress').hide();
+                        showMessage('檔案上傳完成，開始驗證資料...', 'success');
+                        moveToStep(2);
+                        startValidation();
+                    }, 500);
+                }
+
+                updateProgress(progress);
+            }, 200);
+        }
+
+        // 更新進度條
+        function updateProgress(progress) {
+            $('#progressBar').css('width', progress + '%');
+            $('#progressText').text(Math.round(progress) + '%');
+        }
+
+        // 移動到指定步驟
+        function moveToStep(step) {
+            // 更新步驟指示器
+            $('.step').removeClass('active completed').addClass('pending');
+
+            for (let i = 1; i <= step; i++) {
+                if (i === step) {
+                    $(`#step${i}`).removeClass('pending completed').addClass('active');
+                } else if (i < step) {
+                    $(`#step${i}`).removeClass('pending active').addClass('completed');
+                }
+            }
+
+            // 顯示對應的區域
+            $('#uploadSection, #validationSection, #confirmSection, #resultSection').hide();
+
+            switch (step) {
+                case 1:
+                    $('#uploadSection').show();
+                    break;
+                case 2:
+                    $('#validationSection').show();
+                    break;
+                case 3:
+                    $('#confirmSection').show();
+                    break;
+                case 4:
+                    $('#resultSection').show();
+                    break;
+            }
+
+            currentStep = step;
+        }
+
+        // 開始資料驗證
+        function startValidation() {
+            $('#validationLoading').show();
+
+            // 模擬驗證過程
+            setTimeout(() => {
+                const mockValidationResult = generateMockValidationResult();
+                displayValidationResult(mockValidationResult);
+                $('#validationLoading').hide();
+            }, 2000);
+        }
+
+        // 生成模擬驗證結果
+        function generateMockValidationResult() {
+            const totalRecords = Math.floor(Math.random() * 1000) + 500;
+            const errorCount = Math.floor(Math.random() * 50) + 5;
+            const warningCount = Math.floor(Math.random() * 100) + 20;
+            const validCount = totalRecords - errorCount;
+
+            return {
+                totalRecords: totalRecords,
+                validRecords: validCount,
+                warningRecords: warningCount,
+                errorRecords: errorCount,
+                messages: [
+                    { type: 'success', message: `成功驗證 ${validCount} 筆記錄` },
+                    { type: 'warning', message: `發現 ${warningCount} 筆警告：部分記錄缺少規格說明` },
+                    { type: 'warning', message: `發現重複編碼 15 筆，將依據匯入模式處理` },
+                    { type: 'error', message: `發現 ${errorCount} 筆錯誤：必填欄位為空或格式不正確` },
+                    { type: 'error', message: `單價格式錯誤 8 筆，請檢查數值格式` },
+                    { type: 'success', message: `檔案格式正確，可以進行匯入作業` }
+                ]
+            };
+        }
+
+        // 顯示驗證結果
+        function displayValidationResult(result) {
+            validationResult = result;
+
+            // 更新統計數字
+            $('#totalRecords').text(result.totalRecords.toLocaleString());
+            $('#validRecords').text(result.validRecords.toLocaleString());
+            $('#warningRecords').text(result.warningRecords.toLocaleString());
+            $('#errorRecords').text(result.errorRecords.toLocaleString());
+
+            // 顯示詳細訊息
+            const messagesContainer = $('#validationMessages');
+            messagesContainer.empty();
+
+            result.messages.forEach(msg => {
+                const messageClass = `validation-${msg.type}`;
+                const messageItem = $(`
+                    <div class="validation-item ${messageClass}">
+                        <i class="bi bi-${getMessageIcon(msg.type)} me-2"></i>
+                        ${msg.message}
+                    </div>
+                `);
+                messagesContainer.append(messageItem);
+            });
+
+            // 根據驗證結果決定是否可以繼續
+            const canProceed = result.errorRecords === 0 || result.validRecords > 0;
+            $('#proceedBtn').prop('disabled', !canProceed);
+
+            if (canProceed) {
+                showMessage('資料驗證完成，可以進行下一步', 'success');
+            } else {
+                showMessage('資料驗證失敗，請修正錯誤後重新上傳', 'error');
+            }
+        }
+
+        // 取得訊息圖示
+        function getMessageIcon(type) {
+            switch (type) {
+                case 'success': return 'check-circle';
+                case 'warning': return 'exclamation-triangle';
+                case 'error': return 'x-circle';
+                default: return 'info-circle';
+            }
+        }
+
+        // 繼續到確認步驟
+        function proceedToConfirm() {
+            if (!validationResult) {
+                showMessage('請先完成資料驗證', 'warning');
+                return;
+            }
+
+            moveToStep(3);
+            updateImportPreview();
+        }
+
+        // 更新匯入預覽
+        function updateImportPreview() {
+            const mode = $('#importMode').val();
+            let newRecords = 0;
+            let updateRecords = 0;
+
+            switch (mode) {
+                case 'insert':
+                    newRecords = validationResult.validRecords;
+                    updateRecords = 0;
+                    break;
+                case 'update':
+                    newRecords = 0;
+                    updateRecords = validationResult.validRecords;
+                    break;
+                case 'merge':
+                    newRecords = Math.floor(validationResult.validRecords * 0.7);
+                    updateRecords = validationResult.validRecords - newRecords;
+                    break;
+            }
+
+            $('#previewTotal').text(validationResult.validRecords.toLocaleString());
+            $('#previewNew').text(newRecords.toLocaleString());
+            $('#previewUpdate').text(updateRecords.toLocaleString());
+        }
+
+        // 匯入模式變更時更新預覽
+        $(document).on('change', '#importMode', function () {
+            updateImportPreview();
+        });
+
+        // 執行匯入
+        function executeImport() {
+            if (!validationResult) {
+                showMessage('請先完成資料驗證', 'warning');
+                return;
+            }
+
+            const importSettings = {
+                mode: $('#importMode').val(),
+                dataSource: $('#dataSource').val(),
+                skipErrors: $('#skipErrors').is(':checked'),
+                createBackup: $('#createBackup').is(':checked'),
+                sendNotification: $('#sendNotification').is(':checked')
+            };
+
+            $('#importLoading').show();
+
+            // 模擬匯入過程
+            setTimeout(() => {
+                const importResult = simulateImport();
+                displayImportResult(importResult);
+                $('#importLoading').hide();
+                moveToStep(4);
+            }, 3000);
+        }
+
+        // 模擬匯入結果
+        function simulateImport() {
+            const successRate = 0.95;
+            const totalValid = validationResult.validRecords;
+            const successCount = Math.floor(totalValid * successRate);
+            const failCount = totalValid - successCount;
+
+            const insertedCount = Math.floor(successCount * 0.6);
+            const updatedCount = successCount - insertedCount;
+
+            return {
+                success: successCount,
+                inserted: insertedCount,
+                updated: updatedCount,
+                failed: failCount
+            };
+        }
+
+        // 顯示匯入結果
+        function displayImportResult(result) {
+            $('#resultSuccess').text(result.success.toLocaleString());
+            $('#resultInserted').text(result.inserted.toLocaleString());
+            $('#resultUpdated').text(result.updated.toLocaleString());
+            $('#resultFailed').text(result.failed.toLocaleString());
+
+            showMessage('資料匯入完成！', 'success');
+        }
+
+        // 下載範本
+        function downloadTemplate(type) {
+            const templates = {
+                'standard': {
+                    filename: '舊價資料匯入範本_標準版.xlsx',
+                    message: '正在下載標準匯入範本...'
+                },
+                'simple': {
+                    filename: '舊價資料匯入範本_簡化版.xlsx',
+                    message: '正在下載簡化匯入範本...'
+                }
+            };
+
+            const template = templates[type];
+            showMessage(template.message, 'info');
+
+            // 模擬下載
+            setTimeout(() => {
+                // 這裡實際上會觸發檔案下載
+                showMessage(`${template.filename} 下載完成`, 'success');
+            }, 1000);
+        }
+
+        // 匯出驗證報告
+        function exportValidationResult() {
+            if (!validationResult) {
+                showMessage('沒有驗證結果可以匯出', 'warning');
+                return;
+            }
+
+            showMessage('正在生成驗證報告...', 'info');
+
+            setTimeout(() => {
+                showMessage('驗證報告已匯出', 'success');
+            }, 1000);
+        }
+
+        // 下載匯入報告
+        function downloadImportReport() {
+            showMessage('正在生成匯入報告...', 'info');
+
+            setTimeout(() => {
+                showMessage('匯入報告已下載', 'success');
+            }, 1000);
+        }
+
+        // 查看匯入的資料
+        function viewImportedData() {
+            // 跳轉到查詢頁面
+            window.location.href = '/OldPrice/Index';
+        }
+
+        // 開始新的匯入
+        function startNewImport() {
+            // 重置所有狀態
+            selectedFiles = [];
+            validationResult = null;
+
+            // 重置表單
+            $('#fileInput').val('');
+            $('#fileList').hide();
+            $('#uploadBtn').prop('disabled', true);
+            $('#uploadProgress').hide();
+            $('#importMode').val('insert');
+            $('#dataSource').val('');
+            $('#skipErrors').prop('checked', true);
+            $('#createBackup').prop('checked', true);
+            $('#sendNotification').prop('checked', false);
+
+            // 回到第一步
+            moveToStep(1);
+
+            showMessage('已重置，可以開始新的匯入作業', 'info');
+        }
+
+        // 返回上傳步驟
+        function backToUpload() {
+            moveToStep(1);
+        }
+
+        // 返回驗證步驟
+        function backToValidation() {
+            moveToStep(2);
+        }
+
+        // 格式化檔案大小
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+
+        // 顯示訊息
+        function showMessage(message, type = 'info') {
+            const alertClass = {
+                'success': 'alert-success',
+                'warning': 'alert-warning',
+                'error': 'alert-danger',
+                'info': 'alert-info'
+            };
+
+            const alertDiv = $(`
+                <div class="alert ${alertClass[type]} alert-dismissible fade show position-fixed"
+                     style="top: 20px; right: 20px; z-index: 9999; min-width: 300px;">
+                    ${message}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            `);
+
+            $('body').append(alertDiv);
+
+            // 3秒後自動移除
+            setTimeout(() => {
+                alertDiv.alert('close');
+            }, 3000);
+        }
+
+        // 鍵盤快捷鍵
+        $(document).on('keydown', function (e) {
+            // Escape 鍵返回上一步
+            if (e.keyCode === 27) {
+                if (currentStep > 1 && currentStep < 4) {
+                    switch (currentStep) {
+                        case 2:
+                            backToUpload();
+                            break;
+                        case 3:
+                            backToValidation();
+                            break;
+                    }
+                }
+            }
+        });
+
+        // 頁面離開前的確認
+        window.addEventListener('beforeunload', function (e) {
+            if (currentStep > 1 && currentStep < 4) {
+                e.preventDefault();
+                e.returnValue = '匯入作業尚未完成，確定要離開此頁面嗎？';
+            }
+        });
+
+        // 定期儲存表單狀態（防止意外關閉）
+        setInterval(function () {
+            if (currentStep > 1) {
+                const formState = {
+                    step: currentStep,
+                    importMode: $('#importMode').val(),
+                    dataSource: $('#dataSource').val(),
+                    skipErrors: $('#skipErrors').is(':checked'),
+                    createBackup: $('#createBackup').is(':checked'),
+                    sendNotification: $('#sendNotification').is(':checked')
+                };
+
+                // 使用 sessionStorage 暫存（注意：這在 Claude.ai 環境中不支援）
+                // 實際應用中可以儲存到 sessionStorage
+                console.log('Form state saved:', formState);
+            }
+        }, 30000); // 每30秒儲存一次
+
+        // 響應式處理
+        $(window).on('resize', function () {
+            // 在小螢幕上調整上傳區域的樣式
+            if ($(window).width() < 768) {
+                $('.upload-area').css('padding', '30px 15px');
+            } else {
+                $('.upload-area').css('padding', '40px 20px');
+            }
+        });
+
+        // 檔案拖放的視覺效果增強
+        let dragCounter = 0;
+
+        $(document).on('dragenter', function (e) {
+            e.preventDefault();
+            dragCounter++;
+            if (dragCounter === 1) {
+                $('body').addClass('dragging');
+            }
+        });
+
+        $(document).on('dragleave', function (e) {
+            e.preventDefault();
+            dragCounter--;
+            if (dragCounter === 0) {
+                $('body').removeClass('dragging');
+            }
+        });
+
+        $(document).on('drop', function (e) {
+            e.preventDefault();
+            dragCounter = 0;
+            $('body').removeClass('dragging');
+        });
+
+        // 加入 CSS 來支援全域拖放效果
+        $('<style>').prop('type', 'text/css').html(`
+            body.dragging {
+                background-color: rgba(40, 167, 69, 0.1);
+            }
+            body.dragging .upload-area {
+                border-color: var(--dark-green);
+                background-color: var(--light-green);
+                transform: scale(1.05);
+            }
+        `).appendTo('head');
+    </script>
+}

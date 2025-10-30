@@ -1,5 +1,270 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
+﻿@{
+    ViewData["Title"] = "廠商報價評比表";
+    Layout = "_Layout"; // 若沒有共用版面可註解
+}
+
+<div class="container-fluid mt-4">
+    <!-- 頁首 -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h3 class="text-primary-green">
+            <i class="fas fa-balance-scale"></i> 廠商報價評比表
+        </h3>
+        <div>
+            <button class="btn btn-outline-success" onclick="exportToExcel()">
+                <i class="fas fa-file-excel"></i> 匯出 Excel
+            </button>
+            <button class="btn btn-outline-secondary ms-2" onclick="resetCompare()">
+                <i class="fas fa-undo"></i> 重置
+            </button>
+        </div>
+    </div>
+
+    <!-- 選擇區域 -->
+    <div class="card mb-4">
+        <div class="card-header bg-light fw-bold">
+            <i class="fas fa-building"></i> 選擇工程位置與報價單
+        </div>
+        <div class="card-body">
+            <div class="row g-3 align-items-center">
+                <!-- 院區 -->
+                <div class="col-md-3">
+                    <label class="form-label fw-bold text-primary-green">院區：</label>
+                    <select class="form-select" id="hospitalSelect" onchange="updateBuildingOptions()">
+                        <option value="">請選擇院區</option>
+                        <option value="tp">彰秀</option>
+                        <option value="tc">彰濱</option>
+                        <option value="ks">高秀</option>
+                    </select>
+                </div>
+
+                <!-- 棟別 -->
+                <div class="col-md-3">
+                    <label class="form-label fw-bold text-primary-green">棟別：</label>
+                    <select class="form-select" id="buildingSelect" onchange="updateFloorOptions()">
+                        <option value="">請先選擇院區</option>
+                    </select>
+                </div>
+
+                <!-- 樓層 -->
+                <div class="col-md-3">
+                    <label class="form-label fw-bold text-primary-green">樓層：</label>
+                    <select class="form-select" id="floorSelect" onchange="updateProjectOptions()">
+                        <option value="">請先選擇棟別</option>
+                    </select>
+                </div>
+
+                <!-- 工程名稱 -->
+                <div class="col-md-3">
+                    <label class="form-label fw-bold text-primary-green">工程名稱：</label>
+                    <select class="form-select" id="quotationSelect" onchange="loadSelectedQuotation()">
+                        <option value="">請先選擇樓層</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 廠商資訊 -->
+    <div id="vendorInfo" class="table-responsive mb-4" style="display:none;">
+        <table class="table table-bordered align-middle">
+            <thead class="table-light">
+                <tr>
+                    <th width="20%">工程名稱</th>
+                    <th colspan="3" id="projectName"></th>
+                </tr>
+                <tr>
+                    <th>廠商 / 聯絡人</th>
+                    <th id="vendorA"></th>
+                    <th id="vendorB"></th>
+                    <th id="vendorC"></th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+
+    <!-- 報價比較表 -->
+    <div id="compareTableWrapper" class="card" style="display:none;">
+        <div class="card-header bg-success text-white">
+            <i class="fas fa-table"></i> 比價明細
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0" id="compareTable">
+                    <thead class="table-success">
+                        <tr>
+                            <th>項次</th>
+                            <th>工程項目</th>
+                            <th>數量</th>
+                            <th>單位</th>
+                            <th colspan="2" class="text-center">廠商 A</th>
+                            <th colspan="2" class="text-center">廠商 B</th>
+                            <th colspan="2" class="text-center">廠商 C</th>
+                            <th>備註</th>
+                        </tr>
+                        <tr class="table-light">
+                            <th colspan="4"></th>
+                            <th>單價</th>
+                            <th>金額</th>
+                            <th>單價</th>
+                            <th>金額</th>
+                            <th>單價</th>
+                            <th>金額</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody id="compareTableBody"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+    <script>
+        // ======= 模擬多份報價資料 =======
+        const quotations = {
+            "tp-B-5F-fan": {
+                projectName: "門診五樓新增送風機工程",
+                vendors: ["川豐 / 王先生<br>0988-072923", "互誠 / 林先生<br>0988-332522", "榮信 / 陳先生<br>0988-663355"],
+                data: [
+                    { itemNo: 1, name: "冷氣設備", qty: 1, unit: "式", A: [163600, 163600], B: [302000, 302000], C: [163600, 163600] },
+                    { itemNo: 2, name: "配管工程", qty: 1, unit: "式", A: [1033200, 1033200], B: [426320, 426320], C: [833200, 833200] },
+                    { itemNo: "", name: "小計", A: ["", 2236242], B: ["", 1915180], C: ["", 2259242] },
+                    { itemNo: "三", name: "營業稅 5%", qty: "5%", unit: "", A: [111812, 111812], B: [95759, 95759], C: [120474, 120474] },
+                    { itemNo: "", name: "總價", A: ["", 2348054], B: ["", 2010939], C: ["", 2529956] }
+                ]
+            },
+            "tp-B-3F-electric": {
+                projectName: "B棟三樓電力改善工程",
+                vendors: ["萬通 / 吳先生<br>0922-888888", "互誠 / 林先生<br>0988-332522", "建霖 / 張小姐<br>0912-111222"],
+                data: [
+                    { itemNo: 1, name: "電盤更換", qty: 1, unit: "式", A: [86000, 86000], B: [95000, 95000], C: [87000, 87000] },
+                    { itemNo: 2, name: "線槽配置", qty: 1, unit: "式", A: [32000, 32000], B: [29000, 29000], C: [31000, 31000] },
+                    { itemNo: "", name: "小計", A: ["", 118000], B: ["", 124000], C: ["", 118000] },
+                    { itemNo: "", name: "營業稅 5%", qty: "5%", A: [5900, 5900], B: [6200, 6200], C: [5900, 5900] },
+                    { itemNo: "", name: "總價", A: ["", 123900], B: ["", 130200], C: ["", 123900] }
+                ]
+            }
+        };
+
+        // ======= 動態選單邏輯 =======
+        function updateBuildingOptions() {
+            const hospital = document.getElementById('hospitalSelect').value;
+            const buildingSelect = document.getElementById('buildingSelect');
+            buildingSelect.innerHTML = '<option value="">請選擇棟別</option>';
+
+            if (!hospital) {
+                buildingSelect.innerHTML = '<option value="">請先選擇院區</option>';
+                return;
+            }
+
+            const buildings = ["A棟", "B棟", "C棟"];
+            buildings.forEach(b => {
+                const opt = document.createElement('option');
+                opt.value = b.charAt(0); // 取 A/B/C 作代號
+                opt.textContent = b;
+                buildingSelect.appendChild(opt);
+            });
+
+            document.getElementById('floorSelect').innerHTML = '<option value="">請先選擇棟別</option>';
+            document.getElementById('quotationSelect').innerHTML = '<option value="">請先選擇樓層</option>';
+        }
+
+        function updateFloorOptions() {
+            const floorSelect = document.getElementById('floorSelect');
+            floorSelect.innerHTML = '<option value="">請選擇樓層</option>';
+            for (let i = 1; i <= 10; i++) {
+                const opt = document.createElement('option');
+                opt.value = `${i}F`;
+                opt.textContent = `${i}樓`;
+                floorSelect.appendChild(opt);
+            }
+            document.getElementById('quotationSelect').innerHTML = '<option value="">請先選擇樓層</option>';
+        }
+
+        function updateProjectOptions() {
+            const hospital = document.getElementById('hospitalSelect').value;
+            const building = document.getElementById('buildingSelect').value;
+            const floor = document.getElementById('floorSelect').value;
+            const select = document.getElementById('quotationSelect');
+
+            select.innerHTML = '<option value="">請選擇工程名稱</option>';
+
+            // 根據院區/棟別/樓層組合出可選工程
+            const keyPrefix = `${hospital}-${building}-${floor}`;
+            Object.keys(quotations).forEach(k => {
+                if (k.startsWith(keyPrefix)) {
+                    const opt = document.createElement('option');
+                    opt.value = k;
+                    opt.textContent = quotations[k].projectName;
+                    select.appendChild(opt);
+                }
+            });
+
+            if (select.options.length === 1) {
+                const opt = document.createElement('option');
+                opt.textContent = "（此樓層暫無報價單）";
+                select.appendChild(opt);
+            }
+        }
+
+        // ======= 建立表格 =======
+        function loadSelectedQuotation() {
+            const key = document.getElementById('quotationSelect').value;
+            if (!key || !quotations[key]) return;
+            const q = quotations[key];
+
+            document.getElementById('vendorInfo').style.display = 'block';
+            document.getElementById('compareTableWrapper').style.display = 'block';
+            document.getElementById('projectName').innerHTML = q.projectName;
+            document.getElementById('vendorA').innerHTML = q.vendors[0];
+            document.getElementById('vendorB').innerHTML = q.vendors[1];
+            document.getElementById('vendorC').innerHTML = q.vendors[2];
+
+            buildTable(q.data);
+        }
+
+        function buildTable(data) {
+            const tbody = document.getElementById('compareTableBody');
+            tbody.innerHTML = '';
+            data.forEach(row => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${row.itemNo || ''}</td>
+                    <td>${row.name}</td>
+                    <td>${row.qty || ''}</td>
+                    <td>${row.unit || ''}</td>
+                    <td class="text-end">${formatCurrency(row.A[0])}</td>
+                    <td class="text-end">${formatCurrency(row.A[1])}</td>
+                    <td class="text-end">${formatCurrency(row.B[0])}</td>
+                    <td class="text-end">${formatCurrency(row.B[1])}</td>
+                    <td class="text-end">${formatCurrency(row.C[0])}</td>
+                    <td class="text-end">${formatCurrency(row.C[1])}</td>
+                    <td>${row.note || ''}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function formatCurrency(val) {
+            if (!val || val === '-') return '-';
+            return Number(val).toLocaleString('zh-TW');
+        }
+
+        function exportToExcel() {
+            const key = document.getElementById('quotationSelect').value;
+            if (!key) return alert('請先選擇一份報價單！');
+            const projectName = quotations[key].projectName;
+            const table = document.getElementById("compareTable");
+            const wb = XLSX.utils.table_to_book(table, { sheet: "比價結果" });
+            XLSX.writeFile(wb, `${projectName}_報價比較表.xlsx`);
+        }
+
+        function resetCompare() {
+            ['hospitalSelect', 'buildingSelect', 'floorSelect', 'quotationSelect'].forEach(id => document.getElementById(id).value = '');
+            document.getElementById('vendorInfo').style.display = 'none';
+            document.getElementById('compareTableWrapper').style.display = 'none';
+        }
+    </script>
 }

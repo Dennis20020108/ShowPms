@@ -20,11 +20,6 @@ namespace ShowPms.Controllers
             return View();
         }
 
-        public IActionResult Index1()
-        {
-            return View();
-        }
-
         // 新增：取得舊價資料的 API
         [HttpGet]
         public async Task<IActionResult> GetOldPriceItems(int sourceId, int vendorId)

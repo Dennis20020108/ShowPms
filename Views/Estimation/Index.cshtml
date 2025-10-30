@@ -219,48 +219,6 @@
         </div>
     </div>
 </div>
-
-<div class="app-content">
-    <div class="container-fluid">
-        <!-- 快速載入模組區域 -->
-        <div class="query-section mb-4">
-            <h5 class="text-primary-green mb-3">
-                <i class="fas fa-rocket"></i> 場域模組快速載入
-            </h5>
-
-            <div class="row align-items-end">
-                <div class="col-md-4">
-                    <label class="form-label fw-bold text-primary-green">
-                        <i class="fas fa-layer-group"></i> 選擇場域模組：
-                    </label>
-                    <select class="form-select" id="domainModuleSelect">
-                        <option value="">請選擇場域類型</option>
-                        <option value="urology">泌尿科門診 (116項)</option>
-                    </select>
-                </div>
-                <div class="col-md-6">
-                    <div class="d-flex gap-2">
-                        <button class="btn btn-primary-green" onclick="loadDomainModule()">
-                            <i class="fas fa-download"></i> 載入模組
-                        </button>
-                        <button class="btn btn-outline-primary-green" onclick="previewDomainModule()">
-                            <i class="fas fa-eye"></i> 預覽模組
-                        </button>
-                        <button class="btn btn-secondary-green" onclick="showModuleInfo()">
-                            <i class="fas fa-info-circle"></i> 模組說明
-                        </button>
-                    </div>
-                </div>
-                <div class="col-md-2">
-                    <div class="text-end">
-                        <small class="text-muted">
-                            <i class="fas fa-lightbulb"></i> 新人推薦
-                        </small>
-                    </div>
-                </div>
-            </div>
-        </div>
-
         <!-- 舊價彈性查詢區域 -->
         <div class="query-section">
             <h5 class="text-primary-green mb-3">
@@ -275,30 +233,44 @@
 
             <!-- 主要查詢區域 -->
             <div class="row">
-                <!-- 分類選擇 -->
+
+                <!-- 主類 -->
                 <div class="col-md-4 mb-3">
                     <label class="form-label fw-bold text-primary-green">
-                        <i class="fas fa-layer-group"></i> 大項目：
+                        <i class="fas fa-layer-group"></i> 主類：
                     </label>
-                    <select class="form-select" id="majorCategory">
+                    <select class="form-select" id="mainCategory">
                         <option value="" class="clear-option">不限制（顯示全部）</option>
-                        <option value="裝修">裝修</option>
-                        <option value="水電">水電</option>
-                        <option value="空調">空調</option>
+                        <option value="裝修工程">裝修工程</option>
                     </select>
                 </div>
 
+                <!-- 次類 -->
                 <div class="col-md-4 mb-3">
                     <label class="form-label fw-bold text-primary-green">
-                        <i class="fas fa-list"></i> 中項目：
+                        <i class="fas fa-list"></i> 次類：
                     </label>
-                    <select class="form-select" id="middleCategory">
+                    <select class="form-select" id="subCategory">
                         <option value="" class="clear-option">不限制（顯示全部）</option>
+                        <option value="櫥櫃工程">櫥櫃工程</option>
                     </select>
                 </div>
+
+                <!-- 品項 -->
+                <div class="col-md-4 mb-3">
+                    <label class="form-label fw-bold text-primary-green">
+                        <i class="fas fa-box-open"></i> 項目：
+                    </label>
+                    <select class="form-select" id="itemSelect">
+                        <option value="" class="clear-option">不限制（顯示全部）</option>
+                        <option value="高櫃">高櫃</option>
+                        <option value="矮櫃">矮櫃</option>
+                    </select>
+                </div>
+
 
                 <!-- 關鍵字搜尋 -->
-                <div class="col-md-4 mb-3">
+                <div class="col-md-12 mb-3">
                     <label class="form-label fw-bold text-primary-green">
                         <i class="fas fa-search"></i> 關鍵字搜尋：
                     </label>
@@ -313,72 +285,6 @@
                 </div>
             </div>
 
-            <!-- 進階搜尋選項 -->
-            <div class="row">
-                <div class="col-12">
-                    <div class="advanced-search-toggle" onclick="toggleAdvancedSearch()">
-                        <i class="fas fa-cog"></i> 進階搜尋選項
-                        <i class="fas fa-chevron-down" id="advancedToggleIcon"></i>
-                    </div>
-
-                    <div class="advanced-search-panel" id="advancedSearchPanel">
-                        <div class="row">
-                            <div class="col-md-3">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="searchInName" checked>
-                                    <label class="form-check-label" for="searchInName">項目名稱</label>
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="searchInCode" checked>
-                                    <label class="form-check-label" for="searchInCode">編碼</label>
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="searchInVendor" checked>
-                                    <label class="form-check-label" for="searchInVendor">供應商</label>
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="searchInNote">
-                                    <label class="form-check-label" for="searchInNote">備註</label>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row mt-2">
-                            <div class="col-md-6">
-                                <label class="form-label">單價範圍：</label>
-                                <div class="row">
-                                    <div class="col-6">
-                                        <input type="number" class="form-control form-control-sm"
-                                               id="priceMin" placeholder="最低價">
-                                    </div>
-                                    <div class="col-6">
-                                        <input type="number" class="form-control form-control-sm"
-                                               id="priceMax" placeholder="最高價">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <label class="form-label">單位篩選：</label>
-                                <select class="form-select form-select-sm" id="unitFilter">
-                                    <option value="">不限制</option>
-                                    <option value="式">式</option>
-                                    <option value="m²">m²</option>
-                                    <option value="m">m</option>
-                                    <option value="個">個</option>
-                                    <option value="組">組</option>
-                                    <option value="套">套</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
             <!-- 查詢按鈕區域 -->
             <div class="row mt-3">
                 <div class="col-12">
@@ -387,9 +293,6 @@
                     </button>
                     <button class="btn btn-outline-primary-green me-2" onclick="resetSearch()">
                         <i class="fas fa-undo"></i> 重置條件
-                    </button>
-                    <button class="btn btn-secondary-green" onclick="showSearchTips()">
-                        <i class="fas fa-question-circle"></i> 搜尋技巧
                     </button>
                 </div>
             </div>
@@ -401,12 +304,12 @@
             </div>
         </div>
 
-        <!-- 舊價小項目清單 -->
+        <!-- 舊價項目清單 -->
         <div class="card mb-4">
             <div class="card-header d-flex justify-content-between align-items-center">
                 <div>
                     <h5 class="mb-0 text-primary-green">
-                        <i class="fas fa-list"></i> 舊價小項目清單
+                        <i class="fas fa-list"></i> 舊價項目清單
                     </h5>
                     <small class="text-muted">[☑] 表示已勾選加入估價單 | 點擊列可快速勾選</small>
                 </div>
@@ -425,19 +328,20 @@
                     <table class="table table-hover mb-0">
                         <thead class="table-success">
                             <tr>
-                                <th width="50">選取</th>
-                                <th>大項目</th>
-                                <th>中項目</th>
-                                <th>編碼</th>
+                                <th width="50">
+                                    <input type="checkbox" class="form-check-input" id="selectAllEstimate" onchange="toggleSelectAllEstimate()">
+                                </th>
+                                <th>編號</th>
                                 <th>供應商</th>
-                                <th>小項目名稱</th>
-                                <th>單位</th>
+                                <th>主類</th>
+                                <th>次類</th>
+                                <th>項目</th>
+                                <th>規格</th>
                                 <th>數量</th>
                                 <th>原單價</th>
                                 <th>原複價</th>
                                 <th>合約單價</th>
                                 <th>合約複價</th>
-                                <th>備註</th>
                             </tr>
                         </thead>
                         <tbody id="oldPriceList">
@@ -486,6 +390,61 @@
                 </div>
             </div>
         </div>
+        
+<!-- 工程名稱 Modal -->
+<div class="modal fade" id="projectNameModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form id="projectNameForm">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="projectNameModalLabel">設定專案名稱</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="關閉"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="location" class="form-label">地點</label>
+                        <select class="form-select" id="location" required>
+                            <option value="" selected disabled>請選擇地點</option>
+                            <option value="cs">彰秀</option>
+                            <option value="bs">濱秀</option>
+                            <option value="gs">高秀</option>
+                            <option value="ns">南市醫</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="building" class="form-label">棟別</label>
+                        <select class="form-select" id="building" required>
+                            <option value="" selected disabled>請選擇棟別</option>
+                            <option value="A">A棟</option>
+                            <option value="B">B棟</option>
+                            <option value="C">C棟</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="floor" class="form-label">樓層</label>
+                        <select class="form-select" id="floor" required>
+                            <option value="" selected disabled>請選擇樓層</option>
+                            <option value="1">1樓</option>
+                            <option value="2">2樓</option>
+                            <option value="3">3樓</option>
+                            <option value="4">4樓</option>
+                            <option value="5">5樓</option>
+                            <option value="6">6樓</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="content" class="form-label">內容</label>
+                        <input type="text" class="form-control" id="content" placeholder="請輸入內容" required>
+                    </div>                 
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                    <button type="submit" class="btn btn-primary">確認</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 
         <!-- 已選項目區域 -->
         <div class="card">
@@ -521,21 +480,18 @@
                                     <input type="checkbox" class="form-check-input" id="selectAllEstimate" onchange="toggleSelectAllEstimate()">
                                 </th>
                                 <th>編號</th>
-                                <th>大項目</th>
-                                <th>中項目</th>
-                                <th>編碼</th>
                                 <th>供應商</th>
-                                <th>小項目名稱</th>
-                                <th>規格/說明</th>
-                                <th>單位</th>
+                                <th>主類</th>
+                                <th>次類</th>
+                                <th>項目</th>
+                                <th>規格</th>
                                 <th>數量</th>
                                 <th>原單價</th>
                                 <th>原複價</th>
                                 <th>合約單價</th>
                                 <th>合約複價</th>
-                                <th>備註</th>
                             </tr>
-                        </thead>
+                </thead>
                         <tbody id="selectedItemsList">
                             <tr>
                                 <td colspan="13" class="text-center text-muted py-4">
@@ -550,1822 +506,248 @@
             </div>
         </div>
     </div>
-
 </div>
 
-<!-- 新增項目模態框 -->
-<div class="modal fade" id="addItemModal" tabindex="-1">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title text-primary-green">新增項目</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-            <div class="modal-body">
-                <div class="row">
-                    <div class="col-md-6">
-                        <label class="form-label">編碼</label>
-                        <input type="text" class="form-control" id="newItemCode" placeholder="請輸入編碼">
-                    </div>
-                    <div class="col-md-6">
-                        <label class="form-label">單位</label>
-                        <input type="text" class="form-control" id="newItemUnit" placeholder="請輸入單位">
-                    </div>
-                </div>
-                <div class="row mt-3">
-                    <div class="col-12">
-                        <label class="form-label">小項目名稱</label>
-                        <input type="text" class="form-control" id="newItemName" placeholder="請輸入項目名稱">
-                    </div>
-                </div>
-                <div class="row mt-3">
-                    <div class="col-12">
-                        <label class="form-label">規格/說明</label>
-                        <textarea class="form-control" id="newItemSpec" rows="3" placeholder="請輸入規格說明"></textarea>
-                    </div>
-                </div>
-                <div class="row mt-3">
-                    <div class="col-md-4">
-                        <label class="form-label">數量</label>
-                        <input type="number" class="form-control" id="newItemQuantity" placeholder="0" onchange="calculateNewItemTotal()">
-                    </div>
-                    <div class="col-md-4">
-                        <label class="form-label">原單價</label>
-                        <input type="number" class="form-control" id="newItemUnitPrice" placeholder="0" onchange="calculateNewItemTotal()">
-                    </div>
-                    <div class="col-md-4">
-                        <label class="form-label">原複價</label>
-                        <input type="number" class="form-control" id="newItemTotalPrice" placeholder="0" readonly>
-                    </div>
-                </div>
-                <div class="row mt-3">
-                    <div class="col-12">
-                        <label class="form-label">備註</label>
-                        <input type="text" class="form-control" id="newItemNote" placeholder="請輸入備註">
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary-green" data-bs-dismiss="modal">取消</button>
-                <button type="button" class="btn btn-primary-green" onclick="confirmAddItem()">確認新增</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- 工程名稱 Modal -->
-<div class="modal fade" id="projectNameModal" tabindex="-1">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <form id="projectNameForm">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="projectNameModalLabel">設定專案名稱</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="關閉"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="mb-3">
-                        <label for="location" class="form-label">地點</label>
-                        <select class="form-select" id="location" required>
-                            <option value="" selected disabled>請選擇地點</option>
-                            <option value="彰秀">彰秀</option>
-                            <option value="濱秀">濱秀</option>
-                            <option value="高秀">高秀</option>
-                            <option value="南市醫">南市醫</option>
-                        </select>
-                    </div>
-                    <div class="mb-3">
-                        <label for="building" class="form-label">棟別</label>
-                        <select class="form-select" id="building" required>
-                            <option value="" selected disabled>請選擇棟別</option>
-                            <option value="A棟">A棟</option>
-                            <option value="B棟">B棟</option>
-                            <option value="C棟">C棟</option>
-                        </select>
-                    </div>
-                    <div class="mb-3">
-                        <label for="floor" class="form-label">樓層</label>
-                        <select class="form-select" id="floor" required>
-                            <option value="" selected disabled>請選擇樓層</option>
-                            <option value="1樓">1樓</option>
-                            <option value="2樓">2樓</option>
-                            <option value="3樓">3樓</option>
-                            <option value="4樓">4樓</option>
-                            <option value="5樓">5樓</option>
-                            <option value="6樓">6樓</option>
-                        </select>
-                    </div>
-                    <div class="mb-3">
-                        <label for="content" class="form-label">內容</label>
-                        <input type="text" class="form-control" id="content" placeholder="請輸入內容" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="nature" class="form-label">性質</label>
-                        <select class="form-select" id="nature" required>
-                            <option value="" selected disabled>請選擇性質</option>
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
-                    <button type="submit" class="btn btn-primary">確認</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
-@section scripts{
+@section Scripts {
     <script>
-        // ===== 全域變數 =====
-        let allOldPriceData = []; // 改為空陣列，從資料庫載入
-        let itemCounter = 0;
-        let selectedItems = [];
-        let currentSearchResults = [];
-        let lastSearchParams = {};
-
-        // 場域模組資料
-        const domainModules = {
-            'urology': {
-                name: '泌尿科門診裝修工程',
-                description: '包含拆除、泥作、隔間等完整裝修工程',
-                totalItems: 97,
-                items: [
-                    // 裝修工程 - 拆除工程
-                    { code: 'UR-D-001', vender: '', name: '現場配合業主進行斷水斷電及消防氣體關閉，裝設助警器', spec: '', unit: '式', quantity: '1', unitPrice: '15000', totalPrice: '15000', note: '含安全防護', majorCategory: '裝修', middleCategory: '拆除工程' },
-                    { code: 'UR-D-002', vender: '', name: '室內及公區廁所天花板拆除', spec: '', unit: '式', quantity: '1', unitPrice: '25000', totalPrice: '25000', note: '含垃圾清運', majorCategory: '裝修', middleCategory: '拆除工程' },
-                    { code: 'UR-D-003', vender: '', name: '廁所設備拆除', spec: '', unit: '式', quantity: '1', unitPrice: '18000', totalPrice: '18000', note: '保護既有設備', majorCategory: '裝修', middleCategory: '拆除工程' },
-                    { code: 'UR-D-004', vender: '', name: '垃圾清運車資', spec: '', unit: '式', quantity: '1', unitPrice: '12000', totalPrice: '12000', note: '含搬運工資', majorCategory: '裝修', middleCategory: '拆除工程' },
-                    { code: 'UR-D-005', vender: '', name: '廁所地面刨除見底', spec: '', unit: 'm²', quantity: '45', unitPrice: '350', totalPrice: '15750', note: '含地面清理', majorCategory: '裝修', middleCategory: '拆除工程' },
-                    { code: 'UR-D-006', vender: '', name: '舊管線拆除', spec: '', unit: '式', quantity: '1', unitPrice: '10000', totalPrice: '10000', note: '', majorCategory: '裝修', middleCategory: '拆除工程' },
-                    { code: 'UR-D-007', vender: '', name: '原有櫃台上下櫃拆除', spec: '', unit: '式', quantity: '1', unitPrice: '8000', totalPrice: '8000', note: '', majorCategory: '裝修', middleCategory: '拆除工程' },
-                    // 裝修工程 - 泥作工程
-                    { code: 'UR-M-001', vender: '', name: '吊運/搬運，泥沙、紅磚、材料(工程前中後)', spec: '', unit: '式', quantity: '1', unitPrice: '35000', totalPrice: '35000', note: '', majorCategory: '裝修', middleCategory: '泥作工程' },
-                    { code: 'UR-M-002', vender: '', name: '廁所地/壁面粉光', spec: '', unit: 'm²', quantity: '120', unitPrice: '180', totalPrice: '21600', note: '', majorCategory: '裝修', middleCategory: '泥作工程' },
-                    { code: 'UR-M-003', vender: '', name: '廁所地面水泥墊高(依照磁磚計劃)', spec: '', unit: 'm²', quantity: '45', unitPrice: '280', totalPrice: '12600', note: '', majorCategory: '裝修', middleCategory: '泥作工程' },
-                    { code: 'UR-M-004', vender: '', name: '廁所(地面)不織布+彈性水泥', spec: '', unit: 'm²', quantity: '45', unitPrice: '320', totalPrice: '14400', note: '', majorCategory: '裝修', middleCategory: '泥作工程' },
-                    { code: 'UR-M-005', vender: '', name: '廁所(地面)防水工程', spec: '', unit: 'm²', quantity: '45', unitPrice: '450', totalPrice: '20250', note: '', majorCategory: '裝修', middleCategory: '泥作工程' },
-                    { code: 'UR-M-006', vender: '', name: '廁所(地面)磁磚貼磚工資', spec: '', unit: 'm²', quantity: '45', unitPrice: '400', totalPrice: '18000', note: '', majorCategory: '裝修', middleCategory: '泥作工程' },
-                    { code: 'UR-M-007', vender: '', name: '打鑿管溝泥作修補', spec: '', unit: '式', quantity: '1', unitPrice: '6000', totalPrice: '6000', note: '', majorCategory: '裝修', middleCategory: '泥作工程' },
-                    // 裝修工程 - 室內隔間工程
-                    {
-                        code: 'UR-P-001',
-                        vender: '',
-                        name: '輕隔間 骨料92X35X1MM，間距40公分 雙面封矽酸鈣板9公分，含補土及收邊60K岩棉填充',
-                        spec: '',
-                        unit: 'm²',
-                        quantity: '85',
-                        unitPrice: '1650',
-                        totalPrice: '140250',
-                        note: '',
-                        majorCategory: '裝修',
-                        middleCategory: '室內隔間工程'
-                    },
-
-                    // 裝修工程 - 室內地坪工程
-                    {
-                        code: 'UR-Q-001',
-                        vender: '',
-                        name: 'PVC耐磨透心無縫地板(厚度2mm)',
-                        spec: '',
-                        unit: 'm²',
-                        quantity: '150',
-                        unitPrice: '1200',
-                        totalPrice: '180000',
-                        note: '',
-                        majorCategory: '裝修',
-                        middleCategory: '室內地坪工程'
-                    },
-
-                    // 裝修工程 - 壁面工程
-                    {
-                        code: 'UR-W-001',
-                        vender: '',
-                        name: '入口區:全區造型天花板打底處理(補批土+研磨+底漆+面漆)',
-                        spec: '',
-                        unit: '式',
-                        quantity: '1',
-                        unitPrice: '45000',
-                        totalPrice: '45000',
-                        note: '',
-                        majorCategory: '裝修',
-                        middleCategory: '壁面工程'
-                    },
-                    {
-                        code: 'UR-W-002',
-                        vender: '',
-                        name: '公區:全室隔間牆打底處理(補批土+研磨+底漆+面漆)',
-                        spec: '',
-                        unit: '式',
-                        quantity: '1',
-                        unitPrice: '35000',
-                        totalPrice: '35000',
-                        note: '',
-                        majorCategory: '裝修',
-                        middleCategory: '壁面工程'
-                    },
-
-                    // 裝修工程 - 室內天花板工程
-
-                        {
-                            code: 'UR-C-001',
-                            vender: '',
-                            name: '入口區:暗架天花板',
-                            spec: '',
-                            unit: 'm²',
-                            quantity: '60',
-                            unitPrice: '950',
-                            totalPrice: '57000',
-                            note: '',
-                            majorCategory: '裝修',
-                            middleCategory: '室內天花板工程'
-                        },
-                        {
-                            code: 'UR-C-002',
-                            vender: '',
-                            name: '公區及廁所:明架天花板',
-                            spec: '',
-                            unit: 'm²',
-                            quantity: '120',
-                            unitPrice: '850',
-                            totalPrice: '102000',
-                            note: '',
-                            majorCategory: '裝修',
-                            middleCategory: '室內天花板工程'
-                        },
-                    // 裝修工程 - 造型裝修工程
-                        {
-                            code: 'UR-Z-001',
-                            vender: '',
-                            name: '公區掛號領藥區 倒R造型櫃台(含淺抽)H80',
-                            spec: '',
-                            unit: '式',
-                            quantity: '1',
-                            unitPrice: '0',
-                            totalPrice: '0',
-                            note: '',
-                            majorCategory: '裝修',
-                            middleCategory: '造型裝修工程'
-                        },
-                        {
-                            code: 'UR-Z-002',
-                            vender: '',
-                            name: '公區掛號領藥區 牛仔雙開門W90CMxH80',
-                            spec: '',
-                            unit: '式',
-                            quantity: '1',
-                            unitPrice: '0',
-                            totalPrice: '0',
-                            note: '',
-                            majorCategory: '裝修',
-                            middleCategory: '造型裝修工程'
-                        },
-                        {
-                            code: 'UR-Z-003',
-                            vender: '',
-                            name: '公區走道造型廊道 面美耐板或同等面材',
-                            spec: '',
-                            unit: '式',
-                            quantity: '1',
-                            unitPrice: '0',
-                            totalPrice: '0',
-                            note: '',
-                            majorCategory: '裝修',
-                            middleCategory: '造型裝修工程'
-                        },
-                        {
-                            code: 'UR-Z-004',
-                            vender: '',
-                            name: '廁所壁面貼防防潮壁板H240CM',
-                            spec: '',
-                            unit: '式',
-                            quantity: '1',
-                            unitPrice: '0',
-                            totalPrice: '0',
-                            note: '',
-                            majorCategory: '裝修',
-                            middleCategory: '造型裝修工程'
-                        },
-                        {
-                            code: 'UR-Z-005',
-                            vender: '',
-                            name: '廁所壁面造型美耐板含木作2分底板(半腰壁板)H120',
-                            spec: '',
-                            unit: '式',
-                            quantity: '1',
-                            unitPrice: '0',
-                            totalPrice: '0',
-                            note: '',
-                            majorCategory: '裝修',
-                            middleCategory: '造型裝修工程'
-                        },
-                        {
-                            code: 'UR-Z-006',
-                            vender: '',
-                            name: '入口區:木作主櫃面弧形造型牆',
-                            spec: '',
-                            unit: '式',
-                            quantity: '1',
-                            unitPrice: '0',
-                            totalPrice: '0',
-                            note: '',
-                            majorCategory: '裝修',
-                            middleCategory: '造型裝修工程'
-                        },
-                        {
-                            code: 'UR-Z-007',
-                            vender: '',
-                            name: '公區:壁面造型美耐板含木作2分底板(半腰壁板)H120',
-                            spec: '',
-                            unit: '式',
-                            quantity: '1',
-                            unitPrice: '0',
-                            totalPrice: '0',
-                            note: '',
-                            majorCategory: '裝修',
-                            middleCategory: '造型裝修工程'
-                        },
-                        {
-                            code: 'UR-Z-008',
-                            vender: '',
-                            name: '公區:壁面柱面造型包覆',
-                            spec: '',
-                            unit: '式',
-                            quantity: '1',
-                            unitPrice: '0',
-                            totalPrice: '0',
-                            note: '',
-                            majorCategory: '裝修',
-                            middleCategory: '造型裝修工程'
-                        },
-                        {
-                            code: 'UR-Z-009',
-                            vender: '',
-                            name: '公區:梯下告型木作包覆(含木門附鎖*1)面美耐板',
-                            spec: '',
-                            unit: '式',
-                            quantity: '1',
-                            unitPrice: '0',
-                            totalPrice: '0',
-                            note: '',
-                            majorCategory: '裝修',
-                            middleCategory: '造型裝修工程'
-                    },
-                    // 櫥櫃工程
-                    {
-                        code: 'UR-K-001',
-                        vender: '',
-                        name: '插座系統',
-                        spec: '',
-                        unit: '式',
-                        quantity: '1',
-                        unitPrice: '0',
-                        totalPrice: '0',
-                        note: '',
-                        majorCategory: '裝修',
-                        middleCategory: '櫥櫃工程'
-                    },
-                    {
-                        code: 'UR-K-002',
-                        vender: '',
-                        name: '廁所上項垃圾投擲口，檯面式五金或同功能五金',
-                        spec: '',
-                        unit: '式',
-                        quantity: '1',
-                        unitPrice: '0',
-                        totalPrice: '0',
-                        note: '',
-                        majorCategory: '裝修',
-                        middleCategory: '櫥櫃工程'
-                    },
-                    {
-                        code: 'UR-K-003',
-                        vender: '',
-                        name: '廁所上项人造石檯面W364*D60',
-                        spec: '',
-                        unit: '式',
-                        quantity: '1',
-                        unitPrice: '0',
-                        totalPrice: '0',
-                        note: '',
-                        majorCategory: '裝修',
-                        middleCategory: '櫥櫃工程'
-                    },
-                    {
-                        code: 'UR-K-004',
-                        vender: '',
-                        name: '廁所洗手台下吊體W364*D60*H80',
-                        spec: '',
-                        unit: '式',
-                        quantity: '1',
-                        unitPrice: '0',
-                        totalPrice: '0',
-                        note: '',
-                        majorCategory: '裝修',
-                        middleCategory: '櫥櫃工程'
-                    },
-                    // 門樘工程
-                    {
-                        code: 'UR-DM-001',
-                        vender: '',
-                        name: '公區防火單面貼波英軟片',
-                        spec: '',
-                        unit: '式',
-                        quantity: '1',
-                        unitPrice: '0',
-                        totalPrice: '0',
-                        note: '',
-                        majorCategory: '裝修',
-                        middleCategory: '門樘工程'
-                    },
-                    {
-                        code: 'UR-DM-002',
-                        vender: '',
-                        name: '公區防火單波英軟片',
-                        spec: '',
-                        unit: '式',
-                        quantity: '1',
-                        unitPrice: '0',
-                        totalPrice: '0',
-                        note: '',
-                        majorCategory: '裝修',
-                        middleCategory: '門樘工程'
-                    },
-                    {
-                        code: 'UR-DM-003',
-                        vender: '',
-                        name: '廁所木質美耐板門(含框)D4D5',
-                        spec: '',
-                        unit: '式',
-                        quantity: '1',
-                        unitPrice: '0',
-                        totalPrice: '0',
-                        note: '',
-                        majorCategory: '裝修',
-                        middleCategory: '門樘工程'
-                    },
-                    {
-                        code: 'UR-DM-004',
-                        vender: '',
-                        name: '廁所木質美耐板拉門(含框)D3',
-                        spec: '',
-                        unit: '式',
-                        quantity: '1',
-                        unitPrice: '0',
-                        totalPrice: '0',
-                        note: '',
-                        majorCategory: '裝修',
-                        middleCategory: '門樘工程'
-                    },
-                    {
-                        code: 'UR-DM-005',
-                        vender: '',
-                        name: '入口區鋁框自動門/窗 WD1',
-                        spec: '',
-                        unit: '式',
-                        quantity: '1',
-                        unitPrice: '0',
-                        totalPrice: '0',
-                        note: '',
-                        majorCategory: '裝修',
-                        middleCategory: '門樘工程'
-                    },
-                    {
-                        code: 'UR-DM-006',
-                        vender: '',
-                        name: '入口區鋁框自動門/窗 WD2',
-                        spec: '',
-                        unit: '式',
-                        quantity: '1',
-                        unitPrice: '0',
-                        totalPrice: '0',
-                        note: '',
-                        majorCategory: '裝修',
-                        middleCategory: '門樘工程'
-                    },
-                    {
-                        code: 'UR-DM-007',
-                        vender: '',
-                        name: '入口區鋁框自動門/窗 WD3',
-                        spec: '',
-                        unit: '式',
-                        quantity: '1',
-                        unitPrice: '0',
-                        totalPrice: '0',
-                        note: '',
-                        majorCategory: '裝修',
-                        middleCategory: '門樘工程'
-                    },
-                    {
-                        code: 'UR-DM-008',
-                        vender: '',
-                        name: '施作及安裝(含運費)',
-                        spec: '',
-                        unit: '式',
-                        quantity: '1',
-                        unitPrice: '0',
-                        totalPrice: '0',
-                        note: '',
-                        majorCategory: '裝修',
-                        middleCategory: '門樘工程'
-                    },
-                    // 其他工程
-                    {
-                        code: 'UR-O-001',
-                        vender: '',
-                        name: '公區初步清潔',
-                        spec: '',
-                        unit: '式',
-                        quantity: '1',
-                        unitPrice: '0',
-                        totalPrice: '0',
-                        note: '',
-                        majorCategory: '裝修',
-                        middleCategory: '其他工程'
-                    },
-                    {
-                        code: 'UR-O-002',
-                        vender: '',
-                        name: '廁所初步清潔',
-                        spec: '',
-                        unit: '式',
-                        quantity: '1',
-                        unitPrice: '0',
-                        totalPrice: '0',
-                        note: '',
-                        majorCategory: '裝修',
-                        middleCategory: '其他工程'
-                    },
-                    {
-                        code: 'UR-O-003',
-                        vender: '',
-                        name: '入口區初步清潔',
-                        spec: '',
-                        unit: '式',
-                        quantity: '1',
-                        unitPrice: '0',
-                        totalPrice: '0',
-                        note: '',
-                        majorCategory: '裝修',
-                        middleCategory: '其他工程'
-                    },
-                    {
-                        code: 'UR-O-004',
-                        vender: '',
-                        name: '垃圾搬運工資本(含保護板拆卸)',
-                        spec: '',
-                        unit: '式',
-                        quantity: '1',
-                        unitPrice: '0',
-                        totalPrice: '0',
-                        note: '',
-                        majorCategory: '裝修',
-                        middleCategory: '其他工程'
-                    },
-                    {
-                        code: 'UR-O-005',
-                        vender: '',
-                        name: '垃圾清運',
-                        spec: '',
-                        unit: '式',
-                        quantity: '1',
-                        unitPrice: '0',
-                        totalPrice: '0',
-                        note: '',
-                        majorCategory: '裝修',
-                        middleCategory: '其他工程'
-                    },
-                    {
-                        code: 'UR-O-006',
-                        vender: '',
-                        name: '廁所壓克力LOGO門牌',
-                        spec: '',
-                        unit: '面',
-                        quantity: '1',
-                        unitPrice: '0',
-                        totalPrice: '0',
-                        note: '',
-                        majorCategory: '裝修',
-                        middleCategory: '其他工程'
-                    },
-                    {
-                        code: 'UR-O-007',
-                        vender: '',
-                        name: '入口區造型LOGO背發光',
-                        spec: '',
-                        unit: '組',
-                        quantity: '1',
-                        unitPrice: '0',
-                        totalPrice: '0',
-                        note: '',
-                        majorCategory: '裝修',
-                        middleCategory: '其他工程'
-                    },
-                    {
-                        code: 'UR-O-008',
-                        vender: '',
-                        name: '浴廁造型掛鏡(含工資)',
-                        spec: '',
-                        unit: '面',
-                        quantity: '1',
-                        unitPrice: '0',
-                        totalPrice: '0',
-                        note: '',
-                        majorCategory: '裝修',
-                        middleCategory: '其他工程'
-                    },
-                    // 插座系統
-                    {
-                        code: 'UR-PS-001',
-                        vender: '',
-                        name: '雙聯暗插座接地型2P125V20A一般白色蓋板國際牌',
-                        spec: '',
-                        unit: '個',
-                        quantity: '1',
-                        unitPrice: '0',
-                        totalPrice: '0',
-                        note: '',
-                        majorCategory: '裝修',
-                        middleCategory: '插座系統'
-                    },
-                    {
-                        code: 'UR-PS-002',
-                        vender: '',
-                        name: '雙聯暗插座接地型2P110V15A專用廻路白色蓋板國際牌',
-                        spec: '',
-                        unit: '個',
-                        quantity: '1',
-                        unitPrice: '0',
-                        totalPrice: '0',
-                        note: '',
-                        majorCategory: '裝修',
-                        middleCategory: '插座系統'
-                    },
-                    {
-                        code: 'UR-PS-003',
-                        vender: '',
-                        name: '配管另料(含固定吊管架)',
-                        spec: '',
-                        unit: '式',
-                        quantity: '1',
-                        unitPrice: '0',
-                        totalPrice: '0',
-                        note: '',
-                        majorCategory: '裝修',
-                        middleCategory: '插座系統'
-                    },
-                    {
-                        code: 'UR-PS-004',
-                        vender: '',
-                        name: '打洞修補',
-                        spec: '',
-                        unit: '式',
-                        quantity: '1',
-                        unitPrice: '0',
-                        totalPrice: '0',
-                        note: '',
-                        majorCategory: '裝修',
-                        middleCategory: '插座系統'
-                    },
-                    {
-                        code: 'UR-PS-005',
-                        vender: '',
-                        name: '穿牆開孔、穿樓板洗孔',
-                        spec: '',
-                        unit: '式',
-                        quantity: '1',
-                        unitPrice: '0',
-                        totalPrice: '0',
-                        note: '',
-                        majorCategory: '裝修',
-                        middleCategory: '插座系統'
-                    },
-                    {
-                        code: 'UR-PS-006',
-                        vender: '',
-                        name: '管路填補',
-                        spec: '',
-                        unit: '式',
-                        quantity: '1',
-                        unitPrice: '0',
-                        totalPrice: '0',
-                        note: '',
-                        majorCategory: '裝修',
-                        middleCategory: '插座系統'
-                    },
-                    {
-                        code: 'UR-PS-007',
-                        vender: '',
-                        name: '配管線工資',
-                        spec: '',
-                        unit: '式',
-                        quantity: '1',
-                        unitPrice: '0',
-                        totalPrice: '0',
-                        note: '',
-                        majorCategory: '裝修',
-                        middleCategory: '插座系統'
-                    },
-                    {
-                        code: 'UR-PS-008',
-                        vender: '',
-                        name: '3/4英吋2.0mm',
-                        spec: '',
-                        unit: 'm',
-                        quantity: '1',
-                        unitPrice: '0',
-                        totalPrice: '0',
-                        note: '',
-                        majorCategory: '裝修',
-                        middleCategory: '插座系統'
-                    },
-                    {
-                        code: 'UR-PS-009',
-                        vender: '',
-                        name: '600v5.5mm^23c電纜',
-                        spec: '',
-                        unit: 'm',
-                        quantity: '1',
-                        unitPrice: '0',
-                        totalPrice: '0',
-                        note: '',
-                        majorCategory: '裝修',
-                        middleCategory: '插座系統'
-                    },
-                    {
-                        code: 'UR-PS-010',
-                        vender: '',
-                        name: '600v22mm^21c電纜',
-                        spec: '',
-                        unit: 'm',
-                        quantity: '1',
-                        unitPrice: '0',
-                        totalPrice: '0',
-                        note: '',
-                        majorCategory: '裝修',
-                        middleCategory: '插座系統'
-                    },
-                    // 照明系統
-                    {
-                        code: 'UR-L-001',
-                        vender: '',
-                        name: 'LED崁燈15w暖白15CM',
-                        spec: '',
-                        unit: '個',
-                        quantity: '1',
-                        unitPrice: '0',
-                        totalPrice: '0',
-                        note: '',
-                        majorCategory: '裝修',
-                        middleCategory: '照明系統'
-                    },
-                    {
-                        code: 'UR-L-002',
-                        vender: '',
-                        name: 'LED崁燈15w暖白9CM',
-                        spec: '',
-                        unit: '個',
-                        quantity: '1',
-                        unitPrice: '0',
-                        totalPrice: '0',
-                        note: '',
-                        majorCategory: '裝修',
-                        middleCategory: '照明系統'
-                    },
-                    {
-                        code: 'UR-L-003',
-                        vender: '',
-                        name: 'LED軟條燈8W4000K',
-                        spec: '',
-                        unit: '個',
-                        quantity: '1',
-                        unitPrice: '0',
-                        totalPrice: '0',
-                        note: '',
-                        majorCategory: '裝修',
-                        middleCategory: '照明系統'
-                    },
-                    {
-                        code: 'UR-L-004',
-                        vender: '',
-                        name: 'LED矽膠條燈8W4000K',
-                        spec: '',
-                        unit: '個',
-                        quantity: '1',
-                        unitPrice: '0',
-                        totalPrice: '0',
-                        note: '',
-                        majorCategory: '裝修',
-                        middleCategory: '照明系統'
-                    },
-                    {
-                        code: 'UR-L-005',
-                        vender: '',
-                        name: 'LED平板燈22W晝光色',
-                        spec: '',
-                        unit: '個',
-                        quantity: '1',
-                        unitPrice: '0',
-                        totalPrice: '0',
-                        note: '',
-                        majorCategory: '裝修',
-                        middleCategory: '照明系統'
-                    },
-                    {
-                        code: 'UR-L-006',
-                        vender: '',
-                        name: 'LED造型壁燈',
-                        spec: '',
-                        unit: '個',
-                        quantity: '1',
-                        unitPrice: '0',
-                        totalPrice: '0',
-                        note: '',
-                        majorCategory: '裝修',
-                        middleCategory: '照明系統'
-                    },
-                    {
-                        code: 'UR-L-007',
-                        vender: '',
-                        name: '單切開關金屬蓋板/螢光指示',
-                        spec: '',
-                        unit: '個',
-                        quantity: '1',
-                        unitPrice: '0',
-                        totalPrice: '0',
-                        note: '',
-                        majorCategory: '裝修',
-                        middleCategory: '照明系統'
-                    },
-                    {
-                        code: 'UR-L-008',
-                        vender: '',
-                        name: '超薄磁吸軌道(拉菲爾)',
-                        spec: '',
-                        unit: 'm',
-                        quantity: '1',
-                        unitPrice: '0',
-                        totalPrice: '0',
-                        note: '',
-                        majorCategory: '裝修',
-                        middleCategory: '照明系統'
-                    },
-                    {
-                        code: 'UR-L-009',
-                        vender: '',
-                        name: '超薄磁吸基礎排燈(拉菲爾)',
-                        spec: '',
-                        unit: 'm',
-                        quantity: '1',
-                        unitPrice: '0',
-                        totalPrice: '0',
-                        note: '',
-                        majorCategory: '裝修',
-                        middleCategory: '照明系統'
-                    },
-                    {
-                        code: 'UR-L-010',
-                        vender: '',
-                        name: '上項驅動器',
-                        spec: '',
-                        unit: '個',
-                        quantity: '1',
-                        unitPrice: '0',
-                        totalPrice: '0',
-                        note: '',
-                        majorCategory: '裝修',
-                        middleCategory: '照明系統'
-                    },
-                    {
-                        code: 'UR-L-011',
-                        vender: '',
-                        name: '燈具、插座安裝工資',
-                        spec: '',
-                        unit: '式',
-                        quantity: '1',
-                        unitPrice: '0',
-                        totalPrice: '0',
-                        note: '',
-                        majorCategory: '裝修',
-                        middleCategory: '照明系統'
-                    },
-                    {
-                        code: 'UR-L-012',
-                        vender: '',
-                        name: '穿牆開孔、穿樓板洗孔',
-                        spec: '',
-                        unit: '式',
-                        quantity: '1',
-                        unitPrice: '0',
-                        totalPrice: '0',
-                        note: '',
-                        majorCategory: '裝修',
-                        middleCategory: '照明系統'
-                    },
-                    {
-                        code: 'UR-L-013',
-                        vender: '',
-                        name: '照明燈具出線口(天花板及立板間照)',
-                        spec: '',
-                        unit: '式',
-                        quantity: '1',
-                        unitPrice: '0',
-                        totalPrice: '0',
-                        note: '',
-                        majorCategory: '裝修',
-                        middleCategory: '照明系統'
-                    },
-                    // 衛浴設備工程
-                    {
-                        code: 'UR-B-001',
-                        vender: '',
-                        name: '配管另料含吊管架(給水、污水、透氣)',
-                        spec: '',
-                        unit: '式',
-                        quantity: '1',
-                        unitPrice: '0',
-                        totalPrice: '0',
-                        note: '',
-                        majorCategory: '裝修',
-                        middleCategory: '衛浴設備工程'
-                    },
-                    {
-                        code: 'UR-B-002',
-                        vender: '',
-                        name: '試水、試壓',
-                        spec: '',
-                        unit: '式',
-                        quantity: '1',
-                        unitPrice: '0',
-                        totalPrice: '0',
-                        note: '',
-                        majorCategory: '裝修',
-                        middleCategory: '衛浴設備工程'
-                    },
-                    {
-                        code: 'UR-B-003',
-                        vender: '',
-                        name: '開挖回填',
-                        spec: '',
-                        unit: '式',
-                        quantity: '1',
-                        unitPrice: '0',
-                        totalPrice: '0',
-                        note: '',
-                        majorCategory: '裝修',
-                        middleCategory: '衛浴設備工程'
-                    },
-                    {
-                        code: 'UR-B-004',
-                        vender: '',
-                        name: '配管工資',
-                        spec: '',
-                        unit: '式',
-                        quantity: '1',
-                        unitPrice: '0',
-                        totalPrice: '0',
-                        note: '',
-                        majorCategory: '裝修',
-                        middleCategory: '衛浴設備工程'
-                    },
-                    {
-                        code: 'UR-B-005',
-                        vender: '',
-                        name: '衛生設備安裝工資',
-                        spec: '',
-                        unit: '式',
-                        quantity: '1',
-                        unitPrice: '0',
-                        totalPrice: '0',
-                        note: '',
-                        majorCategory: '裝修',
-                        middleCategory: '衛浴設備工程'
-                    },
-                    {
-                        code: 'UR-B-006',
-                        vender: '',
-                        name: '女廁、男廁 HCG兩件式馬桶',
-                        spec: '',
-                        unit: '個',
-                        quantity: '1',
-                        unitPrice: '0',
-                        totalPrice: '0',
-                        note: '',
-                        majorCategory: '裝修',
-                        middleCategory: '衛浴設備工程'
-                    },
-                    {
-                        code: 'UR-B-007',
-                        vender: '',
-                        name: '女廁HCG蹲式馬桶',
-                        spec: '',
-                        unit: '個',
-                        quantity: '1',
-                        unitPrice: '0',
-                        totalPrice: '0',
-                        note: '',
-                        majorCategory: '裝修',
-                        middleCategory: '衛浴設備工程'
-                    },
-                    {
-                        code: 'UR-B-008',
-                        vender: '',
-                        name: '廁所面盆CAESAR',
-                        spec: '',
-                        unit: '個',
-                        quantity: '1',
-                        unitPrice: '0',
-                        totalPrice: '0',
-                        note: '',
-                        majorCategory: '裝修',
-                        middleCategory: '衛浴設備工程'
-                    },
-                    {
-                        code: 'UR-B-009',
-                        vender: '',
-                        name: '男廁拖布盆HCG拖布盆+S管+水龍頭',
-                        spec: '',
-                        unit: '個',
-                        quantity: '1',
-                        unitPrice: '0',
-                        totalPrice: '0',
-                        note: '',
-                        majorCategory: '裝修',
-                        middleCategory: '衛浴設備工程'
-                    },
-                    {
-                        code: 'UR-B-010',
-                        vender: '',
-                        name: '男廁、女廁 HCG擡面盆',
-                        spec: '',
-                        unit: '個',
-                        quantity: '1',
-                        unitPrice: '0',
-                        totalPrice: '0',
-                        note: '',
-                        majorCategory: '裝修',
-                        middleCategory: '衛浴設備工程'
-                    },
-                    {
-                        code: 'UR-B-011',
-                        vender: '',
-                        name: '男廁、女廁 CAESAR感應式龍頭',
-                        spec: '',
-                        unit: '個',
-                        quantity: '1',
-                        unitPrice: '0',
-                        totalPrice: '0',
-                        note: '',
-                        majorCategory: '裝修',
-                        middleCategory: '衛浴設備工程'
-                    },
-                    {
-                        code: 'UR-B-012',
-                        vender: '',
-                        name: '男廁HCG立式小便斗',
-                        spec: '',
-                        unit: '個',
-                        quantity: '1',
-                        unitPrice: '0',
-                        totalPrice: '0',
-                        note: '',
-                        majorCategory: '裝修',
-                        middleCategory: '衛浴設備工程'
-                    },
-                    {
-                        code: 'UR-B-013',
-                        vender: '',
-                        name: '無障礙廁所馬桶HCG無障礙空間系列',
-                        spec: '',
-                        unit: '個',
-                        quantity: '1',
-                        unitPrice: '0',
-                        totalPrice: '0',
-                        note: '',
-                        majorCategory: '裝修',
-                        middleCategory: '衛浴設備工程'
-                    },
-                    {
-                        code: 'UR-B-014',
-                        vender: '',
-                        name: '無障礙廁所小便斗HCG無障礙空間系列',
-                        spec: '',
-                        unit: '個',
-                        quantity: '1',
-                        unitPrice: '0',
-                        totalPrice: '0',
-                        note: '',
-                        majorCategory: '裝修',
-                        middleCategory: '衛浴設備工程'
-                    },
-                    {
-                        code: 'UR-B-015',
-                        vender: '',
-                        name: '無障礙廁所面盆扶手感應龍頭CAESAR無障礙壁掛洗臉盆',
-                        spec: '',
-                        unit: '個',
-                        quantity: '1',
-                        unitPrice: '0',
-                        totalPrice: '0',
-                        note: '',
-                        majorCategory: '裝修',
-                        middleCategory: '衛浴設備工程'
-                    },
-                    {
-                        code: 'UR-B-016',
-                        vender: '',
-                        name: '穿牆開孔、穿樓板洗孔及修補',
-                        spec: '',
-                        unit: '式',
-                        quantity: '1',
-                        unitPrice: '0',
-                        totalPrice: '0',
-                        note: '',
-                        majorCategory: '裝修',
-                        middleCategory: '衛浴設備工程'
-                    },
-                    // 給排水系統
-                    {
-                        code: 'UR-WP-001',
-                        vender: '',
-                        name: '1英吋4.0mm',
-                        spec: '',
-                        unit: 'm',
-                        quantity: '1',
-                        unitPrice: '0',
-                        totalPrice: '0',
-                        note: '',
-                        majorCategory: '裝修',
-                        middleCategory: '給排水系統'
-                    },
-                    {
-                        code: 'UR-WP-002',
-                        vender: '',
-                        name: '2英吋4.5mm',
-                        spec: '',
-                        unit: 'm',
-                        quantity: '1',
-                        unitPrice: '0',
-                        totalPrice: '0',
-                        note: '',
-                        majorCategory: '裝修',
-                        middleCategory: '給排水系統'
-                    },
-                    {
-                        code: 'UR-WP-003',
-                        vender: '',
-                        name: '3英吋5.5mm',
-                        spec: '',
-                        unit: 'm',
-                        quantity: '1',
-                        unitPrice: '0',
-                        totalPrice: '0',
-                        note: '',
-                        majorCategory: '裝修',
-                        middleCategory: '給排水系統'
-                    },
-                    {
-                        code: 'UR-WP-004',
-                        vender: '',
-                        name: '地板水刀及打鑿',
-                        spec: '',
-                        unit: '式',
-                        quantity: '1',
-                        unitPrice: '0',
-                        totalPrice: '0',
-                        note: '',
-                        majorCategory: '裝修',
-                        middleCategory: '給排水系統'
-                    },
-                    {
-                        code: 'UR-WP-005',
-                        vender: '',
-                        name: 'ST壓接管被覆1/2英吋',
-                        spec: '',
-                        unit: 'm',
-                        quantity: '1',
-                        unitPrice: '0',
-                        totalPrice: '0',
-                        note: '',
-                        majorCategory: '裝修',
-                        middleCategory: '給排水系統'
-                    },
-                    // 弱電系統
-                    {
-                        code: 'UR-ELV-001',
-                        vender: '',
-                        name: '資訊插座出口3/4英吋PVC管含BOX',
-                        spec: '',
-                        unit: '個',
-                        quantity: '1',
-                        unitPrice: '0',
-                        totalPrice: '0',
-                        note: '',
-                        majorCategory: '裝修',
-                        middleCategory: '弱電系統'
-                    },
-                    {
-                        code: 'UR-ELV-002',
-                        vender: '',
-                        name: '叫號機出口配3/4英吋PVC管含BOX',
-                        spec: '',
-                        unit: '個',
-                        quantity: '1',
-                        unitPrice: '0',
-                        totalPrice: '0',
-                        note: '',
-                        majorCategory: '裝修',
-                        middleCategory: '弱電系統'
-                    },
-                    {
-                        code: 'UR-ELV-003',
-                        vender: '',
-                        name: '開門按鈕出口及無接觸感應開關配管1/2英吋含BOX',
-                        spec: '',
-                        unit: '個',
-                        quantity: '1',
-                        unitPrice: '0',
-                        totalPrice: '0',
-                        note: '',
-                        majorCategory: '裝修',
-                        middleCategory: '弱電系統'
-                    },
-                    {
-                        code: 'UR-ELV-004',
-                        vender: '',
-                        name: 'PVC管 3/4英吋3.0mm',
-                        spec: '',
-                        unit: 'm',
-                        quantity: '1',
-                        unitPrice: '0',
-                        totalPrice: '0',
-                        note: '',
-                        majorCategory: '裝修',
-                        middleCategory: '弱電系統'
-                    },
-                    {
-                        code: 'UR-ELV-005',
-                        vender: '',
-                        name: '配管另料(含固定吊管架)',
-                        spec: '',
-                        unit: '式',
-                        quantity: '1',
-                        unitPrice: '0',
-                        totalPrice: '0',
-                        note: '',
-                        majorCategory: '裝修',
-                        middleCategory: '弱電系統'
-                    },
-                    {
-                        code: 'UR-ELV-006',
-                        vender: '',
-                        name: '線材',
-                        spec: '',
-                        unit: 'm',
-                        quantity: '1',
-                        unitPrice: '0',
-                        totalPrice: '0',
-                        note: '',
-                        majorCategory: '裝修',
-                        middleCategory: '弱電系統'
-                    },
-                    {
-                        code: 'UR-ELV-007',
-                        vender: '',
-                        name: '配管工資',
-                        spec: '',
-                        unit: '式',
-                        quantity: '1',
-                        unitPrice: '0',
-                        totalPrice: '0',
-                        note: '',
-                        majorCategory: '裝修',
-                        middleCategory: '弱電系統'
-                    },
-                    {
-                        code: 'UR-ELV-008',
-                        vender: '',
-                        name: '求助鈴配管配線',
-                        spec: '',
-                        unit: '式',
-                        quantity: '1',
-                        unitPrice: '0',
-                        totalPrice: '0',
-                        note: '',
-                        majorCategory: '裝修',
-                        middleCategory: '弱電系統'
-                    },
-                    {
-                        code: 'UR-ELV-009',
-                        vender: '',
-                        name: '求助鈴按鈕',
-                        spec: '',
-                        unit: '個',
-                        quantity: '1',
-                        unitPrice: '0',
-                        totalPrice: '0',
-                        note: '',
-                        majorCategory: '裝修',
-                        middleCategory: '弱電系統'
-                    },
-                    {
-                        code: 'UR-ELV-010',
-                        vender: '',
-                        name: '求助鈴閃光警報器',
-                        spec: '',
-                        unit: '個',
-                        quantity: '1',
-                        unitPrice: '0',
-                        totalPrice: '0',
-                        note: '',
-                        majorCategory: '裝修',
-                        middleCategory: '弱電系統'
-                    },
-                    // 空調系統
-                    {
-                        code: 'UR-AC-001',
-                        vender: '',
-                        name: '冰點冰水埋入送風機(清洗及維修)',
-                        spec: '',
-                        unit: '式',
-                        quantity: '1',
-                        unitPrice: '0',
-                        totalPrice: '0',
-                        note: '',
-                        majorCategory: '裝修',
-                        middleCategory: '空調系統'
-                    },
-                    {
-                        code: 'UR-AC-002',
-                        vender: '',
-                        name: '埋入室內機集風箱(原有設備)',
-                        spec: '',
-                        unit: '式',
-                        quantity: '1',
-                        unitPrice: '0',
-                        totalPrice: '0',
-                        note: '',
-                        majorCategory: '裝修',
-                        middleCategory: '空調系統'
-                    },
-                    {
-                        code: 'UR-AC-003',
-                        vender: '',
-                        name: '自由保溫軟管10英吋',
-                        spec: '',
-                        unit: 'm',
-                        quantity: '1',
-                        unitPrice: '0',
-                        totalPrice: '0',
-                        note: '',
-                        majorCategory: '裝修',
-                        middleCategory: '空調系統'
-                    },
-                    {
-                        code: 'UR-AC-004',
-                        vender: '',
-                        name: '新增方型出(廻)風口',
-                        spec: '',
-                        unit: '個',
-                        quantity: '1',
-                        unitPrice: '0',
-                        totalPrice: '0',
-                        note: '',
-                        majorCategory: '裝修',
-                        middleCategory: '空調系統'
-                    },
-                    {
-                        code: 'UR-AC-005',
-                        vender: '',
-                        name: '風箱+安裝',
-                        spec: '',
-                        unit: '式',
-                        quantity: '1',
-                        unitPrice: '0',
-                        totalPrice: '0',
-                        note: '',
-                        majorCategory: '裝修',
-                        middleCategory: '空調系統'
-                    },
-                    {
-                        code: 'UR-AC-006',
-                        vender: '',
-                        name: '風管+安裝',
-                        spec: '',
-                        unit: 'm',
-                        quantity: '1',
-                        unitPrice: '0',
-                        totalPrice: '0',
-                        note: '',
-                        majorCategory: '裝修',
-                        middleCategory: '空調系統'
-                    },
-                    {
-                        code: 'UR-AC-007',
-                        vender: '',
-                        name: 'HONWELL三速開關',
-                        spec: '',
-                        unit: '個',
-                        quantity: '1',
-                        unitPrice: '0',
-                        totalPrice: '0',
-                        note: '',
-                        majorCategory: '裝修',
-                        middleCategory: '空調系統'
-                    },
-                    {
-                        code: 'UR-AC-008',
-                        vender: '',
-                        name: '線型出(廻)風口',
-                        spec: '',
-                        unit: '個',
-                        quantity: '1',
-                        unitPrice: '0',
-                        totalPrice: '0',
-                        note: '',
-                        majorCategory: '裝修',
-                        middleCategory: '空調系統'
-                    },
-                    {
-                        code: 'UR-AC-009',
-                        vender: '',
-                        name: '線型集風箱',
-                        spec: '',
-                        unit: '個',
-                        quantity: '1',
-                        unitPrice: '0',
-                        totalPrice: '0',
-                        note: '',
-                        majorCategory: '裝修',
-                        middleCategory: '空調系統'
-                    },
-                    // 雜項
-                    {
-                        code: 'UR-MIS-001',
-                        vender: '',
-                        name: '現場清潔、安全防護及文書資處理',
-                        spec: '',
-                        unit: '式',
-                        quantity: '1',
-                        unitPrice: '0',
-                        totalPrice: '0',
-                        note: '',
-                        majorCategory: '裝修',
-                        middleCategory: '雜項'
-                    },
-                    {
-                        code: 'UR-MIS-002',
-                        vender: '',
-                        name: '勞工安全衛生管理費',
-                        spec: '',
-                        unit: '式',
-                        quantity: '1',
-                        unitPrice: '0',
-                        totalPrice: '0',
-                        note: '',
-                        majorCategory: '裝修',
-                        middleCategory: '雜項'
-                    },
-                    {
-                        code: 'UR-MIS-003',
-                        vender: '',
-                        name: '工程營造綜合保險',
-                        spec: '',
-                        unit: '式',
-                        quantity: '1',
-                        unitPrice: '0',
-                        totalPrice: '0',
-                        note: '',
-                        majorCategory: '裝修',
-                        middleCategory: '雜項'
-                    },
-                    {
-                        code: 'UR-MIS-004',
-                        vender: '',
-                        name: '工程品管及包商利費',
-                        spec: '',
-                        unit: '式',
-                        quantity: '1',
-                        unitPrice: '0',
-                        totalPrice: '0',
-                        note: '',
-                        majorCategory: '裝修',
-                        middleCategory: '雜項'
-                    }
-                ]
+        // 假資料範例
+        const mockData = [
+            {
+                id: '001',
+                supplier: '億成木業',
+                mainCategory: '裝修工程',
+                subCategory: '櫥櫃工程',
+                item: '高櫃',
+                spec: '系統櫃 E1 板材 含五金',
+                quantity: 1,
+                originalUnit: 1000,
+                originalTotal: 1000,
+                contractUnit: 950,
+                contractTotal: 950
             },
-        };
-
-        // 分類對應關係
-        const categoryMapping = {
-            '室內裝修': ['假設工程', '室內隔間工程', '天花板裝修工程', '牆面裝修工程', '地坪裝修工程', '內部門工程', '特殊裝修工程', '系統廚櫃工程', '雜項工程'],
-            '水電': ['給水工程', '排水工程', '電氣工程'],
-            '空調': ['空調設備', '通風工程', '冷卻水塔']
-        };
-
-        // ===== 從資料庫載入舊價資料 =====
-        async function loadOldPriceData(sourceId, vendorId) {
-            try {
-                showMessage('正在載入資料...', 'info');
-                const response = await fetch(`/Estimation/GetOldPriceItems?sourceId=${sourceId}&vendorId=${vendorId}`);
-                const result = await response.json();
-
-                if (result.success) {
-                    // 直接對應 OldPriceItemDto 的欄位（ASP.NET Core 會轉成 camelCase）
-                    allOldPriceData = result.data.map(item => ({
-                        id: item.id,
-                        code: item.id.toString(),
-                        vender: '', // OldPriceItemDto 沒有這個欄位
-                        name: item.name,
-                        spec: '', // OldPriceItemDto 沒有這個欄位
-                        unit: item.unit,
-                        quantity: item.quantity?.toString() || '0',
-                        unitPrice: item.contractUnitPrice?.toString() || '0',
-                        totalPrice: item.contractAmount?.toString() || '0',
-                        note: item.note || '',
-                        majorCategory: item.majorCategoryName,
-                        middleCategory: item.middleCategoryName,
-                        minorCategory: item.minorCategoryName
-                    }));
-
-                    showMessage(`成功載入 ${allOldPriceData.length} 筆資料`, 'success');
-                    updateCategoryOptions();
-                    return true;
-                } else {
-                    showMessage('載入資料失敗：' + result.message, 'error');
-                    return false;
-                }
-            } catch (error) {
-                console.error('載入資料錯誤:', error);
-                showMessage('載入資料發生錯誤：' + error.message, 'error');
-                return false;
+            {
+                id: '002',
+                supplier: '昇佳木業',
+                mainCategory: '裝修工程',
+                subCategory: '櫥櫃工程',
+                item: '矮櫃',
+                spec: '系統櫃 E1 板材',
+                quantity: 2,
+                originalUnit: 800,
+                originalTotal: 1600,
+                contractUnit: 760,
+                contractTotal: 1520
+            },
+            {
+                id: '003',
+                supplier: '億成木業',
+                mainCategory: '裝修工程',
+                subCategory: '櫥櫃工程',
+                item: '高櫃',
+                spec: '實木櫃體 含玻璃門片',
+                quantity: 1,
+                originalUnit: 2500,
+                originalTotal: 2500,
+                contractUnit: 2300,
+                contractTotal: 2300
+            },
+            {
+                id: '004',
+                supplier: '鑫豪廚具',
+                mainCategory: '裝修工程',
+                subCategory: '櫥櫃工程',
+                item: '矮櫃',
+                spec: '廚房下櫃 含人造石檯面',
+                quantity: 3,
+                originalUnit: 1200,
+                originalTotal: 3600,
+                contractUnit: 1150,
+                contractTotal: 3450
             }
-        }
+        ];
 
-        // ===== 更新分類選項（從實際資料動態生成） =====
-        function updateCategoryOptions() {
-            // 取得所有不重複的大項目
-            const majorCategories = [...new Set(allOldPriceData.map(item => item.majorCategory))];
+        // 已選項目列表
+        let selectedItems = [];
 
-            const majorSelect = document.getElementById('majorCategory');
-            majorSelect.innerHTML = '<option value="" class="clear-option">不限制（顯示全部）</option>';
-
-            majorCategories.forEach(category => {
-                const option = document.createElement('option');
-                option.value = category;
-                option.textContent = category;
-                majorSelect.appendChild(option);
-            });
-        }
-
-        // ===== 彈性查詢核心功能 =====
-        function performSearch() {
-            if (allOldPriceData.length === 0) {
-                showMessage('尚未載入資料，請稍候...', 'warning');
-                return;
-            }
-
-            const majorCategory = document.getElementById('majorCategory').value;
-            const middleCategory = document.getElementById('middleCategory').value;
-            const keyword = document.getElementById('keywordSearch').value.trim();
-            const priceMin = parseFloat(document.getElementById('priceMin').value) || 0;
-            const priceMax = parseFloat(document.getElementById('priceMax').value) || Infinity;
-            const unitFilter = document.getElementById('unitFilter').value;
-
-            const searchInName = document.getElementById('searchInName').checked;
-            const searchInCode = document.getElementById('searchInCode').checked;
-            const searchInVendor = document.getElementById('searchInVendor').checked;
-            const searchInNote = document.getElementById('searchInNote').checked;
-
-            let results = [...allOldPriceData];
-
-            if (majorCategory) {
-                results = results.filter(item => item.majorCategory === majorCategory);
-            }
-            if (middleCategory) {
-                results = results.filter(item => item.middleCategory === middleCategory);
-            }
-
-            if (keyword) {
-                results = results.filter(item => {
-                    let matchFound = false;
-                    const keywordLower = keyword.toLowerCase();
-
-                    if (searchInName && item.name.toLowerCase().includes(keywordLower)) matchFound = true;
-                    if (searchInCode && item.code.toLowerCase().includes(keywordLower)) matchFound = true;
-                    if (searchInVendor && item.vender.toLowerCase().includes(keywordLower)) matchFound = true;
-                    if (searchInNote && item.note.toLowerCase().includes(keywordLower)) matchFound = true;
-
-                    return matchFound;
-                });
-            }
-
-            results = results.filter(item => {
-                const price = parseFloat(item.unitPrice) || 0;
-                return price >= priceMin && price <= priceMax;
-            });
-
-            if (unitFilter) {
-                results = results.filter(item => item.unit === unitFilter);
-            }
-
-            currentSearchResults = results;
-            lastSearchParams = { majorCategory, middleCategory, keyword, priceMin, priceMax, unitFilter };
-
-            displaySearchResults(results, keyword);
-            updateSearchStats(results, keyword);
-        }
-
-        // ===== 頁面載入時初始化 =====
-        document.addEventListener('DOMContentLoaded', async function () {
-            // 載入資料（請根據實際需求傳入 sourceId 和 vendorId）
-            // 這裡假設 sourceId=1, vendorId=1，你需要根據實際情況調整
-            const sourceId = 1;  // 可以從頁面參數或選單取得
-            const vendorId = 1;  // 可以從頁面參數或選單取得
-
-            await loadOldPriceData(sourceId, vendorId);
-
-            // 大項目變更事件
-            document.getElementById('majorCategory').addEventListener('change', updateMiddleCategories);
-
-            // 初始化選取計數
-            updateSelectionInfo();
+        // ========== 等待 DOM 載入完成 ==========
+        document.addEventListener('DOMContentLoaded', function() {
+            initProjectNameForm();
         });
 
-        function displaySearchResults(results, keyword = '') {
-            const tbody = document.getElementById('oldPriceList');
-            tbody.innerHTML = '';
+        // ========== 工程名稱相關 ==========
+        function initProjectNameForm() {
+            const form = document.getElementById('projectNameForm');
+            if (!form) return;
 
-            if (results.length === 0) {
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                try {
+                    const locationSelect = document.getElementById('location');
+                    const buildingSelect = document.getElementById('building');
+                    const floorSelect = document.getElementById('floor');
+                    const contentInput = document.getElementById('content');
+                    
+                    // 驗證
+                    if (!locationSelect.value || !buildingSelect.value || !floorSelect.value || !contentInput.value) {
+                        alert('請填寫所有欄位！');
+                        return;
+                    }
+                    
+                    // 取得選中的選項文字
+                    const location = locationSelect.options[locationSelect.selectedIndex].text;
+                    const building = buildingSelect.options[buildingSelect.selectedIndex].text;
+                    const floor = floorSelect.options[floorSelect.selectedIndex].text;
+                    const content = contentInput.value;
+                    
+                    // 組合工程名稱
+                    const projectName = `${location}-${building}-${floor}-${content}`;
+                    document.getElementById('projectName').value = projectName;
+                    
+                    // 關閉 Modal (Bootstrap 5 方式)
+                    const modalElement = document.getElementById('projectNameModal');
+                    try {
+                        let modalInstance = bootstrap.Modal.getInstance(modalElement);
+                        if (!modalInstance) {
+                            modalInstance = new bootstrap.Modal(modalElement);
+                        }
+                        modalInstance.hide();
+
+                        //若 Bootstrap 動畫卡住，自動清理灰幕
+                        setTimeout(() => {
+                            document.querySelectorAll('.modal-backdrop').forEach(el => el.remove());
+                            modalElement.classList.remove('show');
+                            modalElement.style.display = 'none';
+                            document.body.classList.remove('modal-open');
+                            document.body.style.overflow = '';
+                        }, 600);
+                    } catch (err) {
+                        console.error('Modal 關閉失敗:', err);
+                    }
+
+                    // 重置表單
+                    form.reset();
+                    
+                } catch (error) {
+                    console.error('設定工程名稱發生錯誤:', error);
+                    alert('設定失敗，請重試');
+                }
+            });
+        }
+
+        // ========== 搜尋相關 ==========
+        function performSearch() {
+            const mainCategory = document.getElementById('mainCategory').value;
+            const subCategory = document.getElementById('subCategory').value;
+            const itemSelect = document.getElementById('itemSelect').value;
+            const keyword = document.getElementById('keywordSearch').value.trim().toLowerCase();
+
+            let filteredData = mockData.filter(item => {
+                if (mainCategory && item.mainCategory !== mainCategory) return false;
+                if (subCategory && item.subCategory !== subCategory) return false;
+                if (itemSelect && item.item !== itemSelect) return false;
+                if (keyword) 
+                {
+                    const searchText = `${item.id} ${item.supplier} ${item.mainCategory} ${item.subCategory} ${item.item} ${item.spec}`.toLowerCase();
+                    if (!searchText.includes(keyword)) return false;
+                }
+                return true;
+            });
+
+            renderTable(filteredData);
+
+            const statsDiv = document.getElementById('searchStats');
+            const statsText = document.getElementById('searchStatsText');
+            if (statsDiv && statsText) {
+                statsDiv.style.display = 'block';
+                statsText.textContent = `查詢完成！共找到 ${filteredData.length} 筆符合條件的項目`;
+            }
+        }
+
+        function renderTable(data) {
+            const tbody = document.getElementById('oldPriceList');
+            if (!tbody) return;
+
+            if (data.length === 0) {
                 tbody.innerHTML = `
-                            <tr>
-                                <td colspan="13" class="text-center text-muted py-4">
-                                    <i class="fas fa-search-minus fa-2x mb-2"></i><br>
-                                    未找到符合條件的項目，請調整搜尋條件
-                                </td>
-                            </tr>
-                        `;
+                    <tr>
+                        <td colspan="12" class="text-center text-muted py-4">
+                            <i class="fas fa-inbox fa-2x mb-2"></i>
+                            <br>
+                            查無符合條件的項目
+                        </td>
+                    </tr>
+                `;
                 return;
             }
 
-            results.forEach((item, index) => {
-                const row = createItemRow(item, index, keyword);
-                tbody.appendChild(row);
-            });
+            tbody.innerHTML = data.map(item => `
+                <tr onclick="toggleRowSelection(this)" style="cursor: pointer;">
+                    <td class="text-center">
+                        <input type="checkbox" class="form-check-input item-checkbox"
+                               data-id="${item.id}"
+                               onclick="event.stopPropagation(); updateSelectionCount();">
+                    </td>
+                    <td>${item.id}</td>
+                    <td>${item.supplier}</td>
+                    <td>${item.mainCategory}</td>
+                    <td>${item.subCategory}</td>
+                    <td>${item.item}</td>
+                    <td>${item.spec}</td>
+                    <td class="text-end">${item.quantity}</td>
+                    <td class="text-end">$${item.originalUnit.toLocaleString()}</td>
+                    <td class="text-end">$${item.originalTotal.toLocaleString()}</td>
+                    <td class="text-end">$${item.contractUnit.toLocaleString()}</td>
+                    <td class="text-end">$${item.contractTotal.toLocaleString()}</td>
+                </tr>
+            `).join('');
 
-            updateSelectionInfo();
+            updateSelectionCount();
         }
 
-        function createItemRow(item, index, keyword = '') {
-            const row = document.createElement('tr');
-
-            // 關鍵字高亮顯示
-            function highlightKeyword(text, keyword) {
-                if (!keyword) return text;
-                const regex = new RegExp(`(${keyword})`, 'gi');
-                return text.replace(regex, '<span class="keyword-highlight">$1</span>');
+        function toggleRowSelection(row) {
+            const checkbox = row.querySelector('.item-checkbox');
+            if (checkbox) {
+                checkbox.checked = !checkbox.checked;
+                updateSelectionCount();
             }
-
-            const isSelected = selectedItems.some(selected => selected.code === item.code);
-
-            // 分類標籤樣式
-            const majorCategoryBadge = `<span class="badge bg-primary me-1">${item.majorCategory}</span>`;
-            const middleCategoryBadge = `<span class="badge bg-secondary">${item.middleCategory}</span>`;
-
-            row.innerHTML = `
-                        <td class="text-center">
-                            <input type="checkbox" class="form-check-input checkbox-custom old-price-checkbox"
-                                   id="item${index}" ${isSelected ? 'checked' : ''} data-code="${item.code}">
-                        </td>
-                        <td>${highlightKeyword(majorCategoryBadge, keyword)}</td>
-                        <td>${highlightKeyword(middleCategoryBadge, keyword)}</td>
-                        <td>${highlightKeyword(item.code, keyword)}</td>
-                        <td>${highlightKeyword(item.vender, keyword)}</td>
-                        <td>${highlightKeyword(item.name, keyword)}</td>
-                        <td>${item.unit}</td>
-                        <td>${formatNumber(item.quantity)}</td>
-                        <td>${formatNumber(item.unitPrice)}</td>
-                        <td>${formatNumber(item.totalPrice)}</td>
-                        <td>-</td>
-                        <td>-</td>
-                        <td>${highlightKeyword(item.note, keyword)}</td>
-                    `;
-
-            // checkbox事件
-            const checkbox = row.querySelector('input[type="checkbox"]');
-            checkbox.addEventListener('change', function () {
-                if (this.checked) {
-                    addItemToSelectedList(item);
-                } else {
-                    removeItemFromSelectedList(item.code);
-                }
-                updateSelectionInfo();
-            });
-
-            // 行點擊事件
-            row.addEventListener('click', function (e) {
-                if (e.target.tagName !== 'INPUT') {
-                    checkbox.checked = !checkbox.checked;
-                    checkbox.dispatchEvent(new Event('change'));
-                }
-            });
-
-            return row;
         }
 
-        function updateSearchStats(results, keyword) {
-            const statsDiv = document.getElementById('searchStats');
-            const statsText = document.getElementById('searchStatsText');
-
-            let statsMessage = `找到 ${results.length} 個項目`;
-
-            if (keyword) {
-                statsMessage += `，關鍵字「${keyword}」`;
+        function updateSelectionCount() {
+            const checkboxes = document.querySelectorAll('.item-checkbox:checked');
+            const countElement = document.getElementById('selectedCount');
+            if (countElement) {
+                countElement.textContent = checkboxes.length;
             }
-
-            if (lastSearchParams.majorCategory) {
-                statsMessage += `，大項目「${lastSearchParams.majorCategory}」`;
-            }
-
-            if (lastSearchParams.middleCategory) {
-                statsMessage += `，中項目「${lastSearchParams.middleCategory}」`;
-            }
-
-            statsText.textContent = statsMessage;
-            statsDiv.style.display = results.length > 0 ? 'block' : 'none';
         }
 
-        // 修復：分離搜尋結果區域的選取功能
-        function updateSelectionInfo() {
-            const checkboxes = document.querySelectorAll('.old-price-checkbox');
-            const checkedCount = document.querySelectorAll('.old-price-checkbox:checked').length;
-            document.getElementById('selectedCount').textContent = checkedCount;
-        }
-
-        // 修復：只針對搜尋結果的全選功能
-        function selectAllSearchResults() {
-            const checkboxes = document.querySelectorAll('.old-price-checkbox');
-            checkboxes.forEach(checkbox => {
-                if (!checkbox.checked) {
-                    checkbox.checked = true;
-                    const code = checkbox.dataset.code;
-                    const item = currentSearchResults.find(item => item.code === code);
-                    if (item) {
-                        addItemToSelectedList(item);
-                    }
-                }
-            });
-            updateSelectionInfo();
-            showMessage(`已全選 ${checkboxes.length} 個可見項目`, 'success');
-        }
-
-        // 修復：只針對搜尋結果的清除選取功能
-        function clearAllSearchSelections() {
-            const checkboxes = document.querySelectorAll('.old-price-checkbox:checked');
-            checkboxes.forEach(checkbox => {
-                checkbox.checked = false;
-                const code = checkbox.dataset.code;
-                removeItemFromSelectedList(code);
-            });
-            updateSelectionInfo();
-            showMessage('已清除所有選取', 'info');
-        }
-
-        // 輔助功能
         function resetSearch() {
-            document.getElementById('majorCategory').value = '';
-            document.getElementById('middleCategory').innerHTML = '<option value="" class="clear-option">不限制（顯示全部）</option>';
+            document.getElementById('mainCategory').value = '';
+            document.getElementById('subCategory').value = '';
+            document.getElementById('itemSelect').value = '';
             document.getElementById('keywordSearch').value = '';
-            document.getElementById('priceMin').value = '';
-            document.getElementById('priceMax').value = '';
-            document.getElementById('unitFilter').value = '';
 
-            // 重置進階搜尋選項
-            document.getElementById('searchInName').checked = true;
-            document.getElementById('searchInCode').checked = true;
-            document.getElementById('searchInVendor').checked = true;
-            document.getElementById('searchInNote').checked = false;
+            const statsDiv = document.getElementById('searchStats');
+            if (statsDiv) {
+                statsDiv.style.display = 'none';
+            }
 
-            // 清空搜尋結果
-            document.getElementById('oldPriceList').innerHTML = `
-                        <tr>
-                            <td colspan="13" class="text-center text-muted py-4">
-                                <i class="fas fa-search fa-2x mb-2"></i><br>
-                                請設定查詢條件後點擊「執行查詢」開始搜尋
-                            </td>
-                        </tr>
-                    `;
-
-            document.getElementById('searchStats').style.display = 'none';
-            updateSelectionInfo();
-            showMessage('搜尋條件已重置', 'info');
+            const tbody = document.getElementById('oldPriceList');
+            if (tbody) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="12" class="text-center text-muted py-4">
+                            <i class="fas fa-search fa-2x mb-2"></i>
+                            <br>
+                            請設定查詢條件後點擊「執行查詢」開始搜尋
+                        </td>
+                    </tr>
+                `;
+            }
         }
 
         function clearKeyword() {
             document.getElementById('keywordSearch').value = '';
-            document.getElementById('keywordSearch').focus();
         }
 
         function handleKeywordEnter(event) {
@@ -2374,576 +756,208 @@
             }
         }
 
-        // 修復：進階搜尋面板切換功能
-        function toggleAdvancedSearch() {
-            const panel = document.getElementById('advancedSearchPanel');
-            const icon = document.getElementById('advancedToggleIcon');
-
-            if (panel.classList.contains('show')) {
-                panel.classList.remove('show');
-                icon.classList.remove('fa-chevron-up');
-                icon.classList.add('fa-chevron-down');
-            } else {
-                panel.classList.add('show');
-                icon.classList.remove('fa-chevron-down');
-                icon.classList.add('fa-chevron-up');
-            }
+        function selectAllSearchResults() {
+            const checkboxes = document.querySelectorAll('.item-checkbox');
+            checkboxes.forEach(cb => cb.checked = true);
+            updateSelectionCount();
         }
 
-        function showSearchTips() {
-            const tips = `
-                        <strong>搜尋技巧：</strong><br>
-                        1. 可單獨使用分類篩選或關鍵字搜尋<br>
-                        2. 關鍵字支援部分比對，如輸入「水管」可找到「給水管配置」<br>
-                        3. 可設定價格範圍快速篩選預算內項目<br>
-                        4. 進階選項可指定搜尋特定欄位<br>
-                        5. 點擊項目列可快速勾選加入估價單
-                    `;
-
-            showMessage(tips, 'info');
-        }
-
-        // ===== 大項目變更時更新中項目選項 =====
-        function updateMiddleCategories() {
-            const majorCategory = document.getElementById('majorCategory').value;
-            const middleCategorySelect = document.getElementById('middleCategory');
-
-            middleCategorySelect.innerHTML = '<option value="" class="clear-option">不限制（顯示全部）</option>';
-
-            if (majorCategory) {
-                // 從資料中篩選出對應大項目的所有中項目
-                const middleCategories = [...new Set(
-                    allOldPriceData
-                        .filter(item => item.majorCategory === majorCategory)
-                        .map(item => item.middleCategory)
-                )];
-
-                middleCategories.forEach(category => {
-                    const option = document.createElement('option');
-                    option.value = category;
-                    option.textContent = category;
-                    middleCategorySelect.appendChild(option);
-                });
-            }
-        }
-
-        // 頁面載入後先初始化 modal 實例
-        const projectModalEl = document.getElementById('projectNameModal');
-        const projectModal = new bootstrap.Modal(projectModalEl);
-
-        // 表單 submit 綁定事件
-        document.getElementById('projectNameForm').addEventListener('submit', function (e) {
-            e.preventDefault();
-            const location = document.getElementById('location').value.trim();
-            const building = document.getElementById('building').value.trim();
-            const floor = document.getElementById('floor').value.trim();
-            const content = document.getElementById('content').value.trim();
-            const nature = document.getElementById('nature').value.trim();
-            const projectName = `${location} ${building} ${floor} ${content} ${nature}`;
-            document.getElementById('projectName').value = projectName;
-
-            // 強制清理函數
-            function forceCleanModal() {
-                // 移除所有可能的蒙版
-                document.querySelectorAll('.modal-backdrop').forEach(backdrop => {
-                    backdrop.remove();
-                });
-
-                // 恢復 body 樣式
-                document.body.classList.remove('modal-open');
-                document.body.style.overflow = '';
-                document.body.style.paddingRight = '';
-                document.body.style.marginRight = '';
-
-                // 移除 modal-open 相關的所有 class
-                document.documentElement.classList.remove('modal-open');
-                document.documentElement.style.overflow = '';
-            }
-
-            // 先嘗試正常關閉
-            projectModal.hide();
-
-            // 立即強制清理一次
-            setTimeout(forceCleanModal, 50);
-
-            // 再次確保清理（雙重保險）
-            setTimeout(forceCleanModal, 350);
-        });
-
-        // 已選項目相關功能
-        function addItemToSelectedList(item) {
-            const alreadyExists = selectedItems.some(selectedItem => selectedItem.code === item.code);
-            if (alreadyExists) return;
-
-            itemCounter += 1;
-
-            const selectedItem = {
-                id: itemCounter,
-                code: item.code,
-                vender: item.vender,
-                name: item.name,
-                spec: item.spec || '',
-                unit: item.unit,
-                quantity: item.quantity,
-                unitPrice: item.unitPrice,
-                totalPrice: item.totalPrice,
-                contractUnitPrice: '',
-                contractTotalPrice: '',
-                note: item.note,
-                majorCategory: item.majorCategory,
-                middleCategory: item.middleCategory
-            };
-
-            selectedItems.push(selectedItem);
-            renderSelectedItems();
-        }
-
-        function removeItemFromSelectedList(code) {
-            selectedItems = selectedItems.filter(item => item.code !== code);
-            renderSelectedItems();
-        }
-
-        function renderSelectedItems() {
-            const tbody = document.getElementById('selectedItemsList');
-            tbody.innerHTML = '';
-
-            if (selectedItems.length === 0) {
-                tbody.innerHTML = `
-                            <tr>
-                                <td colspan="15" class="text-center text-muted py-4">
-                                    <i class="fas fa-clipboard-list fa-2x mb-2"></i><br>
-                                    尚未選取任何項目
-                                </td>
-                            </tr>
-                        `;
-                return;
-            }
-
-            selectedItems.forEach((item, index) => {
-                const row = createSelectedItemRow(item, index);
-                tbody.appendChild(row);
-            });
-        }
-
-        function createSelectedItemRow(item, index) {
-            const row = document.createElement('tr');
-
-            // 分類標籤樣式
-            const majorCategoryBadge = `<span class="category-badge major-category-badge">${item.majorCategory || '-'}</span>`;
-            const middleCategoryBadge = `<span class="category-badge middle-category-badge">${item.middleCategory || '-'}</span>`;
-
-            row.innerHTML = `
-        <td class="text-center">
-            <input type="checkbox" class="form-check-input estimate-row-checkbox" data-id="${item.id}">
-        </td>
-        <td>${String(index + 1).padStart(3, '0')}</td>
-        <td>${majorCategoryBadge}</td>
-        <td>${middleCategoryBadge}</td>
-        <td>${item.code}</td>
-        <td>${item.vender}</td>
-        <td class="editable-cell" contenteditable data-field="name" data-id="${item.id}">${item.name}</td>
-        <td class="editable-cell" contenteditable data-field="spec" data-id="${item.id}">${item.spec}</td>
-        <td>${item.unit}</td>
-        <td class="editable-cell" contenteditable data-field="quantity" data-id="${item.id}">${item.quantity}</td>
-        <td>${formatNumber(item.unitPrice)}</td>
-        <td class="calculated-field">${formatNumber(calculateTotal(item.quantity, item.unitPrice))}</td>
-        <td class="editable-cell" contenteditable data-field="contractUnitPrice" data-id="${item.id}">${item.contractUnitPrice}</td>
-        <td class="calculated-field">${item.contractUnitPrice ? formatNumber(calculateTotal(item.quantity, item.contractUnitPrice)) : '-'}</td>
-        <td class="editable-cell" contenteditable data-field="note" data-id="${item.id}">${item.note}</td>
-    `;
-
-            // 編輯事件
-            const editableCells = row.querySelectorAll('.editable-cell');
-            editableCells.forEach(cell => {
-                cell.addEventListener('blur', function () {
-                    updateItemData(this.dataset.id, this.dataset.field, this.textContent);
-                });
-
-                cell.addEventListener('keydown', function (e) {
-                    if (e.key === 'Enter') {
-                        e.preventDefault();
-                        this.blur();
-                    }
-                });
-            });
-
-            return row;
-        }
-
-        function updateItemData(id, field, value) {
-            const item = selectedItems.find(item => item.id == id);
-            if (item) {
-                item[field] = value;
-                if (field === 'quantity' || field === 'contractUnitPrice') {
-                    renderSelectedItems();
-                }
-            }
-        }
-
-        function calculateTotal(quantity, unitPrice) {
-            const qty = parseFloat(quantity) || 0;
-            const price = parseFloat(unitPrice) || 0;
-            return qty * price;
-        }
-
-        function formatNumber(num) {
-            if (!num || num === '' || num === '-') return '-';
-            return parseFloat(num).toLocaleString();
-        }
-
-        // 場域模組快速載入功能
-        function loadDomainModule() {
-            const moduleId = document.getElementById('domainModuleSelect').value;
-
-            if (!moduleId) {
-                showMessage('請先選擇場域模組', 'warning');
-                return;
-            }
-
-            const module = domainModules[moduleId];
-            if (!module) {
-                showMessage('找不到對應的模組資料', 'error');
-                return;
-            }
-
-            // 直接載入到已選項目清單
-            let addedCount = 0;
-            module.items.forEach(item => {
-                const alreadyExists = selectedItems.some(selected => selected.code === item.code);
-                if (!alreadyExists) {
-                    itemCounter += 1;
-                    const selectedItem = {
-                        id: itemCounter,
-                        code: item.code,
-                        vender: item.vender,
-                        name: item.name,
-                        spec: item.spec || '',
-                        unit: item.unit,
-                        quantity: item.quantity,
-                        unitPrice: item.unitPrice,
-                        totalPrice: item.totalPrice,
-                        contractUnitPrice: '',
-                        contractTotalPrice: '',
-                        note: item.note || '',
-                        majorCategory: item.majorCategory,
-                        middleCategory: item.middleCategory
-                    };
-                    selectedItems.push(selectedItem);
-                    addedCount++;
-                }
-            });
-
-            renderSelectedItems();
-            showMessage(`已載入「${module.name}」模組，新增 ${addedCount} 個項目`, 'success');
-
-            // 滾動到已選項目區域
-            document.querySelector('.card:last-of-type').scrollIntoView({ behavior: 'smooth' });
-        }
-
-        function previewDomainModule() {
-            const moduleId = document.getElementById('domainModuleSelect').value;
-
-            if (!moduleId) {
-                showMessage('請先選擇場域模組', 'warning');
-                return;
-            }
-
-            const module = domainModules[moduleId];
-            if (!module) {
-                showMessage('找不到對應的模組資料', 'error');
-                return;
-            }
-
-            // 將模組項目顯示在舊價查詢結果區域
-            currentSearchResults = module.items;
-            displaySearchResults(module.items, '');
-            updateSearchStats(module.items, '');
-
-            // 更新統計信息，標明這是模組預覽
-            const statsDiv = document.getElementById('searchStats');
-            const statsText = document.getElementById('searchStatsText');
-            statsText.textContent = `模組預覽：${module.name}，共 ${module.items.length} 個項目`;
-            statsDiv.style.display = 'block';
-
-            showMessage(`正在預覽「${module.name}」模組`, 'info');
-        }
-
-        function showModuleInfo() {
-            const moduleId = document.getElementById('domainModuleSelect').value;
-
-            if (!moduleId) {
-                showMessage('請先選擇場域模組', 'warning');
-                return;
-            }
-
-            const module = domainModules[moduleId];
-            if (!module) {
-                showMessage('找不到對應的模組資料', 'error');
-                return;
-            }
-
-            // 統計模組內容
-            const categoryCount = {};
-            module.items.forEach(item => {
-                const key = `${item.majorCategory}-${item.middleCategory}`;
-                if (!categoryCount[key]) {
-                    categoryCount[key] = {
-                        major: item.majorCategory,
-                        middle: item.middleCategory,
-                        count: 0
-                    };
-                }
-                categoryCount[key].count++;
-            });
-
-            let categoryInfo = '';
-            Object.values(categoryCount).forEach(cat => {
-                categoryInfo += `<br>• ${cat.major} - ${cat.middle}: ${cat.count}項`;
-            });
-
-            const infoMessage = `
-                        <strong>模組資訊：${module.name}</strong><br>
-                        <strong>說明：</strong>${module.description}<br>
-                        <strong>總項目數：</strong>${module.totalItems}項<br>
-                        <strong>分類明細：</strong>${categoryInfo}<br><br>
-                        <small class="text-muted">適合新人快速建立完整的工程估價單</small>
-                    `;
-
-            showMessage(infoMessage, 'info');
-        }
-
-        function addToEstimate() {
-            const checkedItems = document.querySelectorAll('.old-price-checkbox:checked');
-            if (checkedItems.length === 0) {
-                showMessage('請先選取要加入的項目', 'warning');
-                return;
-            }
-            showMessage(`已將 ${checkedItems.length} 個項目加入估價單`, 'success');
+        function clearAllSearchSelections() {
+            const checkboxes = document.querySelectorAll('.item-checkbox');
+            checkboxes.forEach(cb => cb.checked = false);
+            updateSelectionCount();
         }
 
         function refreshList() {
-            if (Object.keys(lastSearchParams).length > 0) {
-                performSearch();
-                showMessage('清單已重新整理', 'info');
-            } else {
-                showMessage('請先執行查詢', 'warning');
-            }
+            performSearch();
         }
 
-        // 修復：分離估價單區域的全選功能
-        function toggleSelectAllEstimate() {
-            const selectAll = document.getElementById('selectAllEstimate');
-            const checkboxes = document.querySelectorAll('.estimate-row-checkbox');
+        // ========== 加入估價單 ==========
+        function addToEstimate() {
+            const checkboxes = document.querySelectorAll('.item-checkbox:checked');
+            if (checkboxes.length === 0) {
+                alert('請先選取要加入的項目！');
+                return;
+            }
+            
             checkboxes.forEach(checkbox => {
-                checkbox.checked = selectAll.checked;
+                const id = checkbox.getAttribute('data-id');
+                const item = mockData.find(d => d.id === id);
+                if (item && !selectedItems.some(si => si.id === id)) {
+                    selectedItems.push({...item});
+                }
             });
-        }
-
-        function deleteSelected() {
-            const checkedBoxes = document.querySelectorAll('.estimate-row-checkbox:checked');
-            if (checkedBoxes.length === 0) {
-                showMessage('請先選取要刪除的項目', 'warning');
-                return;
-            }
-
-            if (!confirm(`確定要刪除選取的 ${checkedBoxes.length} 個項目嗎？`)) {
-                return;
-            }
-
-            const idsToDelete = Array.from(checkedBoxes).map(cb => parseInt(cb.dataset.id));
-            selectedItems = selectedItems.filter(item => !idsToDelete.includes(item.id));
+            
             renderSelectedItems();
-            document.getElementById('selectAllEstimate').checked = false;
-            showMessage(`已刪除 ${checkedBoxes.length} 個項目`, 'success');
-
-            // 更新舊價清單的勾選狀態
-            const checkboxesToUpdate = document.querySelectorAll('.old-price-checkbox');
-            checkboxesToUpdate.forEach(checkbox => {
-                const code = checkbox.dataset.code;
-                const stillSelected = selectedItems.some(item => item.code === code);
-                checkbox.checked = stillSelected;
-            });
-            updateSelectionInfo();
+            clearAllSearchSelections();
+            alert(`已將 ${checkboxes.length} 個項目加入估價單！`);
         }
 
+        // ========== 渲染已選項目 ==========
+        function renderSelectedItems() {
+            const tbody = document.getElementById('selectedItemsList');
+            if (!tbody) return;
+
+            if (selectedItems.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="12" class="text-center text-muted py-4">
+                            <i class="fas fa-clipboard-list fa-2x mb-2"></i>
+                            <br>
+                            尚未選取任何項目
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            tbody.innerHTML = selectedItems.map((item, index) => `
+                <tr>
+                    <td class="text-center">
+                        <input type="checkbox" class="form-check-input estimate-checkbox" data-index="${index}">
+                    </td>
+                    <td>
+                        <input type="text" class="form-control form-control-sm" value="${item.id}"
+                               onchange="updateItem(${index}, 'id', this.value)">
+                    </td>
+                    <td>
+                        <input type="text" class="form-control form-control-sm" value="${item.supplier || ''}"
+                               onchange="updateItem(${index}, 'supplier', this.value)">
+                    </td>
+                    <td>
+                        <input type="text" class="form-control form-control-sm" value="${item.mainCategory}"
+                               onchange="updateItem(${index}, 'mainCategory', this.value)">
+                    </td>
+                    <td>
+                        <input type="text" class="form-control form-control-sm" value="${item.subCategory}"
+                               onchange="updateItem(${index}, 'subCategory', this.value)">
+                    </td>
+                    <td>
+                        <input type="text" class="form-control form-control-sm" value="${item.item}"
+                               onchange="updateItem(${index}, 'item', this.value)">
+                    </td>
+                    <td>
+                        <input type="text" class="form-control form-control-sm" value="${item.spec}"
+                               onchange="updateItem(${index}, 'spec', this.value)">
+                    </td>
+                    <td>
+                        <input type="number" class="form-control form-control-sm text-end" value="${item.quantity}"
+                               onchange="updateItem(${index}, 'quantity', parseFloat(this.value))">
+                    </td>
+                    <td>
+                        <input type="number" class="form-control form-control-sm text-end" value="${item.originalUnit}"
+                               onchange="updateItem(${index}, 'originalUnit', parseFloat(this.value))">
+                    </td>
+                    <td class="text-end">$${item.originalTotal.toLocaleString()}</td>
+                    <td>
+                        <input type="number" class="form-control form-control-sm text-end" value="${item.contractUnit}"
+                               onchange="updateItem(${index}, 'contractUnit', parseFloat(this.value))">
+                    </td>
+                    <td class="text-end">$${item.contractTotal.toLocaleString()}</td>
+                </tr>
+            `).join('');
+        }
+
+        // ========== 更新項目資料 ==========
+        function updateItem(index, field, value) {
+            selectedItems[index][field] = value;
+            
+            // 自動計算複價
+            if (field === 'quantity' || field === 'originalUnit') {
+                selectedItems[index].originalTotal = selectedItems[index].quantity * selectedItems[index].originalUnit;
+            }
+            if (field === 'quantity' || field === 'contractUnit') {
+                selectedItems[index].contractTotal = selectedItems[index].quantity * selectedItems[index].contractUnit;
+            }
+            
+            renderSelectedItems();
+        }
+
+        // ========== 新增項目 ==========
         function addNewItem() {
-            // 清空表單
-            document.getElementById('newItemCode').value = '';
-            document.getElementById('newItemName').value = '';
-            document.getElementById('newItemSpec').value = '';
-            document.getElementById('newItemUnit').value = '';
-            document.getElementById('newItemQuantity').value = '';
-            document.getElementById('newItemUnitPrice').value = '';
-            document.getElementById('newItemTotalPrice').value = '';
-            document.getElementById('newItemNote').value = '';
-
-            const modal = new bootstrap.Modal(document.getElementById('addItemModal'));
-            modal.show();
-        }
-
-        function calculateNewItemTotal() {
-            const quantity = parseFloat(document.getElementById('newItemQuantity').value) || 0;
-            const unitPrice = parseFloat(document.getElementById('newItemUnitPrice').value) || 0;
-            const total = quantity * unitPrice;
-            document.getElementById('newItemTotalPrice').value = total;
-        }
-
-        function confirmAddItem() {
-            const code = document.getElementById('newItemCode').value.trim();
-            const name = document.getElementById('newItemName').value.trim();
-            const spec = document.getElementById('newItemSpec').value.trim();
-            const unit = document.getElementById('newItemUnit').value.trim();
-            const quantity = document.getElementById('newItemQuantity').value || '0';
-            const unitPrice = document.getElementById('newItemUnitPrice').value || '0';
-            const note = document.getElementById('newItemNote').value.trim();
-
-            if (!code || !name || !unit) {
-                showMessage('請填寫必要欄位：編碼、項目名稱、單位', 'warning');
-                return;
-            }
-
-            const exists = selectedItems.some(item => item.code === code);
-            if (exists) {
-                showMessage('編碼已存在，請使用其他編碼', 'warning');
-                return;
-            }
-
-            itemCounter += 1;
-
             const newItem = {
-                id: itemCounter,
-                code: code,
-                vender: '自訂',
-                name: name,
-                spec: spec,
-                unit: unit,
-                quantity: quantity,
-                unitPrice: unitPrice,
-                totalPrice: calculateTotal(quantity, unitPrice),
-                contractUnitPrice: '',
-                contractTotalPrice: '',
-                note: note,
-                majorCategory: '其他',  // 新增
-                middleCategory: '自訂項目'  // 新增
+                id: '',
+                supplier: '',
+                mainCategory: '',
+                subCategory: '',
+                item: '',
+                spec: '',
+                quantity: 0,
+                originalUnit: 0,
+                originalTotal: 0,
+                contractUnit: 0,
+                contractTotal: 0
             };
 
             selectedItems.push(newItem);
             renderSelectedItems();
-
-            const modal = bootstrap.Modal.getInstance(document.getElementById('addItemModal'));
-            modal.hide();
-
-            showMessage('新增項目成功', 'success');
         }
 
+        // ========== 刪除選取項目 ==========
+        function deleteSelected() {
+            const checkboxes = document.querySelectorAll('.estimate-checkbox:checked');
+            if (checkboxes.length === 0) {
+                alert('請先選取要刪除的項目！');
+                return;
+            }
+            
+            if (!confirm(`確定要刪除選取的 ${checkboxes.length} 個項目嗎？`)) {
+                return;
+            }
+            
+            const indicesToDelete = Array.from(checkboxes).map(cb => parseInt(cb.getAttribute('data-index')));
+            selectedItems = selectedItems.filter((item, index) => !indicesToDelete.includes(index));
+            
+            renderSelectedItems();
+            alert('已刪除選取的項目！');
+        }
+
+        // ========== 全選/取消全選 ==========
+        function toggleSelectAllEstimate() {
+            const selectAll = document.getElementById('selectAllEstimate');
+            const checkboxes = document.querySelectorAll('.estimate-checkbox');
+            checkboxes.forEach(cb => cb.checked = selectAll.checked);
+        }
+
+        // ========== 儲存資料 ==========
         function saveData() {
             const projectName = document.getElementById('projectName').value;
+            
+            if (!projectName) {
+                alert('請先設定工程名稱！');
+                return;
+            }
+            
+            if (selectedItems.length === 0) {
+                alert('尚無項目可儲存！');
+                return;
+            }
+            
             const data = {
                 projectName: projectName,
-                selectedItems: selectedItems,
-                timestamp: new Date().toISOString(),
-                itemCount: selectedItems.length
+                items: selectedItems,
+                saveTime: new Date().toLocaleString('zh-TW')
             };
-
-            console.log('儲存資料:', data);
-            showMessage('資料儲存成功', 'success');
+            
+            console.log('儲存資料：', data);
+            alert('資料已儲存！');
         }
 
-        function exportBlankForm() {
-            showMessage('Excel匯出功能開發中...', 'info');
+        // ========== 匯出 Excel ==========
+        function exportExcel() {
+            const projectName = document.getElementById('projectName').value;
+            
+            if (!projectName) {
+                alert('請先設定工程名稱！');
+                return;
+            }
+            
+            if (selectedItems.length === 0) {
+                alert('尚無項目可匯出！');
+                return;
+            }
+            
+            alert(`準備匯出：${projectName}\n共 ${selectedItems.length} 個項目`);
         }
-
-        let isExportExcel = false;
-        async function exportExcel() {
-    if (isExportExcel) {
-        toastr.info("正在匯出Excel報表中...");
-        return;
-    }
-
-    isExportExcel = true;
-
-    // 取得專案名稱
-    const projectName = document.getElementById("projectName").value || "";
-
-    // 取得已選項目
-    const items = selectedItems; // 這是你在畫面維護的 global 陣列
-    if (!items || items.length === 0) {
-        toastr.warning("尚未選取任何項目，無法匯出");
-        isExportExcel = false;
-        return;
-    }
-
-    toastr.info("匯出Excel報表中...");
-
-    try {
-        const response = await fetch('@Url.Action("ExportExcel")', {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "RequestVerificationToken": $('[name=__RequestVerificationToken]').val()
-            },
-            body: JSON.stringify({
-                projectName: projectName,
-                items: items
-            })
-        });
-
-        if (response.status === 200) {
-            const blob = await response.blob();
-            const url = window.URL.createObjectURL(blob);
-            const link = document.createElement("a");
-            link.style.display = "none";
-            link.href = url;
-            link.download = projectName + "_空白估價單.xlsx";
-            document.body.appendChild(link);
-            link.click();
-            window.URL.revokeObjectURL(url);
-            toastr.success("匯出成功");
-        } else {
-            toastr.error("匯出失敗，請通知系統管理員");
-        }
-    } catch (err) {
-        toastr.error("發生錯誤：" + err.message);
-    }
-
-    isExportExcel = false;
-}
-
-        function showMessage(message, type = 'info') {
-            const alertClass = {
-                'success': 'alert-success',
-                'warning': 'alert-warning',
-                'error': 'alert-danger',
-                'info': 'alert-info'
-            };
-
-            const alertDiv = document.createElement('div');
-            alertDiv.className = `alert ${alertClass[type]} alert-dismissible fade show position-fixed`;
-            alertDiv.style.cssText = 'top: 20px; right: 20px; z-index: 9999; min-width: 300px;';
-            alertDiv.innerHTML = `
-                        ${message}
-                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                    `;
-
-            document.body.appendChild(alertDiv);
-
-            setTimeout(() => {
-                if (alertDiv.parentNode) {
-                    alertDiv.remove();
-                }
-            }, 3000);
-        }
-
-        // 初始化
-        document.addEventListener('DOMContentLoaded', function () {
-            // 大項目變更事件
-            document.getElementById('majorCategory').addEventListener('change', updateMiddleCategories);
-
-            // 初始化中項目選項
-            updateMiddleCategories();
-
-            // 初始化選取計數
-            updateSelectionInfo();
-        });
     </script>
 }

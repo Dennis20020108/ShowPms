@@ -49,24 +49,43 @@
                         <a class="btn btn-sm btn-outline-danger" href="#"><i class="bi bi-trash"></i> 刪除</a>
                     </td>
                 </tr>
+                <tr>
+                    <td>EST-002</td>
+                    <td>2025-10-20</td>
+                    <td>潘柏宇</td>
+                    <td>醫師休息室裝修</td>
+                    <td>六樓醫師休息室</td>
+                    <td>
+                        <a class="btn btn-sm btn-outline-primary" href="#"><i class="bi bi-eye"></i> 查看</a>
+                        <a class="btn btn-sm btn-outline-success" href="#"><i class="bi bi-download"></i> 匯出</a>
+                        <a class="btn btn-sm btn-outline-danger" href="#"><i class="bi bi-trash"></i> 刪除</a>
+                    </td>
+                </tr>
                 <!-- 可重複多列 -->
             </tbody>
         </table>
     </div>
 </div>
 
-@section scripts{
+@section scripts {
     <script>
-    $(document).ready(function () {
-        $('#estimateTable').DataTable({
-            language: {
-                url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/zh-HANT.json'
-            },
-            ordering: true,
-            paging: true,
-            searching: true
-        });
-    });
-    </script>
+        $(document).ready(function () {
+            // 避免重複初始化
+            if (!$.fn.DataTable.isDataTable('#estimateTable')) {
 
+                $('#estimateTable').DataTable({
+                    language: {
+                        url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/zh-HANT.json'
+                    },
+                    ordering: true,
+                    paging: true,
+                    searching: true,
+                    columnDefs: [
+                        { targets: '_all', className: 'dt-left text-start' } // 全部欄位強制靠左
+                    ]
+                });
+            }
+        });
+    </script>
 }
+
